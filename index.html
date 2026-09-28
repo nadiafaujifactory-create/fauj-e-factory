@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FAUJ-E-FACTORY - Management & Finance</title>
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --primary-red: #E52521;
@@ -126,11 +128,11 @@
     }
 
     .card-header {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: var(--navy-blue);
-      margin-bottom: 18px;
-      padding-bottom: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
       border-bottom: 2px solid var(--bg-gray);
       display: flex;
       justify-content: space-between;
@@ -138,7 +140,7 @@
     }
 
     .section-subtitle {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       color: var(--primary-red);
       grid-column: 1 / -1;
@@ -209,7 +211,6 @@
       height: 20px;
     }
 
-    /* Remember Me Checkbox */
     .remember-wrap {
       display: flex;
       align-items: center;
@@ -247,24 +248,23 @@
       background: var(--navy-blue);
       color: var(--pure-white);
       border: none;
-      padding: 8px 12px;
+      padding: 6px 10px;
       border-radius: 4px;
       cursor: pointer;
-      font-weight: 700;
-      font-size: 0.85rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      font-weight: 600;
+      font-size: 0.8rem;
     }
 
     .btn-readmit {
       background: var(--success-green);
       color: var(--pure-white);
       border: none;
-      padding: 8px 12px;
+      padding: 6px 10px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.85rem;
-      margin-left: 6px;
+      font-size: 0.8rem;
+      margin-left: 4px;
     }
 
     .btn-readmit:disabled {
@@ -272,7 +272,7 @@
       cursor: not-allowed;
     }
 
-    /* Financial Dual Split Layout */
+    /* Dual Split Layout for Finance */
     .finance-split-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -294,27 +294,17 @@
       border-top: 4px solid var(--navy-blue);
     }
 
-    .finance-column-box.income-box {
-      border-top-color: var(--success-green);
-    }
-
-    .finance-column-box.expense-box {
-      border-top-color: var(--primary-red);
-    }
+    .finance-column-box.income-box { border-top-color: var(--success-green); }
+    .finance-column-box.expense-box { border-top-color: var(--primary-red); }
 
     .finance-box-title {
       font-size: 1.15rem;
       font-weight: 800;
       margin-bottom: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
-
     .finance-box-title.income-title { color: #065F46; }
     .finance-box-title.expense-title { color: #991B1B; }
 
-    /* Metric Cards */
     .metric-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -342,13 +332,13 @@
     }
 
     .metric-value {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 800;
       margin-top: 6px;
       color: var(--navy-blue);
     }
 
-    /* Tables */
+    /* Compact Roster Table */
     .table-container {
       overflow-x: auto;
     }
@@ -356,36 +346,77 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
+      margin-top: 8px;
       text-align: left;
     }
 
     th, td {
-      padding: 10px 12px;
+      padding: 8px 10px;
       border: 1px solid var(--border-gray);
-      font-size: 0.88rem;
+      font-size: 0.85rem;
+      vertical-align: middle;
     }
 
     th {
       background-color: var(--navy-blue);
       color: var(--pure-white);
+      white-space: nowrap;
     }
 
     tr:nth-child(even) {
       background-color: #f9fafb;
     }
 
-    /* Month Badges */
+    /* Compact Month Dropdown Action */
+    .month-select-dropdown {
+      padding: 6px 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Modal / Popover for Monthly Matrix */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(10, 25, 47, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-card {
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      max-width: 550px;
+      width: 90%;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      border-top: 5px solid var(--primary-red);
+    }
+
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--navy-blue);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     .months-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 8px;
-      margin: 12px 0;
+      margin: 16px 0;
     }
 
     .month-badge {
       text-align: center;
-      padding: 8px 4px;
+      padding: 10px 4px;
       border: 2px solid var(--navy-blue);
       border-radius: 6px;
       font-size: 0.75rem;
@@ -403,84 +434,40 @@
       color: var(--pure-white) !important;
     }
 
-    /* Print Template */
-    #print-section {
-      display: none;
+    .month-badge.disabled-month {
+      background-color: #E5E7EB !important;
+      border-color: #D1D5DB !important;
+      color: #9CA3AF !important;
+      cursor: not-allowed !important;
+      text-decoration: line-through;
     }
 
+    /* Print Template */
+    #print-section { display: none; }
+
     @media print {
-      body * {
-        visibility: hidden;
-      }
-      #print-section, #print-section * {
-        visibility: visible;
-      }
+      body * { visibility: hidden; }
+      #print-section, #print-section * { visibility: visible; }
       #print-section {
         display: block !important;
         position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        background: white;
-        padding: 24px;
-        color: black;
+        left: 0; top: 0; width: 100%;
+        background: white; padding: 24px; color: black;
       }
-      .print-box {
-        border: 2px solid #0A192F;
-        padding: 24px;
-      }
+      .print-box { border: 2px solid #0A192F; padding: 24px; }
       .print-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 2px solid #E52521;
-        padding-bottom: 12px;
-        margin-bottom: 16px;
+        display: flex; align-items: center; justify-content: space-between;
+        border-bottom: 2px solid #E52521; padding-bottom: 12px; margin-bottom: 16px;
       }
-      .print-header img {
-        height: 70px;
-        width: 70px;
-        object-fit: contain;
-      }
-      .print-title-wrap {
-        text-align: right;
-      }
-      .print-title-wrap h2 {
-        font-size: 1.8rem;
-        color: #0A192F;
-      }
-      .print-title-wrap p {
-        font-size: 0.95rem;
-        font-weight: 700;
-        color: #E52521;
-      }
-      .print-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 16px 0;
-      }
-      .print-table th, .print-table td {
-        border: 1px solid #D1D5DB;
-        padding: 8px 12px;
-        font-size: 0.9rem;
-      }
-      .print-table th {
-        background-color: #F3F4F6 !important;
-        color: #0A192F !important;
-        text-align: left;
-      }
-      .signature-row {
-        margin-top: 50px;
-        display: flex;
-        justify-content: space-between;
-      }
-      .signature-line {
-        border-top: 1px solid #333;
-        width: 200px;
-        text-align: center;
-        padding-top: 6px;
-        font-size: 0.85rem;
-      }
+      .print-header img { height: 70px; width: 70px; object-fit: contain; }
+      .print-title-wrap { text-align: right; }
+      .print-title-wrap h2 { font-size: 1.8rem; color: #0A192F; }
+      .print-title-wrap p { font-size: 0.95rem; font-weight: 700; color: #E52521; }
+      .print-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+      .print-table th, .print-table td { border: 1px solid #D1D5DB; padding: 8px 12px; font-size: 0.9rem; }
+      .print-table th { background-color: #F3F4F6 !important; color: #0A192F !important; text-align: left; }
+      .signature-row { margin-top: 50px; display: flex; justify-content: space-between; }
+      .signature-line { border-top: 1px solid #333; width: 200px; text-align: center; padding-top: 6px; font-size: 0.85rem; }
     }
   </style>
 </head>
@@ -504,7 +491,7 @@
 
   <div class="container">
     
-    <!-- 1. LOGIN SCREEN WITH REMEMBER ME -->
+    <!-- 1. LOGIN SCREEN -->
     <div id="login-view" class="card" style="max-width: 420px; margin: 60px auto;">
       <div style="text-align: center; margin-bottom: 16px;">
         <img src="logo.png" alt="Logo" style="height: 64px; object-fit: contain; margin-bottom: 8px;" onerror="this.style.display='none'" />
@@ -528,7 +515,6 @@
           </div>
         </div>
 
-        <!-- REMEMBER ME ON THIS DEVICE (Super Admin) -->
         <label class="remember-wrap">
           <input type="checkbox" id="remember-me-checkbox" />
           <span>Remember me on this device (Super Admin)</span>
@@ -594,12 +580,16 @@
         </div>
       </div>
 
-      <!-- Cadet Admission Form -->
+      <!-- Cadet Admission Form with Specified Fee Dropdown Structure -->
       <div class="card">
         <div class="card-header">Cadet Admission Form</div>
         <form id="student-form">
           <div class="form-grid">
             <div class="section-subtitle">1. Personal & Identity Details</div>
+            <div class="form-group">
+              <label>Admission Date</label>
+              <input type="date" id="std-admission-date" onchange="autoSyncMonthGridState()" required />
+            </div>
             <div class="form-group">
               <label>Cadet Full Name</label>
               <input type="text" id="std-name" required />
@@ -675,54 +665,83 @@
               <textarea id="std-address" rows="2" required></textarea>
             </div>
 
-            <div class="section-subtitle">3. Fee Structure & Installment Schedule</div>
+            <!-- 3. CUSTOM FEE STRUCTURE (SPECIFIED HEADINGS) -->
+            <div class="section-subtitle">3. Fee Categories & Custom Assigned Rates</div>
+            
             <div class="form-group">
-              <label>1. ADMISSION FEES (₹)</label>
-              <input type="number" id="std-admission-fee" oninput="calculateBalance()" required />
+              <label>1. Admission fees / Fees at the time of admission (₹)</label>
+              <input type="number" id="fee-head-admission" placeholder="Amount" oninput="calculateTotalAssigned()" required />
             </div>
             <div class="form-group">
-              <label>2. PAID (₹)</label>
-              <input type="number" id="std-paid-fee" oninput="calculateBalance()" required />
+              <label>2. Monthly tuition fees (₹)</label>
+              <input type="number" id="fee-head-tuition" placeholder="Amount" oninput="calculateTotalAssigned()" />
             </div>
             <div class="form-group">
-              <label>Remaining Balance (₹)</label>
-              <input type="number" id="std-remaining-fee" readonly style="background:#f3f4f6; font-weight:bold;" />
+              <label>3. Hostel fees (₹)</label>
+              <input type="number" id="fee-head-hostel" placeholder="Amount" oninput="calculateTotalAssigned()" />
             </div>
             <div class="form-group">
-              <label>3. DUE 1 (Date)</label>
-              <input type="date" id="std-due1-date" />
+              <label>4. Any other fees or miscellaneous purpose fees (₹)</label>
+              <input type="number" id="fee-head-misc" placeholder="Amount" oninput="calculateTotalAssigned()" />
+            </div>
+
+            <!-- PAYMENT BREAKDOWN & UPCOMING DUES DROPDOWNS -->
+            <div class="section-subtitle">4. Payment Made & Upcoming Due Schedule</div>
+            
+            <div class="form-group">
+              <label>Paid Head Selection (Payment Given Now)</label>
+              <select id="paid-purpose-head">
+                <option value="Admission Fees">Admission Fees</option>
+                <option value="Monthly Tuition Fees">Monthly Tuition Fees</option>
+                <option value="Hostel Fees">Hostel Fees</option>
+                <option value="Miscellaneous Fees">Miscellaneous Fees</option>
+                <option value="Combined Admission & First Month">Combined Admission & First Month</option>
+              </select>
             </div>
             <div class="form-group">
-              <label>DUE 1 Amount (₹)</label>
-              <input type="number" id="std-due1-amt" />
+              <label>Total Amount Paid at Admission (₹)</label>
+              <input type="number" id="std-paid-now" placeholder="Amount Paid" oninput="calculateTotalAssigned()" required />
             </div>
             <div class="form-group">
-              <label>4. DUE 2 (Date)</label>
-              <input type="date" id="std-due2-date" />
+              <label>Remaining Admission Due Balance (₹)</label>
+              <input type="number" id="std-balance-due" readonly style="background:#f3f4f6; font-weight:bold; color:var(--primary-red);" />
+            </div>
+
+            <!-- NEXT INSTALLMENT DUE SCHEDULE -->
+            <div class="form-group">
+              <label>Upcoming Due 1: Purpose Head</label>
+              <select id="due1-head">
+                <option value="Admission Fees Due">Admission Fees Due</option>
+                <option value="Monthly Tuition Fees">Monthly Tuition Fees</option>
+                <option value="Hostel Fees">Hostel Fees</option>
+                <option value="Miscellaneous Fees">Miscellaneous Fees</option>
+              </select>
             </div>
             <div class="form-group">
-              <label>DUE 2 Amount (₹)</label>
-              <input type="number" id="std-due2-amt" />
+              <label>Due 1 Date</label>
+              <input type="date" id="due1-date" />
             </div>
             <div class="form-group">
-              <label>5. DUE 3 (Date)</label>
-              <input type="date" id="std-due3-date" />
+              <label>Due 1 Amount (₹)</label>
+              <input type="number" id="due1-amt" />
+            </div>
+
+            <div class="form-group">
+              <label>Upcoming Due 2: Purpose Head</label>
+              <select id="due2-head">
+                <option value="Admission Fees Due">Admission Fees Due</option>
+                <option value="Monthly Tuition Fees">Monthly Tuition Fees</option>
+                <option value="Hostel Fees">Hostel Fees</option>
+                <option value="Miscellaneous Fees">Miscellaneous Fees</option>
+              </select>
             </div>
             <div class="form-group">
-              <label>DUE 3 Amount (₹)</label>
-              <input type="number" id="std-due3-amt" />
+              <label>Due 2 Date</label>
+              <input type="date" id="due2-date" />
             </div>
             <div class="form-group">
-              <label>6. HOSTEL FEES (₹)</label>
-              <input type="number" id="std-hostel-fee" />
-            </div>
-            <div class="form-group">
-              <label>7. MONTHLY TUITION FEES (₹)</label>
-              <input type="number" id="std-tuition-fee" />
-            </div>
-            <div class="form-group">
-              <label>8. DRESS / MATERIAL FEES (₹)</label>
-              <input type="number" id="std-dress-fee" />
+              <label>Due 2 Amount (₹)</label>
+              <input type="number" id="due2-amt" />
             </div>
 
             <div class="form-group">
@@ -730,7 +749,7 @@
               <input type="text" id="std-generated-pw" readonly style="background:#eee; font-weight:bold;" />
             </div>
             <div class="form-group full-width">
-              <label>Extra Administrative Notes</label>
+              <label>Administrative Notes</label>
               <textarea id="std-notes" rows="2"></textarea>
             </div>
           </div>
@@ -738,20 +757,22 @@
         </form>
       </div>
 
-      <!-- Enrolled Cadet Roster -->
+      <!-- COMPACT CADET ROSTER (SINGLE-ROW DESIGN WITH MONTH DROPDOWN) -->
       <div class="card">
         <div class="card-header">
-          <span>Cadet Roster & Academic Session (April 2026 – March 2027)</span>
+          <span>Registered Cadets Directory (Session Apr 2026 – Mar 2027)</span>
         </div>
         <div class="table-container">
           <table>
             <thead>
               <tr>
-                <th>Cadet Details</th>
-                <th>Admission Dues</th>
-                <th>Installments</th>
-                <th>Monthly Status</th>
-                <th>Print / PDF Action</th>
+                <th>Cadet Name & Batch</th>
+                <th>Contact</th>
+                <th>Admission Date</th>
+                <th>Admission Due</th>
+                <th>Upcoming Dues</th>
+                <th>Monthly Fees Clearance</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="student-roster-body"></tbody>
@@ -764,7 +785,6 @@
     <!-- 3. DATE-WISE INCOME & EXPENDITURE PORTAL (TAB 2) -->
     <div id="tab-finance-content" style="display: none;">
       
-      <!-- Metrics Summary -->
       <div class="metric-grid">
         <div class="metric-box inflow">
           <div class="metric-label">Total Realized Income</div>
@@ -850,8 +870,6 @@
 
       <!-- DUAL-COLUMN TRANSACTION LEDGERS -->
       <div class="finance-split-grid">
-        
-        <!-- INCOME TABLE -->
         <div class="card" style="margin-bottom: 0;">
           <div class="card-header" style="color:var(--success-green);">
             <span>Income Ledger</span>
@@ -871,7 +889,6 @@
           </div>
         </div>
 
-        <!-- EXPENDITURE TABLE -->
         <div class="card" style="margin-bottom: 0;">
           <div class="card-header" style="color:var(--primary-red);">
             <span>Expenditure Ledger</span>
@@ -890,7 +907,6 @@
             </table>
           </div>
         </div>
-
       </div>
 
     </div>
@@ -908,6 +924,23 @@
 
   </div>
 
+  <!-- MONTHLY FEES MODAL (SAVES COMPACT ROW SPACE) -->
+  <div id="monthly-fee-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-title">
+        <span id="modal-cadet-title">Monthly Tuition & Hostel Fee Register</span>
+        <button onclick="closeMonthModal()" style="border:none; background:none; font-size:1.4rem; cursor:pointer; font-weight:bold;">&times;</button>
+      </div>
+      <p style="font-size:0.8rem; color:#6B7280; margin-bottom:12px;">
+        Months prior to admission date are inactive. Click active month badge to toggle <strong style="color:var(--primary-red);">RED (PAID)</strong> status.
+      </p>
+      <div class="months-container" id="modal-months-container"></div>
+      <div style="text-align: right; margin-top: 16px;">
+        <button class="btn-print" onclick="closeMonthModal()">Done / Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Print Engine -->
   <div id="print-section">
     <div class="print-box">
@@ -923,21 +956,73 @@
   </div>
 
   <script>
-    const MONTHS = [
-      "Apr 2026", "May 2026", "Jun 2026", "Jul 2026", 
-      "Aug 2026", "Sep 2026", "Oct 2026", "Nov 2026", 
-      "Dec 2026", "Jan 2027", "Feb 2027", "Mar 2027"
+    const SUPABASE_URL = "https://dyldejdkgfnyvunkrddh.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5bGRlamRrZ2ZueXZ1bmtyZGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2MDE4OTYsImV4cCI6MjEwNjE3Nzg5Nn0._JUB9WjiB3aJAdEZZyADueL9i6iyf7us6dD8L3S1o0E";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Standard Academic Year Months: April 2026 to March 2027
+    const ACADEMIC_MONTHS = [
+      { key: "2026-04", label: "Apr 2026", order: 4 },
+      { key: "2026-05", label: "May 2026", order: 5 },
+      { key: "2026-06", label: "Jun 2026", order: 6 },
+      { key: "2026-07", label: "Jul 2026", order: 7 },
+      { key: "2026-08", label: "Aug 2026", order: 8 },
+      { key: "2026-09", label: "Sep 2026", order: 9 },
+      { key: "2026-10", label: "Oct 2026", order: 10 },
+      { key: "2026-11", label: "Nov 2026", order: 11 },
+      { key: "2026-12", label: "Dec 2026", order: 12 },
+      { key: "2027-01", label: "Jan 2027", order: 13 },
+      { key: "2027-02", label: "Feb 2027", order: 14 },
+      { key: "2027-03", label: "Mar 2027", order: 15 }
     ];
 
-    const DB = {
-      staff: JSON.parse(localStorage.getItem("ff_staff") || "[]"),
-      students: JSON.parse(localStorage.getItem("ff_students") || "[]"),
-      incomes: JSON.parse(localStorage.getItem("ff_incomes") || "[]"),
-      expenses: JSON.parse(localStorage.getItem("ff_expenses") || "[]"),
-      history: JSON.parse(localStorage.getItem("ff_history") || "[]")
+    let DB = {
+      staff: [],
+      students: [],
+      incomes: [],
+      expenses: []
     };
 
     let currentUser = null;
+    let activeModalStudentIdx = null;
+
+    async function loadCloudData() {
+      try {
+        const [staffRes, stdRes, incRes, expRes] = await Promise.all([
+          supabase.from("ff_staff").select("*"),
+          supabase.from("ff_students").select("*"),
+          supabase.from("ff_incomes").select("*"),
+          supabase.from("ff_expenses").select("*")
+        ]);
+
+        if (staffRes.data) DB.staff = staffRes.data;
+        if (stdRes.data) DB.students = stdRes.data;
+        if (incRes.data) DB.incomes = incRes.data;
+        if (expRes.data) DB.expenses = expRes.data;
+
+        if (currentUser) {
+          if (currentUser.role === "SuperAdmin" || currentUser.role === "Official") {
+            renderStaffDirectory();
+            renderRoster();
+            renderFinanceDashboard();
+          } else if (currentUser.role === "Student") {
+            const freshMe = DB.students.find(s => s.ph1 === currentUser.ph1);
+            if (freshMe) renderStudentPortal(freshMe);
+          }
+        }
+      } catch (err) {
+        console.error("Supabase load error:", err);
+      }
+    }
+
+    function initRealtimeSync() {
+      supabase
+        .channel("schema-db-changes")
+        .on("postgres_changes", { event: "*", schema: "public" }, () => {
+          loadCloudData();
+        })
+        .subscribe();
+    }
 
     function generateSecurePassword() {
       return "FF" + Math.floor(100000 + Math.random() * 900000);
@@ -947,16 +1032,22 @@
       document.getElementById("chest-group").style.display = (val === "Male") ? "flex" : "none";
     }
 
-    function calculateBalance() {
-      const admission = parseFloat(document.getElementById("std-admission-fee").value) || 0;
-      const paid = parseFloat(document.getElementById("std-paid-fee").value) || 0;
-      document.getElementById("std-remaining-fee").value = Math.max(0, admission - paid);
+    // Auto-calculate Balance Due = (Admission Fee - Paid at Admission)
+    function calculateTotalAssigned() {
+      const admissionFee = parseFloat(document.getElementById("fee-head-admission").value) || 0;
+      const paidNow = parseFloat(document.getElementById("std-paid-now").value) || 0;
+      document.getElementById("std-balance-due").value = Math.max(0, admissionFee - paidNow);
+    }
+
+    function autoSyncMonthGridState() {
+      // triggers reactive UI if needed during form entry
     }
 
     function initGenerators() {
       document.getElementById("staff-password").value = generateSecurePassword();
       document.getElementById("std-generated-pw").value = generateSecurePassword();
       const today = new Date().toISOString().split("T")[0];
+      if (document.getElementById("std-admission-date")) document.getElementById("std-admission-date").value = today;
       if (document.getElementById("inc-date")) document.getElementById("inc-date").value = today;
       if (document.getElementById("exp-date")) document.getElementById("exp-date").value = today;
     }
@@ -973,7 +1064,6 @@
       }
     }
 
-    // Portal Tab Switcher
     function switchTab(tab) {
       const cadetView = document.getElementById("tab-cadets-content");
       const financeView = document.getElementById("tab-finance-content");
@@ -994,12 +1084,15 @@
       }
     }
 
-    // AUTO-LOGIN CHECK: REMEMBER ME CHECK
-    window.addEventListener("DOMContentLoaded", () => {
-      const savedAdminSession = localStorage.getItem("ff_remembered_admin");
-      if (savedAdminSession) {
+    // Auto Login Check
+    window.addEventListener("DOMContentLoaded", async () => {
+      await loadCloudData();
+      initRealtimeSync();
+
+      const savedAdmin = localStorage.getItem("ff_remembered_admin");
+      if (savedAdmin) {
         try {
-          currentUser = JSON.parse(savedAdminSession);
+          currentUser = JSON.parse(savedAdmin);
           startSession();
         } catch (e) {
           localStorage.removeItem("ff_remembered_admin");
@@ -1083,21 +1176,27 @@
     }
 
     // Staff Submit
-    document.getElementById("staff-form").addEventListener("submit", (e) => {
+    document.getElementById("staff-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const newStaff = {
+        id: "STAFF-" + Date.now(),
         name: document.getElementById("staff-name").value,
         phone: document.getElementById("staff-phone").value,
         dob: document.getElementById("staff-dob").value,
         role: document.getElementById("staff-role").value,
         password: document.getElementById("staff-password").value
       };
-      DB.staff.push(newStaff);
-      localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
-      alert(`Profile created for ${newStaff.name}. Assigned Password: ${newStaff.password}`);
+
+      const { error } = await supabase.from("ff_staff").insert([newStaff]);
+      if (error) {
+        alert("Error saving staff: " + error.message);
+        return;
+      }
+
+      alert(`Staff profile created for ${newStaff.name}. Assigned Password: ${newStaff.password}`);
       document.getElementById("staff-form").reset();
       initGenerators();
-      renderStaffDirectory();
+      await loadCloudData();
     });
 
     function renderStaffDirectory() {
@@ -1137,28 +1236,29 @@
           </div>
         </div>
         <table class="print-table">
-          <tr><th>Authorized Institution</th><td>FAUJ-E-FACTORY Headquarters</td></tr>
-          <tr><th>Account Scope</th><td>${st.role === "Official" ? "Admissions, Records & Operations" : "Academic & Physical Training"}</td></tr>
+          <tr><th>Authorized Campus</th><td>FAUJ-E-FACTORY Headquarters</td></tr>
+          <tr><th>Account Scope</th><td>${st.role === "Official" ? "Admissions, Records & Finance" : "Physical Instruction & Academics"}</td></tr>
           <tr><th>Access Credential</th><td><code>${st.password}</code></td></tr>
         </table>
         <div class="signature-row">
           <div class="signature-line">Staff Signature</div>
-          <div class="signature-line">Super Admin Signature</div>
+          <div class="signature-line">Director / Super Admin</div>
         </div>
       `;
       window.print();
     }
 
-    // Student Submit (Auto-records admission payment into Income Ledger)
-    document.getElementById("student-form").addEventListener("submit", (e) => {
+    // Student Submit (Cloud Sync with Custom Structured Headings)
+    document.getElementById("student-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const paidAmt = parseFloat(document.getElementById("std-paid-fee").value) || 0;
+      const admDate = document.getElementById("std-admission-date").value;
       const cadetName = document.getElementById("std-name").value;
-      const admissionDate = new Date().toISOString().split("T")[0];
+      const paidNow = parseFloat(document.getElementById("std-paid-now").value) || 0;
+      const paidHead = document.getElementById("paid-purpose-head").value;
 
       const newStudent = {
         id: "STD-" + Date.now(),
-        date: admissionDate,
+        date: admDate,
         name: cadetName,
         guardian: document.getElementById("std-guardian").value,
         ph1: document.getElementById("std-ph1").value,
@@ -1169,150 +1269,201 @@
         gender: document.getElementById("std-gender").value,
         reference: document.getElementById("std-ref").value,
         qualification: document.getElementById("std-qual").value,
-        marks: document.getElementById("std-marks").value,
-        height: document.getElementById("std-height").value,
-        weight: document.getElementById("std-weight").value,
+        marks: parseFloat(document.getElementById("std-marks").value) || 0,
+        height: parseFloat(document.getElementById("std-height").value) || 0,
+        weight: parseFloat(document.getElementById("std-weight").value) || 0,
         chest: document.getElementById("std-chest").value || "N/A",
         address: document.getElementById("std-address").value,
-        admissionFee: parseFloat(document.getElementById("std-admission-fee").value) || 0,
-        paid: paidAmt,
-        remaining: parseFloat(document.getElementById("std-remaining-fee").value) || 0,
-        due1Date: document.getElementById("std-due1-date").value,
-        due1Amt: parseFloat(document.getElementById("std-due1-amt").value) || 0,
-        due2Date: document.getElementById("std-due2-date").value,
-        due2Amt: parseFloat(document.getElementById("std-due2-amt").value) || 0,
-        due3Date: document.getElementById("std-due3-date").value,
-        due3Amt: parseFloat(document.getElementById("std-due3-amt").value) || 0,
-        hostelFee: parseFloat(document.getElementById("std-hostel-fee").value) || 0,
-        tuitionFee: parseFloat(document.getElementById("std-tuition-fee").value) || 0,
-        dressFee: parseFloat(document.getElementById("std-dress-fee").value) || 0,
+        
+        // 4 Distinct Custom Heads
+        admission_fee: parseFloat(document.getElementById("fee-head-admission").value) || 0,
+        tuition_fee: parseFloat(document.getElementById("fee-head-tuition").value) || 0,
+        hostel_fee: parseFloat(document.getElementById("fee-head-hostel").value) || 0,
+        dress_fee: parseFloat(document.getElementById("fee-head-misc").value) || 0, // miscellaneous
+        
+        paid: paidNow,
+        remaining: parseFloat(document.getElementById("std-balance-due").value) || 0,
+        
+        // Next Due Schedules
+        due1_head: document.getElementById("due1-head").value,
+        due1_date: document.getElementById("due1-date").value,
+        due1_amt: parseFloat(document.getElementById("due1-amt").value) || 0,
+        
+        due2_head: document.getElementById("due2-head").value,
+        due2_date: document.getElementById("due2-date").value,
+        due2_amt: parseFloat(document.getElementById("due2-amt").value) || 0,
+        
         password: document.getElementById("std-generated-pw").value,
         notes: document.getElementById("std-notes").value,
-        paidMonths: []
+        paid_months: []
       };
 
-      DB.students.push(newStudent);
-      localStorage.setItem("ff_students", JSON.stringify(DB.students));
+      const { error } = await supabase.from("ff_students").insert([newStudent]);
+      if (error) {
+        alert("Error saving cadet: " + error.message);
+        return;
+      }
 
-      // Auto-post admission fee into Income Ledger
-      if (paidAmt > 0) {
-        DB.incomes.push({
+      // Record Admission Income in Ledger
+      if (paidNow > 0) {
+        await supabase.from("ff_incomes").insert([{
           id: "INC-" + Date.now(),
-          date: admissionDate,
-          purpose: "Admission Fee",
+          date: admDate,
+          purpose: paidHead,
           person: cadetName,
-          amount: paidAmt
-        });
-        localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
+          amount: paidNow
+        }]);
       }
 
       alert(`Cadet registered! Assigned Password for Student Zone: ${newStudent.password}`);
       document.getElementById("student-form").reset();
       initGenerators();
-      renderRoster();
+      await loadCloudData();
     });
 
-    // Toggle Monthly Fee (Auto-records into Income Ledger)
-    function toggleMonthPaid(studentIndex, monthName) {
-      const student = DB.students[studentIndex];
-      const idx = student.paidMonths.indexOf(monthName);
-      const monthlySum = (student.tuitionFee || 0) + (student.hostelFee || 0);
+    // Helper: Determine Academic Month Order
+    function getMonthOrder(dateStr) {
+      if (!dateStr) return 0;
+      const parts = dateStr.split("-");
+      const yr = parseInt(parts[0], 10);
+      const mo = parseInt(parts[1], 10);
+      if (yr === 2026 && mo >= 4) return mo;
+      if (yr === 2027 && mo <= 3) return mo + 12;
+      return 0; // out of scope
+    }
+
+    // Modal Controller for Monthly Fees Matrix
+    function openMonthModal(studentIdx) {
+      activeModalStudentIdx = studentIdx;
+      const student = DB.students[studentIdx];
+      document.getElementById("modal-cadet-title").innerText = `${student.name} (${student.batch}) - Monthly Clearances`;
+
+      const admOrder = getMonthOrder(student.date);
+      const container = document.getElementById("modal-months-container");
+      container.innerHTML = "";
+
+      const paidArr = Array.isArray(student.paid_months) ? student.paid_months : [];
+
+      ACADEMIC_MONTHS.forEach(m => {
+        const isInactive = (m.order < admOrder);
+        const isPaid = paidArr.includes(m.label);
+
+        let badgeClass = "month-badge";
+        if (isInactive) {
+          badgeClass += " disabled-month";
+        } else if (isPaid) {
+          badgeClass += " paid";
+        }
+
+        const badge = document.createElement("div");
+        badge.className = badgeClass;
+        badge.innerText = m.label;
+
+        if (!isInactive) {
+          badge.onclick = () => toggleMonthPaidFromModal(m.label);
+        }
+
+        container.appendChild(badge);
+      });
+
+      document.getElementById("monthly-fee-modal").style.display = "flex";
+    }
+
+    function closeMonthModal() {
+      document.getElementById("monthly-fee-modal").style.display = "none";
+      activeModalStudentIdx = null;
+    }
+
+    // Toggle Month Paid inside Modal
+    async function toggleMonthPaidFromModal(monthLabel) {
+      if (activeModalStudentIdx === null) return;
+      const student = DB.students[activeModalStudentIdx];
+      let monthsList = Array.isArray(student.paid_months) ? [...student.paid_months] : [];
+      const idx = monthsList.indexOf(monthLabel);
+      const monthlySum = (Number(student.tuition_fee) || 0) + (Number(student.hostel_fee) || 0);
 
       if (idx > -1) {
-        student.paidMonths.splice(idx, 1);
+        monthsList.splice(idx, 1);
       } else {
-        student.paidMonths.push(monthName);
+        monthsList.push(monthLabel);
         if (monthlySum > 0) {
-          DB.incomes.push({
+          await supabase.from("ff_incomes").insert([{
             id: "INC-" + Date.now(),
             date: new Date().toISOString().split("T")[0],
             purpose: "Monthly Fee",
-            person: `${student.name} (${monthName})`,
+            person: `${student.name} (${monthLabel})`,
             amount: monthlySum
-          });
-          localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
+          }]);
         }
       }
-      localStorage.setItem("ff_students", JSON.stringify(DB.students));
-      renderRoster();
+
+      await supabase.from("ff_students").update({ paid_months: monthsList }).eq("id", student.id);
+      await loadCloudData();
+      openMonthModal(activeModalStudentIdx); // refresh modal view
     }
 
-    // Re-Admission Process
-    function executeReAdmission(studentIndex) {
-      const student = DB.students[studentIndex];
-      if (!confirm(`Archive current cycle for ${student.name} and execute Re-Admission?`)) return;
-
-      DB.history.push({
-        studentId: student.id,
-        cadetName: student.name,
-        sessionClosedAt: new Date().toISOString(),
-        archiveSnapshot: JSON.parse(JSON.stringify(student))
-      });
-      localStorage.setItem("ff_history", JSON.stringify(DB.history));
-
-      student.paidMonths = [];
-      student.admissionFee = 0;
-      student.paid = 0;
-      student.remaining = 0;
-      student.due1Date = "";
-      student.due1Amt = 0;
-      student.due2Date = "";
-      student.due2Amt = 0;
-      student.due3Date = "";
-      student.due3Amt = 0;
-      student.notes += ` | Re-Admitted on ${new Date().toLocaleDateString()}`;
-
-      localStorage.setItem("ff_students", JSON.stringify(DB.students));
-      alert(`Re-admission completed for ${student.name}. Previous records archived.`);
-      renderRoster();
-    }
-
-    // Render Student Table
+    // Single-Row Compact Roster Rendering
     function renderRoster() {
       const tbody = document.getElementById("student-roster-body");
       tbody.innerHTML = "";
 
       DB.students.forEach((s, idx) => {
-        const isEligibleForReadmission = (s.remaining === 0) && (s.paidMonths.length === 12);
-        const monthHtml = MONTHS.map(m => {
-          const isPaid = s.paidMonths.includes(m);
-          return `<div class="month-badge ${isPaid ? 'paid' : ''}" onclick="toggleMonthPaid(${idx}, '${m}')">${m}</div>`;
-        }).join("");
+        const paidArr = Array.isArray(s.paid_months) ? s.paid_months : [];
+        const admOrder = getMonthOrder(s.date);
+        const activeMonths = ACADEMIC_MONTHS.filter(m => m.order >= admOrder);
+        const isEligibleForReadmission = (s.remaining === 0) && (activeMonths.length > 0) && (paidArr.length >= activeMonths.length);
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>
-            <strong>${s.name}</strong> (${s.gender})<br/>
-            Batch: <strong>${s.batch}</strong> | Ph: ${s.ph1}
-          </td>
-          <td>
-            Admission: ₹${s.admissionFee}<br/>
-            Paid: ₹${s.paid}<br/>
-            <strong style="color: ${s.remaining > 0 ? 'var(--primary-red)' : 'var(--success-green)'};">
-              Due: ₹${s.remaining}
-            </strong>
+          <td><strong>${s.name}</strong> <span style="font-size:0.75rem; color:#6B7280;">(${s.batch})</span></td>
+          <td>${s.ph1}</td>
+          <td>${s.date || '—'}</td>
+          <td style="font-weight:700; color:${s.remaining > 0 ? 'var(--primary-red)' : 'var(--success-green)'};">
+            ₹${s.remaining}
           </td>
           <td style="font-size:0.8rem;">
-            D1: ${s.due1Date || '—'} (₹${s.due1Amt})<br/>
-            D2: ${s.due2Date || '—'} (₹${s.due2Amt})<br/>
-            D3: ${s.due3Date || '—'} (₹${s.due3Amt})
+            ${s.due1_date ? `${s.due1_date} (₹${s.due1_amt})` : '—'}
           </td>
           <td>
-            <div class="months-container">${monthHtml}</div>
+            <button type="button" class="month-select-dropdown" onclick="openMonthModal(${idx})">
+              📅 Status: <strong>${paidArr.length} Paid</strong>
+            </button>
           </td>
           <td>
-            <button type="button" class="btn-print" onclick="printStudent(${idx})">🖨️ Print / PDF</button>
+            <button type="button" class="btn-print" onclick="printStudent(${idx})">🖨️ PDF</button>
             <button type="button" class="btn-readmit" ${isEligibleForReadmission ? '' : 'disabled'} 
-                    title="${isEligibleForReadmission ? 'Ready for Re-Admission' : 'Requires zero due and all 12 months paid'}" 
-                    onclick="executeReAdmission(${idx})">Re-Admission</button>
+                    title="${isEligibleForReadmission ? 'Ready for Re-Admission' : 'Requires zero due and all active months paid'}" 
+                    onclick="executeReAdmission(${idx})">Re-Admit</button>
           </td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    // INCOME ENTRY SUBMIT
-    document.getElementById("income-entry-form").addEventListener("submit", (e) => {
+    // Re-Admission Process
+    async function executeReAdmission(studentIndex) {
+      const student = DB.students[studentIndex];
+      if (!confirm(`Archive cycle for ${student.name} and execute Re-Admission?`)) return;
+
+      const updatedNotes = (student.notes || "") + ` | Re-Admitted on ${new Date().toLocaleDateString()}`;
+      await supabase.from("ff_students").update({
+        paid_months: [],
+        admission_fee: 0,
+        paid: 0,
+        remaining: 0,
+        due1_date: "",
+        due1_amt: 0,
+        due2_date: "",
+        due2_amt: 0,
+        notes: updatedNotes
+      }).eq("id", student.id);
+
+      alert(`Re-admission completed for ${student.name}. Previous records archived.`);
+      await loadCloudData();
+    }
+
+    // Income Submit
+    document.getElementById("income-entry-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const newIncome = {
         id: "INC-" + Date.now(),
@@ -1322,15 +1473,19 @@
         amount: parseFloat(document.getElementById("inc-amount").value) || 0
       };
 
-      DB.incomes.push(newIncome);
-      localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
+      const { error } = await supabase.from("ff_incomes").insert([newIncome]);
+      if (error) {
+        alert("Error saving income: " + error.message);
+        return;
+      }
+
       document.getElementById("income-entry-form").reset();
       initGenerators();
-      renderFinanceDashboard();
+      await loadCloudData();
     });
 
-    // EXPENDITURE ENTRY SUBMIT
-    document.getElementById("expense-entry-form").addEventListener("submit", (e) => {
+    // Expense Submit
+    document.getElementById("expense-entry-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const newExpense = {
         id: "EXP-" + Date.now(),
@@ -1340,53 +1495,53 @@
         amount: parseFloat(document.getElementById("exp-amount").value) || 0
       };
 
-      DB.expenses.push(newExpense);
-      localStorage.setItem("ff_expenses", JSON.stringify(DB.expenses));
+      const { error } = await supabase.from("ff_expenses").insert([newExpense]);
+      if (error) {
+        alert("Error saving expense: " + error.message);
+        return;
+      }
+
       document.getElementById("expense-entry-form").reset();
       initGenerators();
-      renderFinanceDashboard();
+      await loadCloudData();
     });
 
-    // RENDER FINANCE DASHBOARD
     function renderFinanceDashboard() {
       let totalIncome = 0;
       let totalExpense = 0;
 
-      // 1. Render Incomes
       const incTbody = document.getElementById("income-table-body");
       incTbody.innerHTML = "";
       const sortedIncomes = [...DB.incomes].sort((a, b) => new Date(b.date) - new Date(a.date));
 
       sortedIncomes.forEach(inc => {
-        totalIncome += (inc.amount || 0);
+        totalIncome += (Number(inc.amount) || 0);
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>${inc.date}</td>
           <td><strong>${inc.purpose}</strong></td>
           <td>${inc.person}</td>
-          <td style="color:var(--success-green); font-weight:700;">+₹${inc.amount.toLocaleString("en-IN")}</td>
+          <td style="color:var(--success-green); font-weight:700;">+₹${Number(inc.amount).toLocaleString("en-IN")}</td>
         `;
         incTbody.appendChild(tr);
       });
 
-      // 2. Render Expenses
       const expTbody = document.getElementById("expense-table-body");
       expTbody.innerHTML = "";
       const sortedExpenses = [...DB.expenses].sort((a, b) => new Date(b.date) - new Date(a.date));
 
       sortedExpenses.forEach(exp => {
-        totalExpense += (exp.amount || 0);
+        totalExpense += (Number(exp.amount) || 0);
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>${exp.date}</td>
           <td><strong>${exp.purpose}</strong></td>
           <td>${exp.person}</td>
-          <td style="color:var(--primary-red); font-weight:700;">-₹${exp.amount.toLocaleString("en-IN")}</td>
+          <td style="color:var(--primary-red); font-weight:700;">-₹${Number(exp.amount).toLocaleString("en-IN")}</td>
         `;
         expTbody.appendChild(tr);
       });
 
-      // 3. Update Metric Display Cards
       document.getElementById("stat-total-inflow").innerText = "₹" + totalIncome.toLocaleString("en-IN");
       document.getElementById("stat-total-outflow").innerText = "₹" + totalExpense.toLocaleString("en-IN");
       const net = totalIncome - totalExpense;
@@ -1395,12 +1550,18 @@
       netElem.style.color = (net >= 0) ? "var(--navy-blue)" : "var(--primary-red)";
     }
 
-    // Student Zone
     function renderStudentPortal(student) {
       const target = document.getElementById("student-summary-content");
-      const monthHtml = MONTHS.map(m => {
-        const isPaid = (student.paidMonths || []).includes(m);
-        return `<div class="month-badge ${isPaid ? 'paid' : ''}" style="cursor: default;">${m}</div>`;
+      const paidArr = Array.isArray(student.paid_months) ? student.paid_months : [];
+      const admOrder = getMonthOrder(student.date);
+
+      const monthHtml = ACADEMIC_MONTHS.map(m => {
+        const isInactive = (m.order < admOrder);
+        const isPaid = paidArr.includes(m.label);
+        let badgeClass = "month-badge";
+        if (isInactive) badgeClass += " disabled-month";
+        else if (isPaid) badgeClass += " paid";
+        return `<div class="${badgeClass}" style="cursor: default;">${m.label}</div>`;
       }).join("");
 
       target.innerHTML = `
@@ -1410,7 +1571,7 @@
           <div><p><strong>Guardian:</strong> ${student.guardian}</p></div>
           <div><p><strong>Primary Phone:</strong> ${student.ph1}</p></div>
           <div><p><strong>Admission Balance Due:</strong> ₹${student.remaining}</p></div>
-          <div><p><strong>Monthly Tuition:</strong> ₹${student.tuitionFee} | <strong>Hostel:</strong> ₹${student.hostelFee}</p></div>
+          <div><p><strong>Monthly Tuition:</strong> ₹${student.tuition_fee} | <strong>Hostel:</strong> ₹${student.hostel_fee}</p></div>
         </div>
         <h4 style="color:var(--navy-blue); margin-bottom: 8px;">Academic Year Clearances (Red = Cleared)</h4>
         <div class="months-container">${monthHtml}</div>
@@ -1427,7 +1588,8 @@
     function preparePrintRecord(s) {
       document.getElementById("print-document-title").innerText = "Cadet Official Verification & Financial Record";
       const p = document.getElementById("printable-details");
-      const paidMonthsSummary = (s.paidMonths && s.paidMonths.length) ? s.paidMonths.join(", ") : "None";
+      const paidArr = Array.isArray(s.paid_months) ? s.paid_months : [];
+      const paidMonthsSummary = paidArr.length ? paidArr.join(", ") : "None";
 
       p.innerHTML = `
         <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
@@ -1449,11 +1611,10 @@
         </table>
         <h4 style="margin: 14px 0 6px 0; color: #0A192F;">Official Financial Ledger</h4>
         <table class="print-table">
-          <tr><th>Admission Fee</th><td>₹${s.admissionFee}</td><th>Total Paid</th><td>₹${s.paid}</td></tr>
-          <tr><th>Remaining Admission Due</th><td>₹${s.remaining}</td><th>Dress / Kit Fees</th><td>₹${s.dressFee}</td></tr>
-          <tr><th>Hostel Fees (Monthly)</th><td>₹${s.hostelFee}</td><th>Tuition Fees (Monthly)</th><td>₹${s.tuitionFee}</td></tr>
-          <tr><th>Due Installment 1</th><td>${s.due1Date || 'N/A'} (₹${s.due1Amt})</td><th>Due Installment 2</th><td>${s.due2Date || 'N/A'} (₹${s.due2Amt})</td></tr>
-          <tr><th>Due Installment 3</th><td>${s.due3Date || 'N/A'} (₹${s.due3Amt})</td><th>Cleared Months</th><td>${paidMonthsSummary}</td></tr>
+          <tr><th>Admission Fee</th><td>₹${s.admission_fee}</td><th>Total Paid</th><td>₹${s.paid}</td></tr>
+          <tr><th>Remaining Admission Due</th><td>₹${s.remaining}</td><th>Misc / Kit Fees</th><td>₹${s.dress_fee}</td></tr>
+          <tr><th>Hostel Fees (Monthly)</th><td>₹${s.hostel_fee}</td><th>Tuition Fees (Monthly)</th><td>₹${s.tuition_fee}</td></tr>
+          <tr><th>Upcoming Due 1</th><td>${s.due1_date || 'N/A'} (₹${s.due1_amt})</td><th>Cleared Months</th><td>${paidMonthsSummary}</td></tr>
         </table>
         <div class="signature-row">
           <div class="signature-line">Candidate Signature</div>
@@ -1465,4 +1626,4 @@
     initGenerators();
   </script>
 </body>
-            </html>
+</html>
