@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAUJ-E-FACTORY - Management System</title>
+  <style>
+    :root {
+      --primary-red: #E52521;
+      --navy-blue: #0A192F;
+      --navy-light: #172A45;
+      --pure-white: #FFFFFF;
+      --border-gray: #D1D5DB;
+      --bg-gray: #F3F4F6;
+      --text-dark: #1F2937;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-gray);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navbar */
+    .navbar {
+      background-color: var(--navy-blue);
+      color: var(--pure-white);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 4px solid var(--primary-red);
+    }
+
+    .brand-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--pure-white);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-title span {
+      color: var(--primary-red);
+    }
+
+    .user-tag {
+      font-size: 0.9rem;
+      background: var(--navy-light);
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .btn-logout {
+      background: var(--primary-red);
+      color: var(--pure-white);
+      border: none;
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 12px;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      margin: 24px auto;
+      padding: 0 16px;
+      flex: 1;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--pure-white);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 24px;
+      margin-bottom: 24px;
+      border-top: 4px solid var(--navy-blue);
+    }
+
+    .card-header {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--navy-blue);
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--bg-gray);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Form Layout */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--navy-blue);
+    }
+
+    input, select, textarea {
+      padding: 10px;
+      border: 1px solid var(--border-gray);
+      border-radius: 4px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary-red);
+      box-shadow: 0 0 0 2px rgba(229, 37, 33, 0.2);
+    }
+
+    .btn-primary {
+      background: var(--primary-red);
+      color: var(--pure-white);
+      font-weight: 700;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #c21b18;
+    }
+
+    .btn-print {
+      background: var(--navy-blue);
+      color: var(--pure-white);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* Roster Table */
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 10px 14px;
+      border: 1px solid var(--border-gray);
+      font-size: 0.9rem;
+    }
+
+    th {
+      background-color: var(--navy-blue);
+      color: var(--pure-white);
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9fafb;
+    }
+
+    /* Print Template */
+    #print-section {
+      display: none;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #print-section, #print-section * {
+        visibility: visible;
+      }
+      #print-section {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white;
+        padding: 20px;
+        color: black;
+      }
+      .print-box {
+        border: 2px solid #0A192F;
+        padding: 20px;
+      }
+      .print-header {
+        text-align: center;
+        border-bottom: 2px solid #E52521;
+        padding-bottom: 10px;
+        margin-bottom: 16px;
+      }
+      .print-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="navbar">
+    <div class="brand-title">FAUJ-E-<span>FACTORY</span></div>
+    <div id="nav-controls" style="display: none;">
+      <span class="user-tag" id="current-user-tag"></span>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="container">
+    
+    <!-- 1. LOGIN SCREEN -->
+    <div id="login-view" class="card" style="max-width: 420px; margin: 60px auto;">
+      <div class="card-header" style="justify-content: center; text-align: center;">
+        SYSTEM ACCESS
+      </div>
+      <form id="login-form">
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label>Email or Phone Number</label>
+          <input type="text" id="login-identifier" placeholder="admin@fauji.com or Phone Number" required />
+        </div>
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label>Password</label>
+          <input type="password" id="login-password" placeholder="••••••••" required />
+        </div>
+        <button type="submit" class="btn-primary" style="width: 100%;">Sign In</button>
+        <p style="font-size: 0.75rem; text-align: center; color: #6B7280; margin-top: 14px;">
+          Official/Student passwords are generated by Super Admin and cannot be changed by users.
+        </p>
+      </form>
+    </div>
+
+    <!-- 2. SUPER ADMIN & OFFICIAL DASHBOARD -->
+    <div id="admin-view" style="display: none;">
+      
+      <!-- Staff Generation Card (Super Admin Only) -->
+      <div class="card" id="staff-creation-box">
+        <div class="card-header">Create Official / Faculty Profile</div>
+        <form id="staff-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="staff-name" required />
+            </div>
+            <div class="form-group">
+              <label>Phone Number (Login ID)</label>
+              <input type="tel" id="staff-phone" required />
+            </div>
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input type="date" id="staff-dob" required />
+            </div>
+            <div class="form-group">
+              <label>Designation</label>
+              <select id="staff-role" required>
+                <option value="Official">Official</option>
+                <option value="Faculty">Faculty</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Generated Password</label>
+              <input type="text" id="staff-password" readonly style="background:#eee; font-weight:bold;" />
+            </div>
+          </div>
+          <button type="submit" class="btn-primary">Generate & Save Staff Profile</button>
+        </form>
+      </div>
+
+      <!-- Student Enrollment Card -->
+      <div class="card">
+        <div class="card-header">
+          New Student Registration
+        </div>
+        <form id="student-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Candidate Full Name</label>
+              <input type="text" id="std-name" required />
+            </div>
+            <div class="form-group">
+              <label>Candidate Photo</label>
+              <input type="file" id="std-photo" accept="image/*" />
+            </div>
+            <div class="form-group">
+              <label>Guardian's Name</label>
+              <input type="text" id="std-guardian" required />
+            </div>
+            <div class="form-group">
+              <label>Primary Phone (Phone 1 - Login ID)</label>
+              <input type="tel" id="std-ph1" required />
+            </div>
+            <div class="form-group">
+              <label>Secondary Phone (Phone 2)</label>
+              <input type="tel" id="std-ph2" />
+            </div>
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input type="date" id="std-dob" required />
+            </div>
+            <div class="form-group">
+              <label>Aadhaar Number</label>
+              <input type="text" id="std-aadhar" placeholder="XXXX-XXXX-XXXX" required />
+            </div>
+            <div class="form-group">
+              <label>Batch</label>
+              <select id="std-batch" required>
+                <option value="G1">G1</option><option value="G2">G2</option>
+                <option value="G3">G3</option><option value="G4">G4</option>
+                <option value="H1">H1</option><option value="H2">H2</option>
+                <option value="H3">H3</option><option value="H4">H4</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Gender</label>
+              <select id="std-gender" onchange="toggleChestField(this.value)">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Reference</label>
+              <input type="text" id="std-ref" />
+            </div>
+            <div class="form-group">
+              <label>Educational Qualifications</label>
+              <input type="text" id="std-qual" required />
+            </div>
+            <div class="form-group">
+              <label>% of Last Passed Exam</label>
+              <input type="number" step="0.01" id="std-marks" required />
+            </div>
+            <div class="form-group">
+              <label>Height (cm)</label>
+              <input type="number" id="std-height" required />
+            </div>
+            <div class="form-group">
+              <label>Weight (kg)</label>
+              <input type="number" id="std-weight" required />
+            </div>
+            <div class="form-group" id="chest-group">
+              <label>Chest (cm) [Male Candidates]</label>
+              <input type="number" id="std-chest" />
+            </div>
+            <div class="form-group full-width">
+              <label>Address</label>
+              <textarea id="std-address" rows="2" required></textarea>
+            </div>
+            <div class="form-group">
+              <label>Paid at Time of Admission (₹)</label>
+              <input type="number" id="std-paid" required />
+            </div>
+            <div class="form-group">
+              <label>Remaining Balance (₹)</label>
+              <input type="number" id="std-remaining" required />
+            </div>
+            <div class="form-group">
+              <label>Next Installment Date</label>
+              <input type="date" id="std-next-date" />
+            </div>
+            <div class="form-group">
+              <label>Monthly Payment Date</label>
+              <input type="date" id="std-monthly-date" />
+            </div>
+            <div class="form-group">
+              <label>Generated Student Password</label>
+              <input type="text" id="std-generated-pw" readonly style="background:#eee; font-weight:bold;" />
+            </div>
+            <div class="form-group full-width">
+              <label>Extra Notes</label>
+              <textarea id="std-notes" rows="2"></textarea>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary">Register Student Profile</button>
+        </form>
+      </div>
+
+      <!-- Student Roster -->
+      <div class="card">
+        <div class="card-header">
+          Enrolled Candidates
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Batch</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Remaining Fee</th>
+                <th>Next Due Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="student-roster-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 3. STUDENTS' ZONE VIEW -->
+    <div id="student-zone-view" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <span>STUDENT'S ZONE - OFFICIAL IDENTITY SUMMARY</span>
+          <button class="btn-print" onclick="window.print()">Print Bio-Data</button>
+        </div>
+        <div id="student-summary-content"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Print Bio-Data Template -->
+  <div id="print-section">
+    <div class="print-box">
+      <div class="print-header">
+        <h2>FAUJ-E-FACTORY</h2>
+        <p>Cadet Verification & Bio-Data Record</p>
+      </div>
+      <div id="printable-details"></div>
+    </div>
+  </div>
+
+  <script>
+    // In-memory / localStorage Data Store
+    const DB = {
+      staff: JSON.parse(localStorage.getItem("ff_staff") || "[]"),
+      students: JSON.parse(localStorage.getItem("ff_students") || "[]")
+    };
+
+    let currentUser = null;
+
+    // Helper: Password Generator
+    function generateSecurePassword() {
+      return "FF" + Math.floor(100000 + Math.random() * 900000);
+    }
+
+    // Dynamic Chest field toggle
+    function toggleChestField(val) {
+      document.getElementById("chest-group").style.display = (val === "Male") ? "flex" : "none";
+    }
+
+    // Refresh generated inputs on page load
+    function initGenerators() {
+      document.getElementById("staff-password").value = generateSecurePassword();
+      document.getElementById("std-generated-pw").value = generateSecurePassword();
+    }
+
+    // Login Controller
+    document.getElementById("login-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const id = document.getElementById("login-identifier").value.trim();
+      const pass = document.getElementById("login-password").value.trim();
+
+      // 1. Super Admin Hardcoded Access Check
+      if (id === "admin@fauji.com" && pass === "Admin@123") {
+        currentUser = { role: "SuperAdmin", name: "Super Admin" };
+        startSession();
+        return;
+      }
+
+      // 2. Staff Check
+      const staffMember = DB.staff.find(s => s.phone === id && s.password === pass);
+      if (staffMember) {
+        currentUser = { ...staffMember };
+        startSession();
+        return;
+      }
+
+      // 3. Student Check
+      const student = DB.students.find(s => s.ph1 === id && s.password === pass);
+      if (student) {
+        currentUser = { ...student, role: "Student" };
+        startSession();
+        return;
+      }
+
+      alert("Invalid identifier or password.");
+    });
+
+    function startSession() {
+      document.getElementById("login-view").style.display = "none";
+      document.getElementById("nav-controls").style.display = "flex";
+      document.getElementById("current-user-tag").innerText = `${currentUser.name} (${currentUser.role})`;
+
+      if (currentUser.role === "SuperAdmin" || currentUser.role === "Official") {
+        document.getElementById("admin-view").style.display = "block";
+        document.getElementById("staff-creation-box").style.display = (currentUser.role === "SuperAdmin") ? "block" : "none";
+        renderRoster();
+      } else if (currentUser.role === "Student") {
+        document.getElementById("student-zone-view").style.display = "block";
+        renderStudentPortal(currentUser);
+      }
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById("login-view").style.display = "block";
+      document.getElementById("admin-view").style.display = "none";
+      document.getElementById("student-zone-view").style.display = "none";
+      document.getElementById("nav-controls").style.display = "none";
+    }
+
+    // Staff Creation Form Submit
+    document.getElementById("staff-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const newStaff = {
+        name: document.getElementById("staff-name").value,
+        phone: document.getElementById("staff-phone").value,
+        dob: document.getElementById("staff-dob").value,
+        role: document.getElementById("staff-role").value,
+        password: document.getElementById("staff-password").value
+      };
+
+      DB.staff.push(newStaff);
+      localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
+      alert(`Profile created for ${newStaff.name}. Assigned Password: ${newStaff.password}`);
+      document.getElementById("staff-form").reset();
+      initGenerators();
+    });
+
+    // Student Creation Form Submit
+    document.getElementById("student-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const newStudent = {
+        name: document.getElementById("std-name").value,
+        guardian: document.getElementById("std-guardian").value,
+        ph1: document.getElementById("std-ph1").value,
+        ph2: document.getElementById("std-ph2").value,
+        dob: document.getElementById("std-dob").value,
+        aadhar: document.getElementById("std-aadhar").value,
+        batch: document.getElementById("std-batch").value,
+        gender: document.getElementById("std-gender").value,
+        reference: document.getElementById("std-ref").value,
+        qualification: document.getElementById("std-qual").value,
+        marks: document.getElementById("std-marks").value,
+        height: document.getElementById("std-height").value,
+        weight: document.getElementById("std-weight").value,
+        chest: document.getElementById("std-chest").value || "N/A",
+        address: document.getElementById("std-address").value,
+        paid: document.getElementById("std-paid").value,
+        remaining: document.getElementById("std-remaining").value,
+        nextDate: document.getElementById("std-next-date").value,
+        monthlyDate: document.getElementById("std-monthly-date").value,
+        password: document.getElementById("std-generated-pw").value,
+        notes: document.getElementById("std-notes").value
+      };
+
+      DB.students.push(newStudent);
+      localStorage.setItem("ff_students", JSON.stringify(DB.students));
+      alert(`Cadet registered! Assigned Password for Student Zone: ${newStudent.password}`);
+      document.getElementById("student-form").reset();
+      initGenerators();
+      renderRoster();
+    });
+
+    // Render Student Table
+    function renderRoster() {
+      const tbody = document.getElementById("student-roster-body");
+      tbody.innerHTML = "";
+      DB.students.forEach((s, idx) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${s.batch}</strong></td>
+          <td>${s.name}</td>
+          <td>${s.ph1}</td>
+          <td>₹${s.remaining}</td>
+          <td>${s.nextDate || "None"}</td>
+          <td>
+            <button class="btn-print" style="padding: 4px 8px; font-size: 0.8rem;" onclick="printStudent(${idx})">Print</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Render Student Zone Details
+    function renderStudentPortal(student) {
+      const target = document.getElementById("student-summary-content");
+      target.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div><p><strong>Cadet Name:</strong> ${student.name}</p></div>
+          <div><p><strong>Batch Assigned:</strong> ${student.batch}</p></div>
+          <div><p><strong>Guardian:</strong> ${student.guardian}</p></div>
+          <div><p><strong>Primary Contact:</strong> ${student.ph1}</p></div>
+          <div><p><strong>Physical Stats:</strong> Height: ${student.height}cm | Weight: ${student.weight}kg</p></div>
+          <div><p><strong>Remaining Fee Balance:</strong> ₹${student.remaining}</p></div>
+          <div><p><strong>Next Installment Due:</strong> ${student.nextDate || "None"}</p></div>
+        </div>
+      `;
+      preparePrintRecord(student);
+    }
+
+    // Prepare Printable Profile
+    function printStudent(index) {
+      const student = DB.students[index];
+      preparePrintRecord(student);
+      window.print();
+    }
+
+    function preparePrintRecord(s) {
+      const p = document.getElementById("printable-details");
+      p.innerHTML = `
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+          <div>
+            <h3>${s.name}</h3>
+            <p>Batch: <strong>${s.batch}</strong> | Ph: ${s.ph1}</p>
+            <p>Guardian: ${s.guardian}</p>
+            <p>Address: ${s.address}</p>
+          </div>
+          <div style="width: 100px; height: 120px; border: 1px dashed #333; display: flex; align-items: center; justify-content: center; font-size: 10px;">
+            PASSPORT PHOTO
+          </div>
+        </div>
+        <hr style="margin-bottom: 12px;"/>
+        <table style="margin-bottom: 20px;">
+          <tr><th>Height</th><td>${s.height} cm</td><th>Weight</th><td>${s.weight} kg</td></tr>
+          <tr><th>Chest</th><td>${s.chest} cm</td><th>DOB</th><td>${s.dob}</td></tr>
+          <tr><th>Qualification</th><td>${s.qualification}</td><th>Last Exam %</th><td>${s.marks}%</td></tr>
+          <tr><th>Admission Paid</th><td>₹${s.paid}</td><th>Remaining Due</th><td>₹${s.remaining}</td></tr>
+          <tr><th>Next Installment</th><td>${s.nextDate || "N/A"}</td><th>Monthly Date</th><td>${s.monthlyDate || "N/A"}</td></tr>
+        </table>
+        <div style="margin-top: 40px; display: flex; justify-content: space-between;">
+          <p>Candidate Signature: __________________</p>
+          <p>Authorized Signatory: __________________</p>
+        </div>
+      `;
+    }
+
+    // Initialize
+    initGenerators();
+  </script>
+</body>
+</html>
