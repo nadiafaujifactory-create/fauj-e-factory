@@ -72,7 +72,7 @@
       margin-left: 12px;
     }
 
-    /* Layout Containers */
+    /* Container */
     .container {
       max-width: 1100px;
       width: 100%;
@@ -112,7 +112,7 @@
       border-bottom: 1px dashed var(--border-gray);
     }
 
-    /* Form Grids */
+    /* Form Layouts */
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -149,7 +149,7 @@
       box-shadow: 0 0 0 2px rgba(229, 37, 33, 0.15);
     }
 
-    /* Password Input with Eye Toggle */
+    /* Password Input with Toggle */
     .password-wrapper {
       position: relative;
       display: flex;
@@ -175,7 +175,7 @@
       height: 20px;
     }
 
-    /* Buttons */
+    /* Action Buttons */
     .btn-primary {
       background: var(--primary-red);
       color: var(--pure-white);
@@ -195,11 +195,15 @@
       background: var(--navy-blue);
       color: var(--pure-white);
       border: none;
-      padding: 6px 12px;
+      padding: 8px 14px;
       border-radius: 4px;
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
     }
 
     .btn-print:hover {
@@ -210,7 +214,7 @@
       background: var(--success-green);
       color: var(--pure-white);
       border: none;
-      padding: 6px 12px;
+      padding: 8px 12px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 600;
@@ -223,7 +227,7 @@
       cursor: not-allowed;
     }
 
-    /* Table Styles */
+    /* Tables */
     .table-container {
       overflow-x: auto;
     }
@@ -236,7 +240,7 @@
     }
 
     th, td {
-      padding: 10px 12px;
+      padding: 12px 14px;
       border: 1px solid var(--border-gray);
       font-size: 0.88rem;
     }
@@ -278,7 +282,7 @@
       color: var(--pure-white) !important;
     }
 
-    /* Print Template Engine */
+    /* Print Template */
     #print-section {
       display: none;
     }
@@ -297,7 +301,7 @@
         top: 0;
         width: 100%;
         background: white;
-        padding: 20px;
+        padding: 24px;
         color: black;
       }
       .print-box {
@@ -317,7 +321,7 @@
       }
       .print-header p {
         font-size: 0.95rem;
-        font-weight: 600;
+        font-weight: 700;
         color: #E52521;
       }
       .print-table {
@@ -352,7 +356,6 @@
 </head>
 <body>
 
-  <!-- App Header -->
   <header class="navbar">
     <div class="brand-title">FAUJ-E-<span>FACTORY</span></div>
     <div id="nav-controls" style="display: none;">
@@ -387,7 +390,7 @@
         </div>
         <button type="submit" class="btn-primary" style="width: 100%;">Sign In</button>
         <p style="font-size: 0.75rem; text-align: center; color: #6B7280; margin-top: 14px;">
-          Official/Student credentials are configured and controlled solely by Super Admin.
+          Credentials are generated and maintained exclusively by Super Admin.
         </p>
       </form>
     </div>
@@ -395,7 +398,7 @@
     <!-- 2. SUPER ADMIN & OFFICIAL DASHBOARD -->
     <div id="admin-view" style="display: none;">
       
-      <!-- Staff Profile Generation (Super Admin Only) -->
+      <!-- Staff Profile Generation -->
       <div class="card" id="staff-creation-box">
         <div class="card-header">Create Official / Faculty Profile</div>
         <form id="staff-form">
@@ -428,9 +431,9 @@
         </form>
       </div>
 
-      <!-- Staff / Faculty Directory (Super Admin Only) -->
+      <!-- Staff / Faculty Directory with Explicit Print Button -->
       <div class="card" id="staff-directory-box">
-        <div class="card-header">Official & Faculty Directory</div>
+        <div class="card-header">Official & Faculty Directory (Print Staff Bio-Data)</div>
         <div class="table-container">
           <table>
             <thead>
@@ -440,7 +443,7 @@
                 <th>Phone (Login ID)</th>
                 <th>Date of Birth</th>
                 <th>Access Password</th>
-                <th>Actions</th>
+                <th>Print Action</th>
               </tr>
             </thead>
             <tbody id="staff-roster-body"></tbody>
@@ -448,7 +451,7 @@
         </div>
       </div>
 
-      <!-- Student Admission & Detailed Fee Form -->
+      <!-- Cadet Admission Form -->
       <div class="card">
         <div class="card-header">Cadet Admission Form</div>
         <form id="student-form">
@@ -592,7 +595,7 @@
         </form>
       </div>
 
-      <!-- Enrolled Cadet Roster & Monthly Fee Matrix -->
+      <!-- Enrolled Cadet Roster with Explicit Print / PDF Button Column -->
       <div class="card">
         <div class="card-header">
           <span>Cadet Roster & Academic Session (April 2026 – March 2027)</span>
@@ -604,8 +607,8 @@
                 <th>Cadet Details</th>
                 <th>Admission Dues</th>
                 <th>Installments</th>
-                <th>Monthly Fees Status</th>
-                <th>PDF / Actions</th>
+                <th>Monthly Status</th>
+                <th>Print / PDF Action</th>
               </tr>
             </thead>
             <tbody id="student-roster-body"></tbody>
@@ -620,7 +623,7 @@
       <div class="card">
         <div class="card-header">
           <span>STUDENT'S ZONE - CADET STATUS SHEET</span>
-          <button class="btn-print" onclick="window.print()">Print Official Bio-Data / PDF</button>
+          <button class="btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
         </div>
         <div id="student-summary-content"></div>
       </div>
@@ -628,7 +631,7 @@
 
   </div>
 
-  <!-- Hidden Print / PDF Layout Engine -->
+  <!-- Print Engine -->
   <div id="print-section">
     <div class="print-box">
       <div class="print-header">
@@ -646,11 +649,54 @@
       "Dec 2026", "Jan 2027", "Feb 2027", "Mar 2027"
     ];
 
+    // Seed default records if empty so print buttons appear immediately
+    const initialStaff = JSON.parse(localStorage.getItem("ff_staff")) || [
+      { name: "Demo Official", phone: "9876543210", dob: "1990-01-01", role: "Official", password: "FF123456" }
+    ];
+    const initialStudents = JSON.parse(localStorage.getItem("ff_students")) || [
+      {
+        id: "STD-101",
+        name: "Demo Cadet",
+        guardian: "Demo Guardian",
+        ph1: "9123456780",
+        ph2: "9123456781",
+        dob: "2005-05-15",
+        aadhar: "XXXX-XXXX-XXXX",
+        batch: "G1",
+        gender: "Male",
+        reference: "Direct",
+        qualification: "Higher Secondary",
+        marks: 82.5,
+        height: 172,
+        weight: 64,
+        chest: 81,
+        address: "Campus Barrack 1, Kolkata",
+        admissionFee: 10000,
+        paid: 5000,
+        remaining: 5000,
+        due1Date: "2026-10-15",
+        due1Amt: 5000,
+        due2Date: "",
+        due2Amt: 0,
+        due3Date: "",
+        due3Amt: 0,
+        hostelFee: 3000,
+        tuitionFee: 2000,
+        dressFee: 1500,
+        password: "FF654321",
+        notes: "Sample active cadet for instant print verification",
+        paidMonths: ["Apr 2026"]
+      }
+    ];
+
     const DB = {
-      staff: JSON.parse(localStorage.getItem("ff_staff") || "[]"),
-      students: JSON.parse(localStorage.getItem("ff_students") || "[]"),
+      staff: initialStaff,
+      students: initialStudents,
       history: JSON.parse(localStorage.getItem("ff_history") || "[]")
     };
+
+    localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
+    localStorage.setItem("ff_students", JSON.stringify(DB.students));
 
     let currentUser = null;
 
@@ -768,7 +814,7 @@
       renderStaffDirectory();
     });
 
-    // Render Staff Directory
+    // Render Staff Directory with Print Action
     function renderStaffDirectory() {
       const tbody = document.getElementById("staff-roster-body");
       if (!tbody) return;
@@ -782,14 +828,16 @@
           <td>${st.dob}</td>
           <td><code>${st.password}</code></td>
           <td>
-            <button class="btn-print" onclick="printStaffProfile(${idx})">Print / PDF</button>
+            <button type="button" class="btn-print" onclick="printStaffProfile(${idx})">
+              🖨️ Print / PDF
+            </button>
           </td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    // Print Staff Profile Card
+    // Print Staff Card
     function printStaffProfile(index) {
       const st = DB.staff[index];
       document.getElementById("print-document-title").innerText = "Official / Faculty Authorization Document";
@@ -803,17 +851,17 @@
             <p>Date of Birth: ${st.dob}</p>
           </div>
           <div style="width: 100px; height: 120px; border: 1px dashed #333; display: flex; align-items: center; justify-content: center; font-size: 10px;">
-            STAFF PHOTO
+            PASSPORT PHOTO
           </div>
         </div>
         <table class="print-table">
-          <tr><th>Authorized Institution</th><td>FAUJ-E-FACTORY Head Office & Campus</td></tr>
-          <tr><th>Account Scope</th><td>${st.role === "Official" ? "Admissions, Records & Operations" : "Academic & Training Instruction"}</td></tr>
-          <tr><th>Authentication Key</th><td><code>${st.password}</code></td></tr>
+          <tr><th>Authorized Institution</th><td>FAUJ-E-FACTORY Central Campus</td></tr>
+          <tr><th>Account Scope</th><td>${st.role === "Official" ? "Admissions, Records & Operations" : "Academic & Physical Training"}</td></tr>
+          <tr><th>Access Credential</th><td><code>${st.password}</code></td></tr>
         </table>
         <div class="signature-row">
           <div class="signature-line">Staff Signature</div>
-          <div class="signature-line">Director / Super Admin</div>
+          <div class="signature-line">Super Admin Signature</div>
         </div>
       `;
       window.print();
@@ -864,7 +912,7 @@
       renderRoster();
     });
 
-    // Toggle Monthly Fee Status
+    // Toggle Monthly Fee
     function toggleMonthPaid(studentIndex, monthName) {
       const student = DB.students[studentIndex];
       const idx = student.paidMonths.indexOf(monthName);
@@ -903,11 +951,11 @@
       student.notes += ` | Re-Admitted on ${new Date().toLocaleDateString()}`;
 
       localStorage.setItem("ff_students", JSON.stringify(DB.students));
-      alert(`Re-admission completed for ${student.name}. Previous financial records have been archived.`);
+      alert(`Re-admission completed for ${student.name}. Financial ledger archived.`);
       renderRoster();
     }
 
-    // Render Student Table
+    // Render Student Table with Explicit Print Buttons
     function renderRoster() {
       const tbody = document.getElementById("student-roster-body");
       tbody.innerHTML = "";
@@ -942,8 +990,10 @@
             <div class="months-container">${monthHtml}</div>
           </td>
           <td>
-            <button class="btn-print" onclick="printStudent(${idx})">Print / PDF</button>
-            <button class="btn-readmit" ${isEligibleForReadmission ? '' : 'disabled'} 
+            <button type="button" class="btn-print" onclick="printStudent(${idx})">
+              🖨️ Print / PDF
+            </button>
+            <button type="button" class="btn-readmit" ${isEligibleForReadmission ? '' : 'disabled'} 
                     title="${isEligibleForReadmission ? 'Eligible for Re-Admission' : 'Requires zero due and all 12 months paid'}" 
                     onclick="executeReAdmission(${idx})">Re-Admission</button>
           </td>
@@ -984,7 +1034,7 @@
     function preparePrintRecord(s) {
       document.getElementById("print-document-title").innerText = "Cadet Official Verification & Financial Record";
       const p = document.getElementById("printable-details");
-      const paidMonthsSummary = s.paidMonths.length ? s.paidMonths.join(", ") : "None";
+      const paidMonthsSummary = (s.paidMonths && s.paidMonths.length) ? s.paidMonths.join(", ") : "None";
 
       p.innerHTML = `
         <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
@@ -1022,4 +1072,4 @@
     initGenerators();
   </script>
 </body>
-  </html>
+</html>
