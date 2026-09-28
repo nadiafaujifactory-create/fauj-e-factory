@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FAUJ-E-FACTORY - Management & Finance</title>
+  <!-- Supabase CDN Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --primary-red: #E52521;
@@ -325,7 +327,6 @@
       background: var(--navy-blue);
     }
 
-    /* Additional Dynamic Row Style */
     .dynamic-pay-row {
       display: grid;
       grid-template-columns: 1.2fr 1fr 1fr 1fr auto;
@@ -727,9 +728,7 @@
               <textarea id="std-address" rows="2" required></textarea>
             </div>
 
-            <!-- ========================================================= -->
-            <!-- PART 1: FEE FIXATION & TOTAL FIXED FEES                   -->
-            <!-- ========================================================= -->
+            <!-- PART 1: FEE FIXATION -->
             <div class="step-box">
               <div class="step-title">
                 <span>Part 1: Fee Fixation (নির্ধারিত ফি ফিক্সডকরণ)</span>
@@ -762,15 +761,12 @@
               </div>
             </div>
 
-            <!-- ========================================================= -->
-            <!-- PART 2: PAYMENT & DYNAMIC DUE BALANCE + RUNNING PAYMENTS  -->
-            <!-- ========================================================= -->
+            <!-- PART 2: PAYMENT & DYNAMIC DUE BALANCE -->
             <div class="step-box success">
               <div class="step-title">
                 <span>Part 2: Payments & Dynamic Due Balance (পেমেন্ট ও পরিবর্তনশীল বকেয়া হিসাব)</span>
               </div>
               
-              <!-- First Payment (At Admission) -->
               <p style="font-size:0.85rem; font-weight:700; color:var(--navy-blue); margin-bottom:8px;">
                 Initial Payment at the Time of Admission:
               </p>
@@ -786,7 +782,6 @@
                   </select>
                 </div>
 
-                <!-- Monthly Dropdown (Appears conditionally for Monthly Study/Hostel) -->
                 <div class="form-group" id="month-target-picker-group" style="display:none;">
                   <label>Target Month (কোন মাসের ফি)</label>
                   <select id="paid-target-month" onchange="calculateDynamicDue()"></select>
@@ -803,14 +798,12 @@
                 </div>
               </div>
 
-              <!-- Future Running Payments / Installment History -->
+              <!-- Future Running Payments -->
               <div class="section-subtitle" style="margin-top: 16px; margin-bottom: 10px;">
                 Future Payments / Installments Ledger (ভবিষ্যতে টাকা দিলে এখানে যোগ করুন)
               </div>
               
-              <div id="dynamic-payments-container">
-                <!-- Dynamically added rows go here -->
-              </div>
+              <div id="dynamic-payments-container"></div>
 
               <button type="button" class="btn-add-entry" onclick="addPaymentRow()">
                 ➕ Add Another Payment / Future Installment
@@ -1028,7 +1021,17 @@
   </div>
 
   <script>
-    // Standard Academic Year Months: Apr 2026 to Mar 2027
+    // ------------------------------------------------------------------
+    // LIVE CLOUD SYNCHRONIZATION VIA SUPABASE
+    // ------------------------------------------------------------------
+    const SUPABASE_URL = "https://dyldejdkgfnyvunkrddh.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5bGRlamRrZ2ZueXZ1bmtyZGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2MDE4OTYsImV4cCI6MjEwNjE3Nzg5Nn0._JUB9WjiB3aJAdEZZyADueL9i6iyf7us6dD8L3S1o0E";
+    
+    let supabase = null;
+    if (window.supabase) {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+
     const ACADEMIC_MONTHS = [
       { key: "2026-04", label: "Apr 2026", order: 4 },
       { key: "2026-05", label: "May 2026", order: 5 },
@@ -1054,7 +1057,63 @@
     let currentUser = null;
     let activeModalStudentIdx = null;
 
-    // Eye Toggle
+    // Load data from Supabase Cloud
+    async function loadCloudData() {
+      if (!supabase) return;
+      try {
+        const [staffRes, stdRes, incRes, expRes] = await Promise.allSettled([
+          supabase.from("ff_staff").select("*"),
+          supabase.from("ff_students").select("*"),
+          supabase.from("ff_incomes").select("*"),
+          supabase.from("ff_expenses").select("*")
+        ]);
+
+        if (staffRes.status === "fulfilled" && staffRes.value.data) {
+          DB.staff = staffRes.value.data;
+          localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
+        }
+        if (stdRes.status === "fulfilled" && stdRes.value.data) {
+          DB.students = stdRes.value.data;
+          localStorage.setItem("ff_students", JSON.stringify(DB.students));
+        }
+        if (incRes.status === "fulfilled" && incRes.value.data) {
+          DB.incomes = incRes.value.data;
+          localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
+        }
+        if (expRes.status === "fulfilled" && expRes.value.data) {
+          DB.expenses = expRes.value.data;
+          localStorage.setItem("ff_expenses", JSON.stringify(DB.expenses));
+        }
+
+        if (currentUser) {
+          if (currentUser.role === "SuperAdmin" || currentUser.role === "Official") {
+            renderStaffDirectory();
+            renderRoster();
+            renderFinanceDashboard();
+          } else if (currentUser.role === "Student") {
+            const freshMe = DB.students.find(s => s.ph1 === currentUser.ph1);
+            if (freshMe) renderStudentPortal(freshMe);
+          }
+        }
+      } catch (err) {
+        console.warn("Cloud sync warning:", err);
+      }
+    }
+
+    function initRealtimeSync() {
+      if (!supabase) return;
+      try {
+        supabase
+          .channel("realtime-fauji")
+          .on("postgres_changes", { event: "*", schema: "public" }, () => {
+            loadCloudData();
+          })
+          .subscribe();
+      } catch (e) {
+        console.warn("Realtime channel failed:", e);
+      }
+    }
+
     function togglePasswordVisibility() {
       const passInput = document.getElementById("login-password");
       const btn = document.getElementById("eye-toggle-btn");
@@ -1077,7 +1136,6 @@
       if (el) el.style.display = (val === "Male") ? "flex" : "none";
     }
 
-    // Helper: Determine Academic Order of a Date
     function getMonthOrder(dateStr) {
       if (!dateStr) return 0;
       const parts = dateStr.split("-");
@@ -1088,12 +1146,11 @@
       return 0;
     }
 
-    // Helper: Count remaining active months up to March 2027
     function getRemainingMonthsCount(admDateStr) {
       const admOrder = getMonthOrder(admDateStr);
       if (admOrder < 4) return 12;
       if (admOrder > 15) return 1;
-      return (15 - admOrder + 1); // e.g. August (8) to March (15) = 8 months
+      return (15 - admOrder + 1);
     }
 
     // 1. Calculate Total Fixed Fees (Part 1)
@@ -1107,7 +1164,6 @@
       const admDate = document.getElementById("std-admission-date").value || new Date().toISOString().split("T")[0];
       const activeMonths = getRemainingMonthsCount(admDate);
 
-      // Total Fixed Fees across admission & active session
       const totalFixed = adm + dress + other + ((tuition + hostel) * activeMonths);
       document.getElementById("total-fixed-fees-display").value = totalFixed;
 
@@ -1129,9 +1185,9 @@
       calculateDynamicDue();
     }
 
-    // Populate active months dropdown based on admission date
     function populateActiveMonthsDropdown() {
       const sel = document.getElementById("paid-target-month");
+      if (!sel) return;
       sel.innerHTML = "";
       const admDate = document.getElementById("std-admission-date").value;
       const admOrder = getMonthOrder(admDate);
@@ -1168,7 +1224,7 @@
         dueLabel.innerText = "Admission Fee Remaining Due (₹):";
       } else if (head === "Monthly Study Fees") {
         const monthlyTuition = parseFloat(document.getElementById("fix-tuition").value) || 0;
-        targetFixed = monthlyTuition * activeMonths; // e.g. Aug to Mar = 8 months * monthly
+        targetFixed = monthlyTuition * activeMonths;
         dueLabel.innerText = `Study Fees Due (${activeMonths} active months total) (₹):`;
       } else if (head === "Hostel Fees") {
         const monthlyHostel = parseFloat(document.getElementById("fix-hostel").value) || 0;
@@ -1193,7 +1249,6 @@
       const admDate = document.getElementById("std-admission-date").value || new Date().toISOString().split("T")[0];
       const admOrder = getMonthOrder(admDate);
 
-      // Build active months options
       const monthOptionsHtml = ACADEMIC_MONTHS
         .filter(m => m.order >= admOrder)
         .map(m => `<option value="${m.label}">${m.label}</option>`)
@@ -1296,6 +1351,9 @@
           localStorage.removeItem("ff_remembered_admin");
         }
       }
+
+      loadCloudData();
+      initRealtimeSync();
     });
 
     // Login Handler
@@ -1393,6 +1451,10 @@
       alert(`Staff profile created for ${newStaff.name}. Assigned Password: ${newStaff.password}`);
       document.getElementById("staff-form").reset();
       initGenerators();
+
+      if (supabase) {
+        supabase.from("ff_staff").insert([newStaff]).catch(console.warn);
+      }
     });
 
     function renderStaffDirectory() {
@@ -1454,7 +1516,6 @@
       const targetMonth = (paidHead === "Monthly Study Fees" || paidHead === "Hostel Fees")
         ? document.getElementById("paid-target-month").value : "";
 
-      // Collect running additional payments
       const dynRows = document.querySelectorAll(".dynamic-pay-row");
       const additionalPayments = [];
       let totalRunningPaid = paidNow;
@@ -1469,14 +1530,16 @@
         if (a > 0) {
           totalRunningPaid += a;
           additionalPayments.push({ head: h, date: d, amount: a, month: m });
-          // Post to income ledger
-          DB.incomes.push({
+          
+          const incRecord = {
             id: "INC-" + Date.now() + Math.random(),
             date: d,
             purpose: h + (m ? ` (${m})` : ""),
             person: cadetName,
             amount: a
-          });
+          };
+          DB.incomes.push(incRecord);
+          if (supabase) supabase.from("ff_incomes").insert([incRecord]).catch(console.warn);
         }
       });
 
@@ -1507,7 +1570,7 @@
         chest: document.getElementById("std-chest").value || "N/A",
         address: document.getElementById("std-address").value,
         
-        // Part 1: Fixed Fees
+        // Fixed Fees
         admission_fee: parseFloat(document.getElementById("fix-admission").value) || 0,
         tuition_fee: parseFloat(document.getElementById("fix-tuition").value) || 0,
         hostel_fee: parseFloat(document.getElementById("fix-hostel").value) || 0,
@@ -1515,7 +1578,7 @@
         other_fee: parseFloat(document.getElementById("fix-other").value) || 0,
         total_fixed: parseFloat(document.getElementById("total-fixed-fees-display").value) || 0,
         
-        // Part 2: Payments
+        // Payments
         paid: totalRunningPaid,
         remaining: parseFloat(document.getElementById("calc-remaining-due").value) || 0,
         additional_payments: additionalPayments,
@@ -1528,15 +1591,16 @@
       DB.students.push(newStudent);
       localStorage.setItem("ff_students", JSON.stringify(DB.students));
 
-      // Record first payment to income ledger
       if (paidNow > 0) {
-        DB.incomes.push({
+        const initInc = {
           id: "INC-" + Date.now(),
           date: admDate,
           purpose: paidHead + (targetMonth ? ` (${targetMonth})` : ""),
           person: cadetName,
           amount: paidNow
-        });
+        };
+        DB.incomes.push(initInc);
+        if (supabase) supabase.from("ff_incomes").insert([initInc]).catch(console.warn);
       }
       localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
 
@@ -1545,6 +1609,10 @@
       document.getElementById("student-form").reset();
       document.getElementById("dynamic-payments-container").innerHTML = "";
       initGenerators();
+
+      if (supabase) {
+        supabase.from("ff_students").insert([newStudent]).catch(console.warn);
+      }
     });
 
     // Monthly Fee Modal Controller
@@ -1564,11 +1632,8 @@
         const isPaid = paidArr.includes(m.label);
 
         let badgeClass = "month-badge";
-        if (isInactive) {
-          badgeClass += " disabled-month";
-        } else if (isPaid) {
-          badgeClass += " paid";
-        }
+        if (isInactive) badgeClass += " disabled-month";
+        else if (isPaid) badgeClass += " paid";
 
         const badge = document.createElement("div");
         badge.className = badgeClass;
@@ -1601,14 +1666,16 @@
       } else {
         monthsList.push(monthLabel);
         if (monthlySum > 0) {
-          DB.incomes.push({
+          const incRecord = {
             id: "INC-" + Date.now(),
             date: new Date().toISOString().split("T")[0],
             purpose: `Monthly Study & Hostel Fee (${monthLabel})`,
             person: student.name,
             amount: monthlySum
-          });
+          };
+          DB.incomes.push(incRecord);
           localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
+          if (supabase) supabase.from("ff_incomes").insert([incRecord]).catch(console.warn);
         }
       }
 
@@ -1616,9 +1683,12 @@
       localStorage.setItem("ff_students", JSON.stringify(DB.students));
       renderRoster();
       openMonthModal(activeModalStudentIdx);
+
+      if (supabase) {
+        supabase.from("ff_students").update({ paid_months: monthsList }).eq("id", student.id).catch(console.warn);
+      }
     }
 
-    // Render Compact Directory
     function renderRoster() {
       const tbody = document.getElementById("student-roster-body");
       if (!tbody) return;
@@ -1668,6 +1738,16 @@
       localStorage.setItem("ff_students", JSON.stringify(DB.students));
       renderRoster();
       alert(`Re-admission completed for ${student.name}. Previous records archived.`);
+
+      if (supabase) {
+        supabase.from("ff_students").update({
+          paid_months: [],
+          admission_fee: 0,
+          paid: 0,
+          remaining: 0,
+          notes: student.notes
+        }).eq("id", student.id).catch(console.warn);
+      }
     }
 
     // Income Form Submit
@@ -1686,6 +1766,10 @@
       document.getElementById("income-entry-form").reset();
       initGenerators();
       renderFinanceDashboard();
+
+      if (supabase) {
+        supabase.from("ff_incomes").insert([newIncome]).catch(console.warn);
+      }
     });
 
     // Expense Form Submit
@@ -1704,6 +1788,10 @@
       document.getElementById("expense-entry-form").reset();
       initGenerators();
       renderFinanceDashboard();
+
+      if (supabase) {
+        supabase.from("ff_expenses").insert([newExpense]).catch(console.warn);
+      }
     });
 
     function renderFinanceDashboard() {
