@@ -256,7 +256,7 @@
       <form id="login-form">
         <div class="form-group" style="margin-bottom: 16px;">
           <label>Email or Phone Number</label>
-          <input type="text" id="login-identifier" placeholder="admin@fauji.com or Phone Number" required />
+          <input type="text" id="login-identifier" placeholder="Email or Phone Number" required />
         </div>
         <div class="form-group" style="margin-bottom: 20px;">
           <label>Password</label>
@@ -338,7 +338,7 @@
             </div>
             <div class="form-group">
               <label>Aadhaar Number</label>
-              <input type="text" id="std-aadhar" placeholder="XXXX-XXXX-XXXX" required />
+              <input type="text" id="std-aadhar" placeholder="Enter Aadhaar Number" required />
             </div>
             <div class="form-group">
               <label>Batch</label>
@@ -462,7 +462,7 @@
   </div>
 
   <script>
-    // In-memory / localStorage Data Store
+    // Data Store in LocalStorage
     const DB = {
       staff: JSON.parse(localStorage.getItem("ff_staff") || "[]"),
       students: JSON.parse(localStorage.getItem("ff_students") || "[]")
@@ -492,9 +492,19 @@
       const id = document.getElementById("login-identifier").value.trim();
       const pass = document.getElementById("login-password").value.trim();
 
-      // 1. Super Admin Hardcoded Access Check
-      if (id === "admin@fauji.com" && pass === "Admin@123") {
-        currentUser = { role: "SuperAdmin", name: "Super Admin" };
+      // 1. Two Authorized Super Admins with Shared Password
+      const SUPER_ADMINS = [
+        { email: "supriyaskkundu@gmail.com", name: "Super Admin (Supriya)" },
+        { email: "ersadsir1986@gmail.com", name: "Super Admin (Ersad)" }
+      ];
+      const SUPER_ADMIN_PASSWORD = "Fauj-efactory2026";
+
+      const matchedAdmin = SUPER_ADMINS.find(
+        admin => admin.email.toLowerCase() === id.toLowerCase() && pass === SUPER_ADMIN_PASSWORD
+      );
+
+      if (matchedAdmin) {
+        currentUser = { role: "SuperAdmin", name: matchedAdmin.name, email: matchedAdmin.email };
         startSession();
         return;
       }
