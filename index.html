@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FAUJ-E-FACTORY - Management & Finance</title>
-  <!-- Supabase JS Client -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --primary-red: #E52521;
@@ -51,8 +49,8 @@
     }
 
     .brand-logo {
-      height: 48px;
-      width: 48px;
+      height: 44px;
+      width: 44px;
       object-fit: contain;
       background: white;
       border-radius: 4px;
@@ -190,25 +188,28 @@
       position: relative;
       display: flex;
       align-items: center;
+      width: 100%;
     }
 
     .password-wrapper input {
       width: 100%;
-      padding-right: 44px;
+      padding-right: 48px;
     }
 
     .toggle-password-btn {
       position: absolute;
-      right: 10px;
+      right: 8px;
       background: none;
       border: none;
       cursor: pointer;
-      color: #6B7280;
+      font-size: 1.1rem;
+      padding: 4px 8px;
+      color: #4B5563;
+      user-select: none;
     }
 
-    .toggle-password-btn svg {
-      width: 20px;
-      height: 20px;
+    .toggle-password-btn:hover {
+      color: var(--navy-blue);
     }
 
     .remember-wrap {
@@ -475,7 +476,7 @@
 </head>
 <body>
 
-  <!-- App Header with Logo -->
+  <!-- App Header -->
   <header class="navbar">
     <div class="brand-wrap">
       <img src="logo.png" alt="FAUJ-E-FACTORY" class="brand-logo" onerror="this.style.display='none'" />
@@ -483,11 +484,11 @@
     </div>
     <div id="nav-controls" style="display: none; align-items: center;">
       <div class="nav-tabs" id="admin-nav-tabs" style="display: none; margin-right: 16px;">
-        <button class="tab-btn active" id="btn-tab-cadets" onclick="switchTab('cadets')">Cadets & Admissions</button>
-        <button class="tab-btn" id="btn-tab-finance" onclick="switchTab('finance')">Income & Expenditure</button>
+        <button type="button" class="tab-btn active" id="btn-tab-cadets" onclick="switchTab('cadets')">Cadets & Admissions</button>
+        <button type="button" class="tab-btn" id="btn-tab-finance" onclick="switchTab('finance')">Income & Expenditure</button>
       </div>
       <span class="user-tag" id="current-user-tag"></span>
-      <button class="btn-logout" onclick="logout()">Logout</button>
+      <button type="button" class="btn-logout" onclick="logout()">Logout</button>
     </div>
   </header>
 
@@ -502,18 +503,13 @@
       <form id="login-form">
         <div class="form-group" style="margin-bottom: 16px;">
           <label>Email or Phone Number</label>
-          <input type="text" id="login-identifier" placeholder="Email or Phone Number" required />
+          <input type="text" id="login-identifier" placeholder="Email or Phone Number" required autocomplete="username" />
         </div>
         <div class="form-group" style="margin-bottom: 12px;">
           <label>Password</label>
           <div class="password-wrapper">
-            <input type="password" id="login-password" placeholder="••••••••" required />
-            <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility()" title="Show/Hide Password">
-              <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
-            </button>
+            <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password" />
+            <button type="button" class="toggle-password-btn" id="eye-toggle-btn" onclick="togglePasswordVisibility()" title="Show/Hide Password">👁️</button>
           </div>
         </div>
 
@@ -911,7 +907,7 @@
       <div class="card">
         <div class="card-header">
           <span>STUDENT'S ZONE - CADET STATUS SHEET</span>
-          <button class="btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
+          <button type="button" class="btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
         </div>
         <div id="student-summary-content"></div>
       </div>
@@ -924,14 +920,14 @@
     <div class="modal-card">
       <div class="modal-title">
         <span id="modal-cadet-title">Monthly Tuition & Hostel Fee Register</span>
-        <button onclick="closeMonthModal()" style="border:none; background:none; font-size:1.4rem; cursor:pointer; font-weight:bold;">&times;</button>
+        <button type="button" onclick="closeMonthModal()" style="border:none; background:none; font-size:1.4rem; cursor:pointer; font-weight:bold;">&times;</button>
       </div>
       <p style="font-size:0.8rem; color:#6B7280; margin-bottom:12px;">
         Months prior to admission date are inactive. Click active month badge to toggle <strong style="color:var(--primary-red);">RED (PAID)</strong> status.
       </p>
       <div class="months-container" id="modal-months-container"></div>
       <div style="text-align: right; margin-top: 16px;">
-        <button class="btn-print" onclick="closeMonthModal()">Done / Close</button>
+        <button type="button" class="btn-print" onclick="closeMonthModal()">Done / Close</button>
       </div>
     </div>
   </div>
@@ -951,18 +947,7 @@
   </div>
 
   <script>
-    const SUPABASE_URL = "https://dyldejdkgfnyvunkrddh.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5bGRlamRrZ2ZueXZ1bmtyZGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2MDE4OTYsImV4cCI6MjEwNjE3Nzg5Nn0._JUB9WjiB3aJAdEZZyADueL9i6iyf7us6dD8L3S1o0E";
-    
-    let supabase = null;
-    try {
-      if (window.supabase) {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      }
-    } catch (e) {
-      console.warn("Supabase init failed, fallback active:", e);
-    }
-
+    // Robust Local Data Store (Always Instant & Reliable)
     const ACADEMIC_MONTHS = [
       { key: "2026-04", label: "Apr 2026", order: 4 },
       { key: "2026-05", label: "May 2026", order: 5 },
@@ -988,60 +973,17 @@
     let currentUser = null;
     let activeModalStudentIdx = null;
 
-    // Fail-safe non-blocking cloud sync
-    async function loadCloudData() {
-      if (!supabase) return;
-      try {
-        const [staffRes, stdRes, incRes, expRes] = await Promise.allSettled([
-          supabase.from("ff_staff").select("*"),
-          supabase.from("ff_students").select("*"),
-          supabase.from("ff_incomes").select("*"),
-          supabase.from("ff_expenses").select("*")
-        ]);
-
-        if (staffRes.status === "fulfilled" && staffRes.value.data) {
-          DB.staff = staffRes.value.data;
-          localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
-        }
-        if (stdRes.status === "fulfilled" && stdRes.value.data) {
-          DB.students = stdRes.value.data;
-          localStorage.setItem("ff_students", JSON.stringify(DB.students));
-        }
-        if (incRes.status === "fulfilled" && incRes.value.data) {
-          DB.incomes = incRes.value.data;
-          localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
-        }
-        if (expRes.status === "fulfilled" && expRes.value.data) {
-          DB.expenses = expRes.value.data;
-          localStorage.setItem("ff_expenses", JSON.stringify(DB.expenses));
-        }
-
-        if (currentUser) {
-          if (currentUser.role === "SuperAdmin" || currentUser.role === "Official") {
-            renderStaffDirectory();
-            renderRoster();
-            renderFinanceDashboard();
-          } else if (currentUser.role === "Student") {
-            const freshMe = DB.students.find(s => s.ph1 === currentUser.ph1);
-            if (freshMe) renderStudentPortal(freshMe);
-          }
-        }
-      } catch (err) {
-        console.warn("Cloud sync error, local cache active:", err);
-      }
-    }
-
-    function initRealtimeSync() {
-      if (!supabase) return;
-      try {
-        supabase
-          .channel("schema-db-changes")
-          .on("postgres_changes", { event: "*", schema: "public" }, () => {
-            loadCloudData();
-          })
-          .subscribe();
-      } catch (e) {
-        console.warn("Realtime error:", e);
+    // Direct, Standalone Password Toggle
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById("login-password");
+      const btn = document.getElementById("eye-toggle-btn");
+      if (!passInput) return;
+      if (passInput.type === "password") {
+        passInput.type = "text";
+        if (btn) btn.innerText = "🙈";
+      } else {
+        passInput.type = "password";
+        if (btn) btn.innerText = "👁️";
       }
     }
 
@@ -1050,34 +992,27 @@
     }
 
     function toggleChestField(val) {
-      document.getElementById("chest-group").style.display = (val === "Male") ? "flex" : "none";
+      const el = document.getElementById("chest-group");
+      if (el) el.style.display = (val === "Male") ? "flex" : "none";
     }
 
     function calculateTotalAssigned() {
       const admissionFee = parseFloat(document.getElementById("fee-head-admission").value) || 0;
       const paidNow = parseFloat(document.getElementById("std-paid-now").value) || 0;
-      document.getElementById("std-balance-due").value = Math.max(0, admissionFee - paidNow);
+      const balEl = document.getElementById("std-balance-due");
+      if (balEl) balEl.value = Math.max(0, admissionFee - paidNow);
     }
 
     function initGenerators() {
-      document.getElementById("staff-password").value = generateSecurePassword();
-      document.getElementById("std-generated-pw").value = generateSecurePassword();
+      const sp = document.getElementById("staff-password");
+      if (sp) sp.value = generateSecurePassword();
+      const stp = document.getElementById("std-generated-pw");
+      if (stp) stp.value = generateSecurePassword();
+
       const today = new Date().toISOString().split("T")[0];
       if (document.getElementById("std-admission-date")) document.getElementById("std-admission-date").value = today;
       if (document.getElementById("inc-date")) document.getElementById("inc-date").value = today;
       if (document.getElementById("exp-date")) document.getElementById("exp-date").value = today;
-    }
-
-    function togglePasswordVisibility() {
-      const passInput = document.getElementById("login-password");
-      const eyeIcon = document.getElementById("eye-icon");
-      if (passInput.type === "password") {
-        passInput.type = "text";
-        eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />`;
-      } else {
-        passInput.type = "password";
-        eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />`;
-      }
     }
 
     function switchTab(tab) {
@@ -1087,60 +1022,56 @@
       const btnFinance = document.getElementById("btn-tab-finance");
 
       if (tab === "cadets") {
-        cadetView.style.display = "block";
-        financeView.style.display = "none";
-        btnCadets.classList.add("active");
-        btnFinance.classList.remove("active");
+        if (cadetView) cadetView.style.display = "block";
+        if (financeView) financeView.style.display = "none";
+        if (btnCadets) btnCadets.classList.add("active");
+        if (btnFinance) btnFinance.classList.remove("active");
       } else {
-        cadetView.style.display = "none";
-        financeView.style.display = "block";
-        btnCadets.classList.remove("active");
-        btnFinance.classList.add("active");
+        if (cadetView) cadetView.style.display = "none";
+        if (financeView) financeView.style.display = "block";
+        if (btnCadets) btnCadets.classList.remove("active");
+        if (btnFinance) btnFinance.classList.add("active");
         renderFinanceDashboard();
       }
     }
 
-    // Instant Super Admin Login & Init
+    // Page Load Setup
     window.addEventListener("DOMContentLoaded", () => {
       initGenerators();
 
-      // Check Remember Me
-      const savedAdmin = localStorage.getItem("ff_remembered_admin");
-      if (savedAdmin) {
+      // Check Saved Session
+      const saved = localStorage.getItem("ff_remembered_admin");
+      if (saved) {
         try {
-          currentUser = JSON.parse(savedAdmin);
+          currentUser = JSON.parse(saved);
           startSession();
         } catch (e) {
           localStorage.removeItem("ff_remembered_admin");
         }
       }
-
-      // Background load
-      loadCloudData();
-      initRealtimeSync();
     });
 
-    // Login Controller (Zero Waiting for Cloud)
+    // Unbreakable Login Handler
     document.getElementById("login-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const id = document.getElementById("login-identifier").value.trim().toLowerCase();
       const pass = document.getElementById("login-password").value.trim();
-      const rememberMe = document.getElementById("remember-me-checkbox").checked;
+      const remember = document.getElementById("remember-me-checkbox").checked;
 
-      // 1. Instant Hardcoded Super Admin Check
+      // 1. Super Admins
       const SUPER_ADMINS = [
         { email: "supriyaskkundu@gmail.com", name: "Super Admin (Supriya)" },
         { email: "ersadsir1986@gmail.com", name: "Super Admin (Ersad)" }
       ];
       const SUPER_ADMIN_PASSWORD = "Fauj-efactory2026";
 
-      const matchedAdmin = SUPER_ADMINS.find(
-        admin => admin.email.toLowerCase() === id && pass === SUPER_ADMIN_PASSWORD
+      const matched = SUPER_ADMINS.find(
+        a => a.email.toLowerCase() === id && pass === SUPER_ADMIN_PASSWORD
       );
 
-      if (matchedAdmin) {
-        currentUser = { role: "SuperAdmin", name: matchedAdmin.name, email: matchedAdmin.email };
-        if (rememberMe) {
+      if (matched) {
+        currentUser = { role: "SuperAdmin", name: matched.name, email: matched.email };
+        if (remember) {
           localStorage.setItem("ff_remembered_admin", JSON.stringify(currentUser));
         } else {
           localStorage.removeItem("ff_remembered_admin");
@@ -1196,10 +1127,12 @@
       document.getElementById("tab-finance-content").style.display = "none";
       document.getElementById("student-zone-view").style.display = "none";
       document.getElementById("nav-controls").style.display = "none";
+      document.getElementById("login-identifier").value = "";
+      document.getElementById("login-password").value = "";
     }
 
-    // Staff Submit
-    document.getElementById("staff-form").addEventListener("submit", async (e) => {
+    // Staff Registration
+    document.getElementById("staff-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const newStaff = {
         id: "STAFF-" + Date.now(),
@@ -1216,10 +1149,6 @@
       alert(`Staff profile created for ${newStaff.name}. Assigned Password: ${newStaff.password}`);
       document.getElementById("staff-form").reset();
       initGenerators();
-
-      if (supabase) {
-        supabase.from("ff_staff").insert([newStaff]).catch(console.warn);
-      }
     });
 
     function renderStaffDirectory() {
@@ -1271,8 +1200,8 @@
       window.print();
     }
 
-    // Student Submit
-    document.getElementById("student-form").addEventListener("submit", async (e) => {
+    // Student Registration
+    document.getElementById("student-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const admDate = document.getElementById("std-admission-date").value;
       const cadetName = document.getElementById("std-name").value;
@@ -1323,26 +1252,20 @@
       localStorage.setItem("ff_students", JSON.stringify(DB.students));
 
       if (paidNow > 0) {
-        const incItem = {
+        DB.incomes.push({
           id: "INC-" + Date.now(),
           date: admDate,
           purpose: paidHead,
           person: cadetName,
           amount: paidNow
-        };
-        DB.incomes.push(incItem);
+        });
         localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
-        if (supabase) supabase.from("ff_incomes").insert([incItem]).catch(console.warn);
       }
 
       renderRoster();
       alert(`Cadet registered! Assigned Password: ${newStudent.password}`);
       document.getElementById("student-form").reset();
       initGenerators();
-
-      if (supabase) {
-        supabase.from("ff_students").insert([newStudent]).catch(console.warn);
-      }
     });
 
     function getMonthOrder(dateStr) {
@@ -1371,11 +1294,8 @@
         const isPaid = paidArr.includes(m.label);
 
         let badgeClass = "month-badge";
-        if (isInactive) {
-          badgeClass += " disabled-month";
-        } else if (isPaid) {
-          badgeClass += " paid";
-        }
+        if (isInactive) badgeClass += " disabled-month";
+        else if (isPaid) badgeClass += " paid";
 
         const badge = document.createElement("div");
         badge.className = badgeClass;
@@ -1396,7 +1316,7 @@
       activeModalStudentIdx = null;
     }
 
-    async function toggleMonthPaidFromModal(monthLabel) {
+    function toggleMonthPaidFromModal(monthLabel) {
       if (activeModalStudentIdx === null) return;
       const student = DB.students[activeModalStudentIdx];
       let monthsList = Array.isArray(student.paid_months) ? [...student.paid_months] : [];
@@ -1408,16 +1328,14 @@
       } else {
         monthsList.push(monthLabel);
         if (monthlySum > 0) {
-          const incItem = {
+          DB.incomes.push({
             id: "INC-" + Date.now(),
             date: new Date().toISOString().split("T")[0],
             purpose: "Monthly Fee",
             person: `${student.name} (${monthLabel})`,
             amount: monthlySum
-          };
-          DB.incomes.push(incItem);
+          });
           localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
-          if (supabase) supabase.from("ff_incomes").insert([incItem]).catch(console.warn);
         }
       }
 
@@ -1425,14 +1343,11 @@
       localStorage.setItem("ff_students", JSON.stringify(DB.students));
       renderRoster();
       openMonthModal(activeModalStudentIdx);
-
-      if (supabase) {
-        supabase.from("ff_students").update({ paid_months: monthsList }).eq("id", student.id).catch(console.warn);
-      }
     }
 
     function renderRoster() {
       const tbody = document.getElementById("student-roster-body");
+      if (!tbody) return;
       tbody.innerHTML = "";
 
       DB.students.forEach((s, idx) => {
@@ -1468,7 +1383,7 @@
       });
     }
 
-    async function executeReAdmission(studentIndex) {
+    function executeReAdmission(studentIndex) {
       const student = DB.students[studentIndex];
       if (!confirm(`Archive cycle for ${student.name} and execute Re-Admission?`)) return;
 
@@ -1485,24 +1400,10 @@
       localStorage.setItem("ff_students", JSON.stringify(DB.students));
       renderRoster();
       alert(`Re-admission completed for ${student.name}. Previous records archived.`);
-
-      if (supabase) {
-        supabase.from("ff_students").update({
-          paid_months: [],
-          admission_fee: 0,
-          paid: 0,
-          remaining: 0,
-          due1_date: "",
-          due1_amt: 0,
-          due2_date: "",
-          due2_amt: 0,
-          notes: student.notes
-        }).eq("id", student.id).catch(console.warn);
-      }
     }
 
-    // Income Submit
-    document.getElementById("income-entry-form").addEventListener("submit", async (e) => {
+    // Income Form Submit
+    document.getElementById("income-entry-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const newIncome = {
         id: "INC-" + Date.now(),
@@ -1517,14 +1418,10 @@
       document.getElementById("income-entry-form").reset();
       initGenerators();
       renderFinanceDashboard();
-
-      if (supabase) {
-        supabase.from("ff_incomes").insert([newIncome]).catch(console.warn);
-      }
     });
 
-    // Expense Submit
-    document.getElementById("expense-entry-form").addEventListener("submit", async (e) => {
+    // Expense Form Submit
+    document.getElementById("expense-entry-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const newExpense = {
         id: "EXP-" + Date.now(),
@@ -1539,10 +1436,6 @@
       document.getElementById("expense-entry-form").reset();
       initGenerators();
       renderFinanceDashboard();
-
-      if (supabase) {
-        supabase.from("ff_expenses").insert([newExpense]).catch(console.warn);
-      }
     });
 
     function renderFinanceDashboard() {
@@ -1550,47 +1443,57 @@
       let totalExpense = 0;
 
       const incTbody = document.getElementById("income-table-body");
-      incTbody.innerHTML = "";
-      const sortedIncomes = [...DB.incomes].sort((a, b) => new Date(b.date) - new Date(a.date));
+      if (incTbody) {
+        incTbody.innerHTML = "";
+        const sortedIncomes = [...DB.incomes].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-      sortedIncomes.forEach(inc => {
-        totalIncome += (Number(inc.amount) || 0);
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${inc.date}</td>
-          <td><strong>${inc.purpose}</strong></td>
-          <td>${inc.person}</td>
-          <td style="color:var(--success-green); font-weight:700;">+₹${Number(inc.amount).toLocaleString("en-IN")}</td>
-        `;
-        incTbody.appendChild(tr);
-      });
+        sortedIncomes.forEach(inc => {
+          totalIncome += (Number(inc.amount) || 0);
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${inc.date}</td>
+            <td><strong>${inc.purpose}</strong></td>
+            <td>${inc.person}</td>
+            <td style="color:var(--success-green); font-weight:700;">+₹${Number(inc.amount).toLocaleString("en-IN")}</td>
+          `;
+          incTbody.appendChild(tr);
+        });
+      }
 
       const expTbody = document.getElementById("expense-table-body");
-      expTbody.innerHTML = "";
-      const sortedExpenses = [...DB.expenses].sort((a, b) => new Date(b.date) - new Date(a.date));
+      if (expTbody) {
+        expTbody.innerHTML = "";
+        const sortedExpenses = [...DB.expenses].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-      sortedExpenses.forEach(exp => {
-        totalExpense += (Number(exp.amount) || 0);
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${exp.date}</td>
-          <td><strong>${exp.purpose}</strong></td>
-          <td>${exp.person}</td>
-          <td style="color:var(--primary-red); font-weight:700;">-₹${Number(exp.amount).toLocaleString("en-IN")}</td>
-        `;
-        expTbody.appendChild(tr);
-      });
+        sortedExpenses.forEach(exp => {
+          totalExpense += (Number(exp.amount) || 0);
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${exp.date}</td>
+            <td><strong>${exp.purpose}</strong></td>
+            <td>${exp.person}</td>
+            <td style="color:var(--primary-red); font-weight:700;">-₹${Number(exp.amount).toLocaleString("en-IN")}</td>
+          `;
+          expTbody.appendChild(tr);
+        });
+      }
 
-      document.getElementById("stat-total-inflow").innerText = "₹" + totalIncome.toLocaleString("en-IN");
-      document.getElementById("stat-total-outflow").innerText = "₹" + totalExpense.toLocaleString("en-IN");
+      const inEl = document.getElementById("stat-total-inflow");
+      if (inEl) inEl.innerText = "₹" + totalIncome.toLocaleString("en-IN");
+      const outEl = document.getElementById("stat-total-outflow");
+      if (outEl) outEl.innerText = "₹" + totalExpense.toLocaleString("en-IN");
+
       const net = totalIncome - totalExpense;
       const netElem = document.getElementById("stat-net-balance");
-      netElem.innerText = "₹" + net.toLocaleString("en-IN");
-      netElem.style.color = (net >= 0) ? "var(--navy-blue)" : "var(--primary-red)";
+      if (netElem) {
+        netElem.innerText = "₹" + net.toLocaleString("en-IN");
+        netElem.style.color = (net >= 0) ? "var(--navy-blue)" : "var(--primary-red)";
+      }
     }
 
     function renderStudentPortal(student) {
       const target = document.getElementById("student-summary-content");
+      if (!target) return;
       const paidArr = Array.isArray(student.paid_months) ? student.paid_months : [];
       const admOrder = getMonthOrder(student.date);
 
