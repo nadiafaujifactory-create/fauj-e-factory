@@ -272,7 +272,7 @@
       cursor: not-allowed;
     }
 
-    /* Dual Split Layout for Finance */
+    /* Dual Split Layout */
     .finance-split-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -367,16 +367,18 @@
       background-color: #f9fafb;
     }
 
-    /* Compact Month Dropdown Action */
     .month-select-dropdown {
       padding: 6px 8px;
       font-size: 0.8rem;
       font-weight: 600;
       border-radius: 4px;
       cursor: pointer;
+      background: white;
+      border: 1px solid var(--navy-blue);
+      color: var(--navy-blue);
     }
 
-    /* Modal / Popover for Monthly Matrix */
+    /* Modal / Popover */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -580,7 +582,7 @@
         </div>
       </div>
 
-      <!-- Cadet Admission Form with Specified Fee Dropdown Structure -->
+      <!-- Cadet Admission Form -->
       <div class="card">
         <div class="card-header">Cadet Admission Form</div>
         <form id="student-form">
@@ -588,7 +590,7 @@
             <div class="section-subtitle">1. Personal & Identity Details</div>
             <div class="form-group">
               <label>Admission Date</label>
-              <input type="date" id="std-admission-date" onchange="autoSyncMonthGridState()" required />
+              <input type="date" id="std-admission-date" required />
             </div>
             <div class="form-group">
               <label>Cadet Full Name</label>
@@ -665,11 +667,9 @@
               <textarea id="std-address" rows="2" required></textarea>
             </div>
 
-            <!-- 3. CUSTOM FEE STRUCTURE (SPECIFIED HEADINGS) -->
             <div class="section-subtitle">3. Fee Categories & Custom Assigned Rates</div>
-            
             <div class="form-group">
-              <label>1. Admission fees / Fees at the time of admission (₹)</label>
+              <label>1. Admission fees / Fees at admission (₹)</label>
               <input type="number" id="fee-head-admission" placeholder="Amount" oninput="calculateTotalAssigned()" required />
             </div>
             <div class="form-group">
@@ -681,13 +681,11 @@
               <input type="number" id="fee-head-hostel" placeholder="Amount" oninput="calculateTotalAssigned()" />
             </div>
             <div class="form-group">
-              <label>4. Any other fees or miscellaneous purpose fees (₹)</label>
+              <label>4. Any other fees or misc purpose fees (₹)</label>
               <input type="number" id="fee-head-misc" placeholder="Amount" oninput="calculateTotalAssigned()" />
             </div>
 
-            <!-- PAYMENT BREAKDOWN & UPCOMING DUES DROPDOWNS -->
             <div class="section-subtitle">4. Payment Made & Upcoming Due Schedule</div>
-            
             <div class="form-group">
               <label>Paid Head Selection (Payment Given Now)</label>
               <select id="paid-purpose-head">
@@ -707,7 +705,6 @@
               <input type="number" id="std-balance-due" readonly style="background:#f3f4f6; font-weight:bold; color:var(--primary-red);" />
             </div>
 
-            <!-- NEXT INSTALLMENT DUE SCHEDULE -->
             <div class="form-group">
               <label>Upcoming Due 1: Purpose Head</label>
               <select id="due1-head">
@@ -757,7 +754,7 @@
         </form>
       </div>
 
-      <!-- COMPACT CADET ROSTER (SINGLE-ROW DESIGN WITH MONTH DROPDOWN) -->
+      <!-- Compact Cadet Roster Table -->
       <div class="card">
         <div class="card-header">
           <span>Registered Cadets Directory (Session Apr 2026 – Mar 2027)</span>
@@ -800,7 +797,6 @@
         </div>
       </div>
 
-      <!-- DUAL-COLUMN INPUT FORM -->
       <div class="finance-split-grid">
         
         <!-- COLUMN 1: INCOME ENTRY -->
@@ -868,7 +864,6 @@
 
       </div>
 
-      <!-- DUAL-COLUMN TRANSACTION LEDGERS -->
       <div class="finance-split-grid">
         <div class="card" style="margin-bottom: 0;">
           <div class="card-header" style="color:var(--success-green);">
@@ -924,7 +919,7 @@
 
   </div>
 
-  <!-- MONTHLY FEES MODAL (SAVES COMPACT ROW SPACE) -->
+  <!-- MONTHLY FEES MODAL -->
   <div id="monthly-fee-modal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-title">
@@ -958,9 +953,16 @@
   <script>
     const SUPABASE_URL = "https://dyldejdkgfnyvunkrddh.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5bGRlamRrZ2ZueXZ1bmtyZGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2MDE4OTYsImV4cCI6MjEwNjE3Nzg5Nn0._JUB9WjiB3aJAdEZZyADueL9i6iyf7us6dD8L3S1o0E";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    let supabase = null;
+    try {
+      if (window.supabase) {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+    } catch (e) {
+      console.warn("Supabase init failed, fallback active:", e);
+    }
 
-    // Standard Academic Year Months: April 2026 to March 2027
     const ACADEMIC_MONTHS = [
       { key: "2026-04", label: "Apr 2026", order: 4 },
       { key: "2026-05", label: "May 2026", order: 5 },
@@ -977,28 +979,42 @@
     ];
 
     let DB = {
-      staff: [],
-      students: [],
-      incomes: [],
-      expenses: []
+      staff: JSON.parse(localStorage.getItem("ff_staff") || "[]"),
+      students: JSON.parse(localStorage.getItem("ff_students") || "[]"),
+      incomes: JSON.parse(localStorage.getItem("ff_incomes") || "[]"),
+      expenses: JSON.parse(localStorage.getItem("ff_expenses") || "[]")
     };
 
     let currentUser = null;
     let activeModalStudentIdx = null;
 
+    // Fail-safe non-blocking cloud sync
     async function loadCloudData() {
+      if (!supabase) return;
       try {
-        const [staffRes, stdRes, incRes, expRes] = await Promise.all([
+        const [staffRes, stdRes, incRes, expRes] = await Promise.allSettled([
           supabase.from("ff_staff").select("*"),
           supabase.from("ff_students").select("*"),
           supabase.from("ff_incomes").select("*"),
           supabase.from("ff_expenses").select("*")
         ]);
 
-        if (staffRes.data) DB.staff = staffRes.data;
-        if (stdRes.data) DB.students = stdRes.data;
-        if (incRes.data) DB.incomes = incRes.data;
-        if (expRes.data) DB.expenses = expRes.data;
+        if (staffRes.status === "fulfilled" && staffRes.value.data) {
+          DB.staff = staffRes.value.data;
+          localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
+        }
+        if (stdRes.status === "fulfilled" && stdRes.value.data) {
+          DB.students = stdRes.value.data;
+          localStorage.setItem("ff_students", JSON.stringify(DB.students));
+        }
+        if (incRes.status === "fulfilled" && incRes.value.data) {
+          DB.incomes = incRes.value.data;
+          localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
+        }
+        if (expRes.status === "fulfilled" && expRes.value.data) {
+          DB.expenses = expRes.value.data;
+          localStorage.setItem("ff_expenses", JSON.stringify(DB.expenses));
+        }
 
         if (currentUser) {
           if (currentUser.role === "SuperAdmin" || currentUser.role === "Official") {
@@ -1011,17 +1027,22 @@
           }
         }
       } catch (err) {
-        console.error("Supabase load error:", err);
+        console.warn("Cloud sync error, local cache active:", err);
       }
     }
 
     function initRealtimeSync() {
-      supabase
-        .channel("schema-db-changes")
-        .on("postgres_changes", { event: "*", schema: "public" }, () => {
-          loadCloudData();
-        })
-        .subscribe();
+      if (!supabase) return;
+      try {
+        supabase
+          .channel("schema-db-changes")
+          .on("postgres_changes", { event: "*", schema: "public" }, () => {
+            loadCloudData();
+          })
+          .subscribe();
+      } catch (e) {
+        console.warn("Realtime error:", e);
+      }
     }
 
     function generateSecurePassword() {
@@ -1032,15 +1053,10 @@
       document.getElementById("chest-group").style.display = (val === "Male") ? "flex" : "none";
     }
 
-    // Auto-calculate Balance Due = (Admission Fee - Paid at Admission)
     function calculateTotalAssigned() {
       const admissionFee = parseFloat(document.getElementById("fee-head-admission").value) || 0;
       const paidNow = parseFloat(document.getElementById("std-paid-now").value) || 0;
       document.getElementById("std-balance-due").value = Math.max(0, admissionFee - paidNow);
-    }
-
-    function autoSyncMonthGridState() {
-      // triggers reactive UI if needed during form entry
     }
 
     function initGenerators() {
@@ -1084,11 +1100,11 @@
       }
     }
 
-    // Auto Login Check
-    window.addEventListener("DOMContentLoaded", async () => {
-      await loadCloudData();
-      initRealtimeSync();
+    // Instant Super Admin Login & Init
+    window.addEventListener("DOMContentLoaded", () => {
+      initGenerators();
 
+      // Check Remember Me
       const savedAdmin = localStorage.getItem("ff_remembered_admin");
       if (savedAdmin) {
         try {
@@ -1098,15 +1114,20 @@
           localStorage.removeItem("ff_remembered_admin");
         }
       }
+
+      // Background load
+      loadCloudData();
+      initRealtimeSync();
     });
 
-    // Login Controller
+    // Login Controller (Zero Waiting for Cloud)
     document.getElementById("login-form").addEventListener("submit", (e) => {
       e.preventDefault();
-      const id = document.getElementById("login-identifier").value.trim();
+      const id = document.getElementById("login-identifier").value.trim().toLowerCase();
       const pass = document.getElementById("login-password").value.trim();
       const rememberMe = document.getElementById("remember-me-checkbox").checked;
 
+      // 1. Instant Hardcoded Super Admin Check
       const SUPER_ADMINS = [
         { email: "supriyaskkundu@gmail.com", name: "Super Admin (Supriya)" },
         { email: "ersadsir1986@gmail.com", name: "Super Admin (Ersad)" }
@@ -1114,7 +1135,7 @@
       const SUPER_ADMIN_PASSWORD = "Fauj-efactory2026";
 
       const matchedAdmin = SUPER_ADMINS.find(
-        admin => admin.email.toLowerCase() === id.toLowerCase() && pass === SUPER_ADMIN_PASSWORD
+        admin => admin.email.toLowerCase() === id && pass === SUPER_ADMIN_PASSWORD
       );
 
       if (matchedAdmin) {
@@ -1128,6 +1149,7 @@
         return;
       }
 
+      // 2. Staff Check
       const staffMember = DB.staff.find(s => s.phone === id && s.password === pass);
       if (staffMember) {
         currentUser = { ...staffMember };
@@ -1135,6 +1157,7 @@
         return;
       }
 
+      // 3. Student Check
       const student = DB.students.find(s => s.ph1 === id && s.password === pass);
       if (student) {
         currentUser = { ...student, role: "Student" };
@@ -1187,16 +1210,16 @@
         password: document.getElementById("staff-password").value
       };
 
-      const { error } = await supabase.from("ff_staff").insert([newStaff]);
-      if (error) {
-        alert("Error saving staff: " + error.message);
-        return;
-      }
-
+      DB.staff.push(newStaff);
+      localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
+      renderStaffDirectory();
       alert(`Staff profile created for ${newStaff.name}. Assigned Password: ${newStaff.password}`);
       document.getElementById("staff-form").reset();
       initGenerators();
-      await loadCloudData();
+
+      if (supabase) {
+        supabase.from("ff_staff").insert([newStaff]).catch(console.warn);
+      }
     });
 
     function renderStaffDirectory() {
@@ -1248,7 +1271,7 @@
       window.print();
     }
 
-    // Student Submit (Cloud Sync with Custom Structured Headings)
+    // Student Submit
     document.getElementById("student-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const admDate = document.getElementById("std-admission-date").value;
@@ -1275,16 +1298,14 @@
         chest: document.getElementById("std-chest").value || "N/A",
         address: document.getElementById("std-address").value,
         
-        // 4 Distinct Custom Heads
         admission_fee: parseFloat(document.getElementById("fee-head-admission").value) || 0,
         tuition_fee: parseFloat(document.getElementById("fee-head-tuition").value) || 0,
         hostel_fee: parseFloat(document.getElementById("fee-head-hostel").value) || 0,
-        dress_fee: parseFloat(document.getElementById("fee-head-misc").value) || 0, // miscellaneous
+        dress_fee: parseFloat(document.getElementById("fee-head-misc").value) || 0,
         
         paid: paidNow,
         remaining: parseFloat(document.getElementById("std-balance-due").value) || 0,
         
-        // Next Due Schedules
         due1_head: document.getElementById("due1-head").value,
         due1_date: document.getElementById("due1-date").value,
         due1_amt: parseFloat(document.getElementById("due1-amt").value) || 0,
@@ -1298,30 +1319,32 @@
         paid_months: []
       };
 
-      const { error } = await supabase.from("ff_students").insert([newStudent]);
-      if (error) {
-        alert("Error saving cadet: " + error.message);
-        return;
-      }
+      DB.students.push(newStudent);
+      localStorage.setItem("ff_students", JSON.stringify(DB.students));
 
-      // Record Admission Income in Ledger
       if (paidNow > 0) {
-        await supabase.from("ff_incomes").insert([{
+        const incItem = {
           id: "INC-" + Date.now(),
           date: admDate,
           purpose: paidHead,
           person: cadetName,
           amount: paidNow
-        }]);
+        };
+        DB.incomes.push(incItem);
+        localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
+        if (supabase) supabase.from("ff_incomes").insert([incItem]).catch(console.warn);
       }
 
-      alert(`Cadet registered! Assigned Password for Student Zone: ${newStudent.password}`);
+      renderRoster();
+      alert(`Cadet registered! Assigned Password: ${newStudent.password}`);
       document.getElementById("student-form").reset();
       initGenerators();
-      await loadCloudData();
+
+      if (supabase) {
+        supabase.from("ff_students").insert([newStudent]).catch(console.warn);
+      }
     });
 
-    // Helper: Determine Academic Month Order
     function getMonthOrder(dateStr) {
       if (!dateStr) return 0;
       const parts = dateStr.split("-");
@@ -1329,10 +1352,9 @@
       const mo = parseInt(parts[1], 10);
       if (yr === 2026 && mo >= 4) return mo;
       if (yr === 2027 && mo <= 3) return mo + 12;
-      return 0; // out of scope
+      return 0;
     }
 
-    // Modal Controller for Monthly Fees Matrix
     function openMonthModal(studentIdx) {
       activeModalStudentIdx = studentIdx;
       const student = DB.students[studentIdx];
@@ -1374,7 +1396,6 @@
       activeModalStudentIdx = null;
     }
 
-    // Toggle Month Paid inside Modal
     async function toggleMonthPaidFromModal(monthLabel) {
       if (activeModalStudentIdx === null) return;
       const student = DB.students[activeModalStudentIdx];
@@ -1387,22 +1408,29 @@
       } else {
         monthsList.push(monthLabel);
         if (monthlySum > 0) {
-          await supabase.from("ff_incomes").insert([{
+          const incItem = {
             id: "INC-" + Date.now(),
             date: new Date().toISOString().split("T")[0],
             purpose: "Monthly Fee",
             person: `${student.name} (${monthLabel})`,
             amount: monthlySum
-          }]);
+          };
+          DB.incomes.push(incItem);
+          localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
+          if (supabase) supabase.from("ff_incomes").insert([incItem]).catch(console.warn);
         }
       }
 
-      await supabase.from("ff_students").update({ paid_months: monthsList }).eq("id", student.id);
-      await loadCloudData();
-      openMonthModal(activeModalStudentIdx); // refresh modal view
+      student.paid_months = monthsList;
+      localStorage.setItem("ff_students", JSON.stringify(DB.students));
+      renderRoster();
+      openMonthModal(activeModalStudentIdx);
+
+      if (supabase) {
+        supabase.from("ff_students").update({ paid_months: monthsList }).eq("id", student.id).catch(console.warn);
+      }
     }
 
-    // Single-Row Compact Roster Rendering
     function renderRoster() {
       const tbody = document.getElementById("student-roster-body");
       tbody.innerHTML = "";
@@ -1440,26 +1468,37 @@
       });
     }
 
-    // Re-Admission Process
     async function executeReAdmission(studentIndex) {
       const student = DB.students[studentIndex];
       if (!confirm(`Archive cycle for ${student.name} and execute Re-Admission?`)) return;
 
-      const updatedNotes = (student.notes || "") + ` | Re-Admitted on ${new Date().toLocaleDateString()}`;
-      await supabase.from("ff_students").update({
-        paid_months: [],
-        admission_fee: 0,
-        paid: 0,
-        remaining: 0,
-        due1_date: "",
-        due1_amt: 0,
-        due2_date: "",
-        due2_amt: 0,
-        notes: updatedNotes
-      }).eq("id", student.id);
+      student.paid_months = [];
+      student.admission_fee = 0;
+      student.paid = 0;
+      student.remaining = 0;
+      student.due1_date = "";
+      student.due1_amt = 0;
+      student.due2_date = "";
+      student.due2_amt = 0;
+      student.notes = (student.notes || "") + ` | Re-Admitted on ${new Date().toLocaleDateString()}`;
 
+      localStorage.setItem("ff_students", JSON.stringify(DB.students));
+      renderRoster();
       alert(`Re-admission completed for ${student.name}. Previous records archived.`);
-      await loadCloudData();
+
+      if (supabase) {
+        supabase.from("ff_students").update({
+          paid_months: [],
+          admission_fee: 0,
+          paid: 0,
+          remaining: 0,
+          due1_date: "",
+          due1_amt: 0,
+          due2_date: "",
+          due2_amt: 0,
+          notes: student.notes
+        }).eq("id", student.id).catch(console.warn);
+      }
     }
 
     // Income Submit
@@ -1473,15 +1512,15 @@
         amount: parseFloat(document.getElementById("inc-amount").value) || 0
       };
 
-      const { error } = await supabase.from("ff_incomes").insert([newIncome]);
-      if (error) {
-        alert("Error saving income: " + error.message);
-        return;
-      }
-
+      DB.incomes.push(newIncome);
+      localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
       document.getElementById("income-entry-form").reset();
       initGenerators();
-      await loadCloudData();
+      renderFinanceDashboard();
+
+      if (supabase) {
+        supabase.from("ff_incomes").insert([newIncome]).catch(console.warn);
+      }
     });
 
     // Expense Submit
@@ -1495,15 +1534,15 @@
         amount: parseFloat(document.getElementById("exp-amount").value) || 0
       };
 
-      const { error } = await supabase.from("ff_expenses").insert([newExpense]);
-      if (error) {
-        alert("Error saving expense: " + error.message);
-        return;
-      }
-
+      DB.expenses.push(newExpense);
+      localStorage.setItem("ff_expenses", JSON.stringify(DB.expenses));
       document.getElementById("expense-entry-form").reset();
       initGenerators();
-      await loadCloudData();
+      renderFinanceDashboard();
+
+      if (supabase) {
+        supabase.from("ff_expenses").insert([newExpense]).catch(console.warn);
+      }
     });
 
     function renderFinanceDashboard() {
@@ -1622,8 +1661,6 @@
         </div>
       `;
     }
-
-    initGenerators();
   </script>
 </body>
 </html>
