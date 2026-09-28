@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FAUJ-E-FACTORY - Management & Finance</title>
-  <!-- Supabase CDN Client -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --primary-red: #E52521;
@@ -217,19 +215,22 @@
 
     .password-wrapper input {
       width: 100%;
-      padding-right: 48px;
+      padding-right: 50px;
     }
 
     .toggle-password-btn {
       position: absolute;
-      right: 8px;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
       background: none;
       border: none;
       cursor: pointer;
-      font-size: 1.1rem;
-      padding: 4px 8px;
-      color: #4B5563;
+      font-size: 1.25rem;
+      padding: 6px 10px;
+      line-height: 1;
       user-select: none;
+      z-index: 10;
     }
 
     .remember-wrap {
@@ -1022,14 +1023,21 @@
 
   <script>
     // ------------------------------------------------------------------
-    // LIVE CLOUD SYNCHRONIZATION VIA SUPABASE
+    // SAFE NATIVE STORAGE & CLOUD REST ENGINE (ZERO DEPENDENCY)
     // ------------------------------------------------------------------
-    const SUPABASE_URL = "https://dyldejdkgfnyvunkrddh.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5bGRlamRrZ2ZueXZ1bmtyZGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2MDE4OTYsImV4cCI6MjEwNjE3Nzg5Nn0._JUB9WjiB3aJAdEZZyADueL9i6iyf7us6dD8L3S1o0E";
-    
-    let supabase = null;
-    if (window.supabase) {
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const SUPABASE_REST_URL = "https://dyldejdkgfnyvunkrddh.supabase.co/rest/v1";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5bGRlamRrZ2ZueXZ1bmtyZGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2MDE4OTYsImV4cCI6MjEwNjE3Nzg5Nn0._JUB9WjiB3aJAdEZZyADueL9i6iyf7us6dD8L3S1o0E";
+
+    // Safe parser that NEVER throws or crashes script
+    function safeGet(key) {
+      try {
+        const val = localStorage.getItem(key);
+        if (!val || val === "undefined" || val === "null") return [];
+        const parsed = JSON.parse(val);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
     }
 
     const ACADEMIC_MONTHS = [
@@ -1048,72 +1056,66 @@
     ];
 
     let DB = {
-      staff: JSON.parse(localStorage.getItem("ff_staff") || "[]"),
-      students: JSON.parse(localStorage.getItem("ff_students") || "[]"),
-      incomes: JSON.parse(localStorage.getItem("ff_incomes") || "[]"),
-      expenses: JSON.parse(localStorage.getItem("ff_expenses") || "[]")
+      staff: safeGet("ff_staff"),
+      students: safeGet("ff_students"),
+      incomes: safeGet("ff_incomes"),
+      expenses: safeGet("ff_expenses")
     };
 
     let currentUser = null;
     let activeModalStudentIdx = null;
 
-    // Load data from Supabase Cloud
-    async function loadCloudData() {
-      if (!supabase) return;
+    // DIRECT NATIVE SUPABASE REST SYNC (NO EXTERNAL SCRIPTS NEEDED)
+    async function cloudFetch(endpoint, method = "GET", body = null) {
       try {
-        const [staffRes, stdRes, incRes, expRes] = await Promise.allSettled([
-          supabase.from("ff_staff").select("*"),
-          supabase.from("ff_students").select("*"),
-          supabase.from("ff_incomes").select("*"),
-          supabase.from("ff_expenses").select("*")
-        ]);
-
-        if (staffRes.status === "fulfilled" && staffRes.value.data) {
-          DB.staff = staffRes.value.data;
-          localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
-        }
-        if (stdRes.status === "fulfilled" && stdRes.value.data) {
-          DB.students = stdRes.value.data;
-          localStorage.setItem("ff_students", JSON.stringify(DB.students));
-        }
-        if (incRes.status === "fulfilled" && incRes.value.data) {
-          DB.incomes = incRes.value.data;
-          localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
-        }
-        if (expRes.status === "fulfilled" && expRes.value.data) {
-          DB.expenses = expRes.value.data;
-          localStorage.setItem("ff_expenses", JSON.stringify(DB.expenses));
-        }
-
-        if (currentUser) {
-          if (currentUser.role === "SuperAdmin" || currentUser.role === "Official") {
-            renderStaffDirectory();
-            renderRoster();
-            renderFinanceDashboard();
-          } else if (currentUser.role === "Student") {
-            const freshMe = DB.students.find(s => s.ph1 === currentUser.ph1);
-            if (freshMe) renderStudentPortal(freshMe);
-          }
-        }
-      } catch (err) {
-        console.warn("Cloud sync warning:", err);
-      }
-    }
-
-    function initRealtimeSync() {
-      if (!supabase) return;
-      try {
-        supabase
-          .channel("realtime-fauji")
-          .on("postgres_changes", { event: "*", schema: "public" }, () => {
-            loadCloudData();
-          })
-          .subscribe();
+        const headers = {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json"
+        };
+        const opt = { method, headers };
+        if (body) opt.body = JSON.stringify(body);
+        const res = await fetch(`${SUPABASE_REST_URL}/${endpoint}`, opt);
+        if (!res.ok) return null;
+        return await res.json();
       } catch (e) {
-        console.warn("Realtime channel failed:", e);
+        return null;
       }
     }
 
+    async function syncFromCloud() {
+      const [staffData, studentData, incomeData, expenseData] = await Promise.all([
+        cloudFetch("ff_staff?select=*"),
+        cloudFetch("ff_students?select=*"),
+        cloudFetch("ff_incomes?select=*"),
+        cloudFetch("ff_expenses?select=*")
+      ]);
+
+      if (staffData && Array.isArray(staffData)) {
+        DB.staff = staffData;
+        localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
+      }
+      if (studentData && Array.isArray(studentData)) {
+        DB.students = studentData;
+        localStorage.setItem("ff_students", JSON.stringify(DB.students));
+      }
+      if (incomeData && Array.isArray(incomeData)) {
+        DB.incomes = incomeData;
+        localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
+      }
+      if (expenseData && Array.isArray(expenseData)) {
+        DB.expenses = expenseData;
+        localStorage.setItem("ff_expenses", JSON.stringify(DB.expenses));
+      }
+
+      if (currentUser) {
+        renderStaffDirectory();
+        renderRoster();
+        renderFinanceDashboard();
+      }
+    }
+
+    // Direct, Standalone Password Toggle
     function togglePasswordVisibility() {
       const passInput = document.getElementById("login-password");
       const btn = document.getElementById("eye-toggle-btn");
@@ -1153,7 +1155,6 @@
       return (15 - admOrder + 1);
     }
 
-    // 1. Calculate Total Fixed Fees (Part 1)
     function calculateTotalFixedAndDue() {
       const adm = parseFloat(document.getElementById("fix-admission").value) || 0;
       const tuition = parseFloat(document.getElementById("fix-tuition").value) || 0;
@@ -1170,7 +1171,6 @@
       calculateDynamicDue();
     }
 
-    // 2. On changing Payment Head choice in Part 2
     function onPaymentHeadChange() {
       const head = document.getElementById("paid-head-choice").value;
       const monthGroup = document.getElementById("month-target-picker-group");
@@ -1207,7 +1207,6 @@
       calculateTotalFixedAndDue();
     }
 
-    // 3. Dynamic Due Balance relative to selected Payment Head
     function calculateDynamicDue() {
       const head = document.getElementById("paid-head-choice").value;
       const paidNow = parseFloat(document.getElementById("paid-now-amount").value) || 0;
@@ -1241,7 +1240,6 @@
       dueInput.value = Math.max(0, targetFixed - paidNow);
     }
 
-    // 4. Add Future Installment / Running Payment Row
     function addPaymentRow() {
       const container = document.getElementById("dynamic-payments-container");
       const rowId = "pay_row_" + Date.now();
@@ -1339,9 +1337,11 @@
       }
     }
 
-    // Auto Login Check
+    // Auto Login & Instant Init
     window.addEventListener("DOMContentLoaded", () => {
       initGenerators();
+
+      // Check Saved Session
       const saved = localStorage.getItem("ff_remembered_admin");
       if (saved) {
         try {
@@ -1352,11 +1352,11 @@
         }
       }
 
-      loadCloudData();
-      initRealtimeSync();
+      // Background cloud fetch (non-blocking)
+      syncFromCloud();
     });
 
-    // Login Handler
+    // Login Handler (Zero Dependency, Always Instant)
     document.getElementById("login-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const id = document.getElementById("login-identifier").value.trim().toLowerCase();
@@ -1433,7 +1433,7 @@
       document.getElementById("login-password").value = "";
     }
 
-    // Staff Registration
+    // Staff Submit
     document.getElementById("staff-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const newStaff = {
@@ -1452,9 +1452,8 @@
       document.getElementById("staff-form").reset();
       initGenerators();
 
-      if (supabase) {
-        supabase.from("ff_staff").insert([newStaff]).catch(console.warn);
-      }
+      // Cloud REST Background Sync
+      cloudFetch("ff_staff", "POST", newStaff);
     });
 
     function renderStaffDirectory() {
@@ -1539,7 +1538,7 @@
             amount: a
           };
           DB.incomes.push(incRecord);
-          if (supabase) supabase.from("ff_incomes").insert([incRecord]).catch(console.warn);
+          cloudFetch("ff_incomes", "POST", incRecord);
         }
       });
 
@@ -1570,7 +1569,6 @@
         chest: document.getElementById("std-chest").value || "N/A",
         address: document.getElementById("std-address").value,
         
-        // Fixed Fees
         admission_fee: parseFloat(document.getElementById("fix-admission").value) || 0,
         tuition_fee: parseFloat(document.getElementById("fix-tuition").value) || 0,
         hostel_fee: parseFloat(document.getElementById("fix-hostel").value) || 0,
@@ -1578,7 +1576,6 @@
         other_fee: parseFloat(document.getElementById("fix-other").value) || 0,
         total_fixed: parseFloat(document.getElementById("total-fixed-fees-display").value) || 0,
         
-        // Payments
         paid: totalRunningPaid,
         remaining: parseFloat(document.getElementById("calc-remaining-due").value) || 0,
         additional_payments: additionalPayments,
@@ -1600,7 +1597,7 @@
           amount: paidNow
         };
         DB.incomes.push(initInc);
-        if (supabase) supabase.from("ff_incomes").insert([initInc]).catch(console.warn);
+        cloudFetch("ff_incomes", "POST", initInc);
       }
       localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
 
@@ -1610,9 +1607,8 @@
       document.getElementById("dynamic-payments-container").innerHTML = "";
       initGenerators();
 
-      if (supabase) {
-        supabase.from("ff_students").insert([newStudent]).catch(console.warn);
-      }
+      // Cloud REST Background Sync
+      cloudFetch("ff_students", "POST", newStudent);
     });
 
     // Monthly Fee Modal Controller
@@ -1632,8 +1628,11 @@
         const isPaid = paidArr.includes(m.label);
 
         let badgeClass = "month-badge";
-        if (isInactive) badgeClass += " disabled-month";
-        else if (isPaid) badgeClass += " paid";
+        if (isInactive) {
+          badgeClass += " disabled-month";
+        } else if (isPaid) {
+          badgeClass += " paid";
+        }
 
         const badge = document.createElement("div");
         badge.className = badgeClass;
@@ -1675,7 +1674,7 @@
           };
           DB.incomes.push(incRecord);
           localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
-          if (supabase) supabase.from("ff_incomes").insert([incRecord]).catch(console.warn);
+          cloudFetch("ff_incomes", "POST", incRecord);
         }
       }
 
@@ -1684,9 +1683,8 @@
       renderRoster();
       openMonthModal(activeModalStudentIdx);
 
-      if (supabase) {
-        supabase.from("ff_students").update({ paid_months: monthsList }).eq("id", student.id).catch(console.warn);
-      }
+      // Cloud PATCH Update
+      cloudFetch(`ff_students?id=eq.${student.id}`, "PATCH", { paid_months: monthsList });
     }
 
     function renderRoster() {
@@ -1739,15 +1737,13 @@
       renderRoster();
       alert(`Re-admission completed for ${student.name}. Previous records archived.`);
 
-      if (supabase) {
-        supabase.from("ff_students").update({
-          paid_months: [],
-          admission_fee: 0,
-          paid: 0,
-          remaining: 0,
-          notes: student.notes
-        }).eq("id", student.id).catch(console.warn);
-      }
+      cloudFetch(`ff_students?id=eq.${student.id}`, "PATCH", {
+        paid_months: [],
+        admission_fee: 0,
+        paid: 0,
+        remaining: 0,
+        notes: student.notes
+      });
     }
 
     // Income Form Submit
@@ -1767,9 +1763,7 @@
       initGenerators();
       renderFinanceDashboard();
 
-      if (supabase) {
-        supabase.from("ff_incomes").insert([newIncome]).catch(console.warn);
-      }
+      cloudFetch("ff_incomes", "POST", newIncome);
     });
 
     // Expense Form Submit
@@ -1789,9 +1783,7 @@
       initGenerators();
       renderFinanceDashboard();
 
-      if (supabase) {
-        supabase.from("ff_expenses").insert([newExpense]).catch(console.warn);
-      }
+      cloudFetch("ff_expenses", "POST", newExpense);
     });
 
     function renderFinanceDashboard() {
