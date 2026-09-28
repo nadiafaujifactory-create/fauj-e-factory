@@ -13,13 +13,14 @@
       --border-gray: #D1D5DB;
       --bg-gray: #F3F4F6;
       --text-dark: #1F2937;
+      --success-green: #10B981;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     body {
@@ -46,9 +47,6 @@
       font-weight: 800;
       letter-spacing: 1px;
       color: var(--pure-white);
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
 
     .brand-title span {
@@ -74,16 +72,15 @@
       margin-left: 12px;
     }
 
-    /* Container */
+    /* Layout Containers */
     .container {
-      max-width: 1000px;
+      max-width: 1100px;
       width: 100%;
       margin: 24px auto;
       padding: 0 16px;
       flex: 1;
     }
 
-    /* Cards */
     .card {
       background: var(--pure-white);
       border-radius: 8px;
@@ -105,10 +102,20 @@
       align-items: center;
     }
 
-    /* Form Layout */
+    .section-subtitle {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary-red);
+      grid-column: 1 / -1;
+      margin-top: 10px;
+      padding-bottom: 4px;
+      border-bottom: 1px dashed var(--border-gray);
+    }
+
+    /* Form Grids */
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
       gap: 16px;
       margin-bottom: 16px;
     }
@@ -139,10 +146,10 @@
 
     input:focus, select:focus, textarea:focus {
       border-color: var(--primary-red);
-      box-shadow: 0 0 0 2px rgba(229, 37, 33, 0.2);
+      box-shadow: 0 0 0 2px rgba(229, 37, 33, 0.15);
     }
 
-    /* Password Input Wrapper with Toggle */
+    /* Password Input with Eye Toggle */
     .password-wrapper {
       position: relative;
       display: flex;
@@ -161,14 +168,6 @@
       border: none;
       cursor: pointer;
       color: #6B7280;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px;
-    }
-
-    .toggle-password-btn:hover {
-      color: var(--navy-blue);
     }
 
     .toggle-password-btn svg {
@@ -176,6 +175,7 @@
       height: 20px;
     }
 
+    /* Buttons */
     .btn-primary {
       background: var(--primary-red);
       color: var(--pure-white);
@@ -185,7 +185,6 @@
       border-radius: 4px;
       cursor: pointer;
       font-size: 1rem;
-      transition: background 0.2s;
     }
 
     .btn-primary:hover {
@@ -196,13 +195,35 @@
       background: var(--navy-blue);
       color: var(--pure-white);
       border: none;
-      padding: 8px 16px;
+      padding: 6px 12px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 600;
+      font-size: 0.85rem;
     }
 
-    /* Roster Table */
+    .btn-print:hover {
+      background: #172A45;
+    }
+
+    .btn-readmit {
+      background: var(--success-green);
+      color: var(--pure-white);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-left: 6px;
+    }
+
+    .btn-readmit:disabled {
+      background: #9CA3AF;
+      cursor: not-allowed;
+    }
+
+    /* Table Styles */
     .table-container {
       overflow-x: auto;
     }
@@ -215,9 +236,9 @@
     }
 
     th, td {
-      padding: 10px 14px;
+      padding: 10px 12px;
       border: 1px solid var(--border-gray);
-      font-size: 0.9rem;
+      font-size: 0.88rem;
     }
 
     th {
@@ -229,7 +250,35 @@
       background-color: #f9fafb;
     }
 
-    /* Print Template */
+    /* Monthly Grid */
+    .months-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .month-badge {
+      text-align: center;
+      padding: 10px 4px;
+      border: 2px solid var(--navy-blue);
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      background: white;
+      color: var(--navy-blue);
+      transition: all 0.2s ease;
+    }
+
+    .month-badge.paid {
+      background-color: var(--primary-red) !important;
+      border-color: var(--primary-red) !important;
+      color: var(--pure-white) !important;
+    }
+
+    /* Print Template Engine */
     #print-section {
       display: none;
     }
@@ -253,18 +302,50 @@
       }
       .print-box {
         border: 2px solid #0A192F;
-        padding: 20px;
+        padding: 24px;
       }
       .print-header {
         text-align: center;
         border-bottom: 2px solid #E52521;
-        padding-bottom: 10px;
+        padding-bottom: 12px;
         margin-bottom: 16px;
       }
-      .print-grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 16px;
+      .print-header h2 {
+        font-size: 1.8rem;
+        color: #0A192F;
+        margin-bottom: 4px;
+      }
+      .print-header p {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #E52521;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 16px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #D1D5DB;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+      }
+      .print-table th {
+        background-color: #F3F4F6 !important;
+        color: #0A192F !important;
+        text-align: left;
+      }
+      .signature-row {
+        margin-top: 50px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .signature-line {
+        border-top: 1px solid #333;
+        width: 200px;
+        text-align: center;
+        padding-top: 6px;
+        font-size: 0.85rem;
       }
     }
   </style>
@@ -296,7 +377,7 @@
           <label>Password</label>
           <div class="password-wrapper">
             <input type="password" id="login-password" placeholder="••••••••" required />
-            <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility()" title="Show/Hide Password" aria-label="Toggle password visibility">
+            <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility()" title="Show/Hide Password">
               <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -306,7 +387,7 @@
         </div>
         <button type="submit" class="btn-primary" style="width: 100%;">Sign In</button>
         <p style="font-size: 0.75rem; text-align: center; color: #6B7280; margin-top: 14px;">
-          Official/Student passwords are generated by Super Admin and cannot be changed by users.
+          Official/Student credentials are configured and controlled solely by Super Admin.
         </p>
       </form>
     </div>
@@ -314,7 +395,7 @@
     <!-- 2. SUPER ADMIN & OFFICIAL DASHBOARD -->
     <div id="admin-view" style="display: none;">
       
-      <!-- Staff Generation Card (Super Admin Only) -->
+      <!-- Staff Profile Generation (Super Admin Only) -->
       <div class="card" id="staff-creation-box">
         <div class="card-header">Create Official / Faculty Profile</div>
         <form id="staff-form">
@@ -347,19 +428,38 @@
         </form>
       </div>
 
-      <!-- Student Enrollment Card -->
-      <div class="card">
-        <div class="card-header">
-          New Student Registration
+      <!-- Staff / Faculty Directory (Super Admin Only) -->
+      <div class="card" id="staff-directory-box">
+        <div class="card-header">Official & Faculty Directory</div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Designation</th>
+                <th>Name</th>
+                <th>Phone (Login ID)</th>
+                <th>Date of Birth</th>
+                <th>Access Password</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="staff-roster-body"></tbody>
+          </table>
         </div>
+      </div>
+
+      <!-- Student Admission & Detailed Fee Form -->
+      <div class="card">
+        <div class="card-header">Cadet Admission Form</div>
         <form id="student-form">
           <div class="form-grid">
+            <div class="section-subtitle">1. Personal & Identity Details</div>
             <div class="form-group">
-              <label>Candidate Full Name</label>
+              <label>Cadet Full Name</label>
               <input type="text" id="std-name" required />
             </div>
             <div class="form-group">
-              <label>Candidate Photo</label>
+              <label>Cadet Photo</label>
               <input type="file" id="std-photo" accept="image/*" />
             </div>
             <div class="form-group">
@@ -402,6 +502,8 @@
               <label>Reference</label>
               <input type="text" id="std-ref" />
             </div>
+
+            <div class="section-subtitle">2. Academic & Physical Standards</div>
             <div class="form-group">
               <label>Educational Qualifications</label>
               <input type="text" id="std-qual" required />
@@ -419,57 +521,91 @@
               <input type="number" id="std-weight" required />
             </div>
             <div class="form-group" id="chest-group">
-              <label>Chest (cm) [Male Candidates]</label>
+              <label>Chest (cm) [Male Only]</label>
               <input type="number" id="std-chest" />
             </div>
             <div class="form-group full-width">
-              <label>Address</label>
+              <label>Permanent Address</label>
               <textarea id="std-address" rows="2" required></textarea>
             </div>
+
+            <div class="section-subtitle">3. Fee Structure & Installment Schedule</div>
             <div class="form-group">
-              <label>Paid at Time of Admission (₹)</label>
-              <input type="number" id="std-paid" required />
+              <label>1. ADMISSION FEES (₹)</label>
+              <input type="number" id="std-admission-fee" oninput="calculateBalance()" required />
+            </div>
+            <div class="form-group">
+              <label>2. PAID (₹)</label>
+              <input type="number" id="std-paid-fee" oninput="calculateBalance()" required />
             </div>
             <div class="form-group">
               <label>Remaining Balance (₹)</label>
-              <input type="number" id="std-remaining" required />
+              <input type="number" id="std-remaining-fee" readonly style="background:#f3f4f6; font-weight:bold;" />
             </div>
             <div class="form-group">
-              <label>Next Installment Date</label>
-              <input type="date" id="std-next-date" />
+              <label>3. DUE 1 (Date)</label>
+              <input type="date" id="std-due1-date" />
             </div>
             <div class="form-group">
-              <label>Monthly Payment Date</label>
-              <input type="date" id="std-monthly-date" />
+              <label>DUE 1 Amount (₹)</label>
+              <input type="number" id="std-due1-amt" />
             </div>
             <div class="form-group">
-              <label>Generated Student Password</label>
+              <label>4. DUE 2 (Date)</label>
+              <input type="date" id="std-due2-date" />
+            </div>
+            <div class="form-group">
+              <label>DUE 2 Amount (₹)</label>
+              <input type="number" id="std-due2-amt" />
+            </div>
+            <div class="form-group">
+              <label>5. DUE 3 (Date)</label>
+              <input type="date" id="std-due3-date" />
+            </div>
+            <div class="form-group">
+              <label>DUE 3 Amount (₹)</label>
+              <input type="number" id="std-due3-amt" />
+            </div>
+            <div class="form-group">
+              <label>6. HOSTEL FEES (₹)</label>
+              <input type="number" id="std-hostel-fee" />
+            </div>
+            <div class="form-group">
+              <label>7. MONTHLY TUITION FEES (₹)</label>
+              <input type="number" id="std-tuition-fee" />
+            </div>
+            <div class="form-group">
+              <label>8. DRESS / MATERIAL FEES (₹)</label>
+              <input type="number" id="std-dress-fee" />
+            </div>
+
+            <div class="form-group">
+              <label>Generated Cadet Password</label>
               <input type="text" id="std-generated-pw" readonly style="background:#eee; font-weight:bold;" />
             </div>
             <div class="form-group full-width">
-              <label>Extra Notes</label>
+              <label>Extra Administrative Notes</label>
               <textarea id="std-notes" rows="2"></textarea>
             </div>
           </div>
-          <button type="submit" class="btn-primary">Register Student Profile</button>
+          <button type="submit" class="btn-primary">Complete Admission & Save Record</button>
         </form>
       </div>
 
-      <!-- Student Roster -->
+      <!-- Enrolled Cadet Roster & Monthly Fee Matrix -->
       <div class="card">
         <div class="card-header">
-          Enrolled Candidates
+          <span>Cadet Roster & Academic Session (April 2026 – March 2027)</span>
         </div>
         <div class="table-container">
           <table>
             <thead>
               <tr>
-                <th>Batch</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Remaining Fee</th>
-                <th>Next Due Date</th>
-                <th>Actions</th>
+                <th>Cadet Details</th>
+                <th>Admission Dues</th>
+                <th>Installments</th>
+                <th>Monthly Fees Status</th>
+                <th>PDF / Actions</th>
               </tr>
             </thead>
             <tbody id="student-roster-body"></tbody>
@@ -483,8 +619,8 @@
     <div id="student-zone-view" style="display: none;">
       <div class="card">
         <div class="card-header">
-          <span>STUDENT'S ZONE - OFFICIAL IDENTITY SUMMARY</span>
-          <button class="btn-print" onclick="window.print()">Print Bio-Data</button>
+          <span>STUDENT'S ZONE - CADET STATUS SHEET</span>
+          <button class="btn-print" onclick="window.print()">Print Official Bio-Data / PDF</button>
         </div>
         <div id="student-summary-content"></div>
       </div>
@@ -492,60 +628,60 @@
 
   </div>
 
-  <!-- Print Bio-Data Template -->
+  <!-- Hidden Print / PDF Layout Engine -->
   <div id="print-section">
     <div class="print-box">
       <div class="print-header">
         <h2>FAUJ-E-FACTORY</h2>
-        <p>Cadet Verification & Bio-Data Record</p>
+        <p id="print-document-title">Official Verification Record</p>
       </div>
       <div id="printable-details"></div>
     </div>
   </div>
 
   <script>
-    // Data Store in LocalStorage
+    const MONTHS = [
+      "Apr 2026", "May 2026", "Jun 2026", "Jul 2026", 
+      "Aug 2026", "Sep 2026", "Oct 2026", "Nov 2026", 
+      "Dec 2026", "Jan 2027", "Feb 2027", "Mar 2027"
+    ];
+
     const DB = {
       staff: JSON.parse(localStorage.getItem("ff_staff") || "[]"),
-      students: JSON.parse(localStorage.getItem("ff_students") || "[]")
+      students: JSON.parse(localStorage.getItem("ff_students") || "[]"),
+      history: JSON.parse(localStorage.getItem("ff_history") || "[]")
     };
 
     let currentUser = null;
 
-    // Helper: Password Generator
     function generateSecurePassword() {
       return "FF" + Math.floor(100000 + Math.random() * 900000);
     }
 
-    // Dynamic Chest field toggle
     function toggleChestField(val) {
       document.getElementById("chest-group").style.display = (val === "Male") ? "flex" : "none";
     }
 
-    // Refresh generated inputs on page load
+    function calculateBalance() {
+      const admission = parseFloat(document.getElementById("std-admission-fee").value) || 0;
+      const paid = parseFloat(document.getElementById("std-paid-fee").value) || 0;
+      document.getElementById("std-remaining-fee").value = Math.max(0, admission - paid);
+    }
+
     function initGenerators() {
       document.getElementById("staff-password").value = generateSecurePassword();
       document.getElementById("std-generated-pw").value = generateSecurePassword();
     }
 
-    // Toggle Password Visibility Function
     function togglePasswordVisibility() {
       const passInput = document.getElementById("login-password");
       const eyeIcon = document.getElementById("eye-icon");
-
       if (passInput.type === "password") {
         passInput.type = "text";
-        // Slash icon indicating visible
-        eyeIcon.innerHTML = `
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
-        `;
+        eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />`;
       } else {
         passInput.type = "password";
-        // Default eye icon indicating masked
-        eyeIcon.innerHTML = `
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-        `;
+        eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />`;
       }
     }
 
@@ -555,7 +691,6 @@
       const id = document.getElementById("login-identifier").value.trim();
       const pass = document.getElementById("login-password").value.trim();
 
-      // 1. Two Authorized Super Admins with Shared Password
       const SUPER_ADMINS = [
         { email: "supriyaskkundu@gmail.com", name: "Super Admin (Supriya)" },
         { email: "ersadsir1986@gmail.com", name: "Super Admin (Ersad)" }
@@ -572,7 +707,6 @@
         return;
       }
 
-      // 2. Staff Check
       const staffMember = DB.staff.find(s => s.phone === id && s.password === pass);
       if (staffMember) {
         currentUser = { ...staffMember };
@@ -580,7 +714,6 @@
         return;
       }
 
-      // 3. Student Check
       const student = DB.students.find(s => s.ph1 === id && s.password === pass);
       if (student) {
         currentUser = { ...student, role: "Student" };
@@ -598,7 +731,10 @@
 
       if (currentUser.role === "SuperAdmin" || currentUser.role === "Official") {
         document.getElementById("admin-view").style.display = "block";
-        document.getElementById("staff-creation-box").style.display = (currentUser.role === "SuperAdmin") ? "block" : "none";
+        const isSuperAdmin = (currentUser.role === "SuperAdmin");
+        document.getElementById("staff-creation-box").style.display = isSuperAdmin ? "block" : "none";
+        document.getElementById("staff-directory-box").style.display = isSuperAdmin ? "block" : "none";
+        if (isSuperAdmin) renderStaffDirectory();
         renderRoster();
       } else if (currentUser.role === "Student") {
         document.getElementById("student-zone-view").style.display = "block";
@@ -614,7 +750,7 @@
       document.getElementById("nav-controls").style.display = "none";
     }
 
-    // Staff Creation Form Submit
+    // Staff Submit
     document.getElementById("staff-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const newStaff = {
@@ -624,18 +760,70 @@
         role: document.getElementById("staff-role").value,
         password: document.getElementById("staff-password").value
       };
-
       DB.staff.push(newStaff);
       localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
       alert(`Profile created for ${newStaff.name}. Assigned Password: ${newStaff.password}`);
       document.getElementById("staff-form").reset();
       initGenerators();
+      renderStaffDirectory();
     });
 
-    // Student Creation Form Submit
+    // Render Staff Directory
+    function renderStaffDirectory() {
+      const tbody = document.getElementById("staff-roster-body");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+      DB.staff.forEach((st, idx) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${st.role}</strong></td>
+          <td>${st.name}</td>
+          <td>${st.phone}</td>
+          <td>${st.dob}</td>
+          <td><code>${st.password}</code></td>
+          <td>
+            <button class="btn-print" onclick="printStaffProfile(${idx})">Print / PDF</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Print Staff Profile Card
+    function printStaffProfile(index) {
+      const st = DB.staff[index];
+      document.getElementById("print-document-title").innerText = "Official / Faculty Authorization Document";
+      const p = document.getElementById("printable-details");
+      p.innerHTML = `
+        <div style="display: flex; justify-content: space-between; margin-bottom: 24px;">
+          <div>
+            <h3>${st.name}</h3>
+            <p>Designation: <strong>${st.role}</strong></p>
+            <p>Login ID / Phone: ${st.phone}</p>
+            <p>Date of Birth: ${st.dob}</p>
+          </div>
+          <div style="width: 100px; height: 120px; border: 1px dashed #333; display: flex; align-items: center; justify-content: center; font-size: 10px;">
+            STAFF PHOTO
+          </div>
+        </div>
+        <table class="print-table">
+          <tr><th>Authorized Institution</th><td>FAUJ-E-FACTORY Head Office & Campus</td></tr>
+          <tr><th>Account Scope</th><td>${st.role === "Official" ? "Admissions, Records & Operations" : "Academic & Training Instruction"}</td></tr>
+          <tr><th>Authentication Key</th><td><code>${st.password}</code></td></tr>
+        </table>
+        <div class="signature-row">
+          <div class="signature-line">Staff Signature</div>
+          <div class="signature-line">Director / Super Admin</div>
+        </div>
+      `;
+      window.print();
+    }
+
+    // Student Submit
     document.getElementById("student-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const newStudent = {
+        id: "STD-" + Date.now(),
         name: document.getElementById("std-name").value,
         guardian: document.getElementById("std-guardian").value,
         ph1: document.getElementById("std-ph1").value,
@@ -651,12 +839,21 @@
         weight: document.getElementById("std-weight").value,
         chest: document.getElementById("std-chest").value || "N/A",
         address: document.getElementById("std-address").value,
-        paid: document.getElementById("std-paid").value,
-        remaining: document.getElementById("std-remaining").value,
-        nextDate: document.getElementById("std-next-date").value,
-        monthlyDate: document.getElementById("std-monthly-date").value,
+        admissionFee: parseFloat(document.getElementById("std-admission-fee").value) || 0,
+        paid: parseFloat(document.getElementById("std-paid-fee").value) || 0,
+        remaining: parseFloat(document.getElementById("std-remaining-fee").value) || 0,
+        due1Date: document.getElementById("std-due1-date").value,
+        due1Amt: parseFloat(document.getElementById("std-due1-amt").value) || 0,
+        due2Date: document.getElementById("std-due2-date").value,
+        due2Amt: parseFloat(document.getElementById("std-due2-amt").value) || 0,
+        due3Date: document.getElementById("std-due3-date").value,
+        due3Amt: parseFloat(document.getElementById("std-due3-amt").value) || 0,
+        hostelFee: parseFloat(document.getElementById("std-hostel-fee").value) || 0,
+        tuitionFee: parseFloat(document.getElementById("std-tuition-fee").value) || 0,
+        dressFee: parseFloat(document.getElementById("std-dress-fee").value) || 0,
         password: document.getElementById("std-generated-pw").value,
-        notes: document.getElementById("std-notes").value
+        notes: document.getElementById("std-notes").value,
+        paidMonths: []
       };
 
       DB.students.push(newStudent);
@@ -667,44 +864,117 @@
       renderRoster();
     });
 
+    // Toggle Monthly Fee Status
+    function toggleMonthPaid(studentIndex, monthName) {
+      const student = DB.students[studentIndex];
+      const idx = student.paidMonths.indexOf(monthName);
+      if (idx > -1) {
+        student.paidMonths.splice(idx, 1);
+      } else {
+        student.paidMonths.push(monthName);
+      }
+      localStorage.setItem("ff_students", JSON.stringify(DB.students));
+      renderRoster();
+    }
+
+    // Re-Admission Process
+    function executeReAdmission(studentIndex) {
+      const student = DB.students[studentIndex];
+      if (!confirm(`Archive current academic cycle for ${student.name} and execute Re-Admission for the next session?`)) return;
+
+      DB.history.push({
+        studentId: student.id,
+        cadetName: student.name,
+        sessionClosedAt: new Date().toISOString(),
+        archiveSnapshot: JSON.parse(JSON.stringify(student))
+      });
+      localStorage.setItem("ff_history", JSON.stringify(DB.history));
+
+      student.paidMonths = [];
+      student.admissionFee = 0;
+      student.paid = 0;
+      student.remaining = 0;
+      student.due1Date = "";
+      student.due1Amt = 0;
+      student.due2Date = "";
+      student.due2Amt = 0;
+      student.due3Date = "";
+      student.due3Amt = 0;
+      student.notes += ` | Re-Admitted on ${new Date().toLocaleDateString()}`;
+
+      localStorage.setItem("ff_students", JSON.stringify(DB.students));
+      alert(`Re-admission completed for ${student.name}. Previous financial records have been archived.`);
+      renderRoster();
+    }
+
     // Render Student Table
     function renderRoster() {
       const tbody = document.getElementById("student-roster-body");
       tbody.innerHTML = "";
+
       DB.students.forEach((s, idx) => {
+        const isEligibleForReadmission = (s.remaining === 0) && (s.paidMonths.length === 12);
+        const monthHtml = MONTHS.map(m => {
+          const isPaid = s.paidMonths.includes(m);
+          return `<div class="month-badge ${isPaid ? 'paid' : ''}" onclick="toggleMonthPaid(${idx}, '${m}')">${m}</div>`;
+        }).join("");
+
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td><strong>${s.batch}</strong></td>
-          <td>${s.name}</td>
-          <td>${s.ph1}</td>
-          <td>₹${s.remaining}</td>
-          <td>${s.nextDate || "None"}</td>
           <td>
-            <button class="btn-print" style="padding: 4px 8px; font-size: 0.8rem;" onclick="printStudent(${idx})">Print</button>
+            <strong>${s.name}</strong> (${s.gender})<br/>
+            Batch: <strong>${s.batch}</strong><br/>
+            Ph: ${s.ph1}
+          </td>
+          <td>
+            Admission: ₹${s.admissionFee}<br/>
+            Paid: ₹${s.paid}<br/>
+            <strong style="color: ${s.remaining > 0 ? 'var(--primary-red)' : 'var(--success-green)'};">
+              Due: ₹${s.remaining}
+            </strong>
+          </td>
+          <td style="font-size:0.8rem;">
+            D1: ${s.due1Date || '—'} (₹${s.due1Amt})<br/>
+            D2: ${s.due2Date || '—'} (₹${s.due2Amt})<br/>
+            D3: ${s.due3Date || '—'} (₹${s.due3Amt})
+          </td>
+          <td>
+            <div class="months-container">${monthHtml}</div>
+          </td>
+          <td>
+            <button class="btn-print" onclick="printStudent(${idx})">Print / PDF</button>
+            <button class="btn-readmit" ${isEligibleForReadmission ? '' : 'disabled'} 
+                    title="${isEligibleForReadmission ? 'Eligible for Re-Admission' : 'Requires zero due and all 12 months paid'}" 
+                    onclick="executeReAdmission(${idx})">Re-Admission</button>
           </td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    // Render Student Zone Details
+    // Student Zone Portal
     function renderStudentPortal(student) {
       const target = document.getElementById("student-summary-content");
+      const monthHtml = MONTHS.map(m => {
+        const isPaid = (student.paidMonths || []).includes(m);
+        return `<div class="month-badge ${isPaid ? 'paid' : ''}" style="cursor: default;">${m}</div>`;
+      }).join("");
+
       target.innerHTML = `
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-          <div><p><strong>Cadet Name:</strong> ${student.name}</p></div>
-          <div><p><strong>Batch Assigned:</strong> ${student.batch}</p></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+          <div><p><strong>Cadet:</strong> ${student.name}</p></div>
+          <div><p><strong>Batch:</strong> ${student.batch}</p></div>
           <div><p><strong>Guardian:</strong> ${student.guardian}</p></div>
-          <div><p><strong>Primary Contact:</strong> ${student.ph1}</p></div>
-          <div><p><strong>Physical Stats:</strong> Height: ${student.height}cm | Weight: ${student.weight}kg</p></div>
-          <div><p><strong>Remaining Fee Balance:</strong> ₹${student.remaining}</p></div>
-          <div><p><strong>Next Installment Due:</strong> ${student.nextDate || "None"}</p></div>
+          <div><p><strong>Primary Phone:</strong> ${student.ph1}</p></div>
+          <div><p><strong>Admission Fee Due:</strong> ₹${student.remaining}</p></div>
+          <div><p><strong>Monthly Tuition:</strong> ₹${student.tuitionFee} | <strong>Hostel:</strong> ₹${student.hostelFee}</p></div>
         </div>
+        <h4 style="color:var(--navy-blue); margin-bottom: 8px;">Academic Year Fee Clearances (Red = Cleared)</h4>
+        <div class="months-container">${monthHtml}</div>
       `;
       preparePrintRecord(student);
     }
 
-    // Prepare Printable Profile
     function printStudent(index) {
       const student = DB.students[index];
       preparePrintRecord(student);
@@ -712,36 +982,44 @@
     }
 
     function preparePrintRecord(s) {
+      document.getElementById("print-document-title").innerText = "Cadet Official Verification & Financial Record";
       const p = document.getElementById("printable-details");
+      const paidMonthsSummary = s.paidMonths.length ? s.paidMonths.join(", ") : "None";
+
       p.innerHTML = `
         <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
           <div>
             <h3>${s.name}</h3>
-            <p>Batch: <strong>${s.batch}</strong> | Ph: ${s.ph1}</p>
+            <p>Batch: <strong>${s.batch}</strong> | Primary Contact: ${s.ph1}</p>
             <p>Guardian: ${s.guardian}</p>
-            <p>Address: ${s.address}</p>
+            <p>Permanent Address: ${s.address}</p>
           </div>
           <div style="width: 100px; height: 120px; border: 1px dashed #333; display: flex; align-items: center; justify-content: center; font-size: 10px;">
             PASSPORT PHOTO
           </div>
         </div>
         <hr style="margin-bottom: 12px;"/>
-        <table style="margin-bottom: 20px;">
+        <table class="print-table">
           <tr><th>Height</th><td>${s.height} cm</td><th>Weight</th><td>${s.weight} kg</td></tr>
-          <tr><th>Chest</th><td>${s.chest} cm</td><th>DOB</th><td>${s.dob}</td></tr>
+          <tr><th>Chest</th><td>${s.chest} cm</td><th>Date of Birth</th><td>${s.dob}</td></tr>
           <tr><th>Qualification</th><td>${s.qualification}</td><th>Last Exam %</th><td>${s.marks}%</td></tr>
-          <tr><th>Admission Paid</th><td>₹${s.paid}</td><th>Remaining Due</th><td>₹${s.remaining}</td></tr>
-          <tr><th>Next Installment</th><td>${s.nextDate || "N/A"}</td><th>Monthly Date</th><td>${s.monthlyDate || "N/A"}</td></tr>
         </table>
-        <div style="margin-top: 40px; display: flex; justify-content: space-between;">
-          <p>Candidate Signature: __________________</p>
-          <p>Authorized Signatory: __________________</p>
+        <h4 style="margin: 14px 0 6px 0; color: #0A192F;">Official Financial Ledger</h4>
+        <table class="print-table">
+          <tr><th>Admission Fee</th><td>₹${s.admissionFee}</td><th>Total Paid</th><td>₹${s.paid}</td></tr>
+          <tr><th>Remaining Admission Due</th><td>₹${s.remaining}</td><th>Dress / Kit Fees</th><td>₹${s.dressFee}</td></tr>
+          <tr><th>Hostel Fees (Monthly)</th><td>₹${s.hostelFee}</td><th>Tuition Fees (Monthly)</th><td>₹${s.tuitionFee}</td></tr>
+          <tr><th>Due Installment 1</th><td>${s.due1Date || 'N/A'} (₹${s.due1Amt})</td><th>Due Installment 2</th><td>${s.due2Date || 'N/A'} (₹${s.due2Amt})</td></tr>
+          <tr><th>Due Installment 3</th><td>${s.due3Date || 'N/A'} (₹${s.due3Amt})</td><th>Cleared Months</th><td>${paidMonthsSummary}</td></tr>
+        </table>
+        <div class="signature-row">
+          <div class="signature-line">Candidate Signature</div>
+          <div class="signature-line">Super Admin / Authorized Signatory</div>
         </div>
       `;
     }
 
-    // Initialize
     initGenerators();
   </script>
 </body>
-</html>
+  </html>
