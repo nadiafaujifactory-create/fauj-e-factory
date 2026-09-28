@@ -31,7 +31,6 @@
       flex-direction: column;
     }
 
-    /* Top Navigation */
     .navbar {
       background-color: var(--navy-blue);
       color: var(--pure-white);
@@ -142,12 +141,40 @@
       font-weight: 700;
       color: var(--primary-red);
       grid-column: 1 / -1;
-      margin-top: 10px;
+      margin-top: 14px;
       padding-bottom: 4px;
       border-bottom: 1px dashed var(--border-gray);
     }
 
-    /* Forms */
+    /* Sub-card Box for Structured Steps */
+    .step-box {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-left: 4px solid var(--navy-blue);
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 16px;
+      grid-column: 1 / -1;
+    }
+
+    .step-box.highlight {
+      border-left-color: var(--primary-red);
+    }
+
+    .step-box.success {
+      border-left-color: var(--success-green);
+    }
+
+    .step-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy-blue);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -208,10 +235,6 @@
       user-select: none;
     }
 
-    .toggle-password-btn:hover {
-      color: var(--navy-blue);
-    }
-
     .remember-wrap {
       display: flex;
       align-items: center;
@@ -256,6 +279,24 @@
       font-size: 0.8rem;
     }
 
+    .btn-sub-action {
+      background: var(--navy-blue);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-sub-action:hover {
+      background: var(--primary-red);
+    }
+
     .btn-readmit {
       background: var(--success-green);
       color: var(--pure-white);
@@ -273,7 +314,6 @@
       cursor: not-allowed;
     }
 
-    /* Dual Split Layout */
     .finance-split-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -339,7 +379,6 @@
       color: var(--navy-blue);
     }
 
-    /* Compact Roster Table */
     .table-container {
       overflow-x: auto;
     }
@@ -379,7 +418,7 @@
       color: var(--navy-blue);
     }
 
-    /* Modal / Popover */
+    /* Modal for Monthly Matrix */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -476,7 +515,7 @@
 </head>
 <body>
 
-  <!-- App Header -->
+  <!-- Top App Navigation -->
   <header class="navbar">
     <div class="brand-wrap">
       <img src="logo.png" alt="FAUJ-E-FACTORY" class="brand-logo" onerror="this.style.display='none'" />
@@ -580,9 +619,10 @@
 
       <!-- Cadet Admission Form -->
       <div class="card">
-        <div class="card-header">Cadet Admission Form</div>
+        <div class="card-header">Cadet Admission & Structured Fee Formulation</div>
         <form id="student-form">
           <div class="form-grid">
+            
             <div class="section-subtitle">1. Personal & Identity Details</div>
             <div class="form-group">
               <label>Admission Date</label>
@@ -663,78 +703,117 @@
               <textarea id="std-address" rows="2" required></textarea>
             </div>
 
-            <div class="section-subtitle">3. Fee Categories & Custom Assigned Rates</div>
-            <div class="form-group">
-              <label>1. Admission fees / Fees at admission (₹)</label>
-              <input type="number" id="fee-head-admission" placeholder="Amount" oninput="calculateTotalAssigned()" required />
-            </div>
-            <div class="form-group">
-              <label>2. Monthly tuition fees (₹)</label>
-              <input type="number" id="fee-head-tuition" placeholder="Amount" oninput="calculateTotalAssigned()" />
-            </div>
-            <div class="form-group">
-              <label>3. Hostel fees (₹)</label>
-              <input type="number" id="fee-head-hostel" placeholder="Amount" oninput="calculateTotalAssigned()" />
-            </div>
-            <div class="form-group">
-              <label>4. Any other fees or misc purpose fees (₹)</label>
-              <input type="number" id="fee-head-misc" placeholder="Amount" oninput="calculateTotalAssigned()" />
+            <!-- ========================================== -->
+            <!-- 3. REORGANIZED STRUCTURED FEE SYSTEM       -->
+            <!-- ========================================== -->
+
+            <!-- PART A: FIXED FEE STRUCTURE -->
+            <div class="step-box">
+              <div class="step-title">
+                <span>Part 1: Fee Fixation (নির্ধারিত ফি ফিক্সডকরণ)</span>
+              </div>
+              <p style="font-size:0.8rem; color:#6B7280; margin-bottom:12px;">
+                ক্যাডেটের জন্য কোন হেডে কত ফি ধার্য করা হচ্ছে তা এখানে লিখে ফিক্সড করুন:
+              </p>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>1. Admission Fees (₹)</label>
+                  <input type="number" id="fix-admission" placeholder="Amount" oninput="calculateBalance()" required />
+                </div>
+                <div class="form-group">
+                  <label>2. Monthly Study Fees (₹)</label>
+                  <input type="number" id="fix-tuition" placeholder="Monthly Study Fees" />
+                </div>
+                <div class="form-group">
+                  <label>3. Hostel Fees (₹)</label>
+                  <input type="number" id="fix-hostel" placeholder="Hostel Fees" />
+                </div>
+                <div class="form-group">
+                  <label>4. Dress & Material Fees (₹)</label>
+                  <input type="number" id="fix-dress" placeholder="Dress & Material Fees" />
+                </div>
+                <div class="form-group">
+                  <label>5. Other Fees (₹)</label>
+                  <input type="number" id="fix-other" placeholder="Other Miscellaneous Fees" />
+                </div>
+              </div>
             </div>
 
-            <div class="section-subtitle">4. Payment Made & Upcoming Due Schedule</div>
-            <div class="form-group">
-              <label>Paid Head Selection (Payment Given Now)</label>
-              <select id="paid-purpose-head">
-                <option value="Admission Fees">Admission Fees</option>
-                <option value="Monthly Tuition Fees">Monthly Tuition Fees</option>
-                <option value="Hostel Fees">Hostel Fees</option>
-                <option value="Miscellaneous Fees">Miscellaneous Fees</option>
-                <option value="Combined Admission & First Month">Combined Admission & First Month</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Total Amount Paid at Admission (₹)</label>
-              <input type="number" id="std-paid-now" placeholder="Amount Paid" oninput="calculateTotalAssigned()" required />
-            </div>
-            <div class="form-group">
-              <label>Remaining Admission Due Balance (₹)</label>
-              <input type="number" id="std-balance-due" readonly style="background:#f3f4f6; font-weight:bold; color:var(--primary-red);" />
-            </div>
-
-            <div class="form-group">
-              <label>Upcoming Due 1: Purpose Head</label>
-              <select id="due1-head">
-                <option value="Admission Fees Due">Admission Fees Due</option>
-                <option value="Monthly Tuition Fees">Monthly Tuition Fees</option>
-                <option value="Hostel Fees">Hostel Fees</option>
-                <option value="Miscellaneous Fees">Miscellaneous Fees</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Due 1 Date</label>
-              <input type="date" id="due1-date" />
-            </div>
-            <div class="form-group">
-              <label>Due 1 Amount (₹)</label>
-              <input type="number" id="due1-amt" />
+            <!-- PART B: PAYMENT AT ADMISSION -->
+            <div class="step-box success">
+              <div class="step-title">
+                <span>Part 2: Payment at the Time of Admission (ভর্তির সময় জমা)</span>
+              </div>
+              <p style="font-size:0.8rem; color:#6B7280; margin-bottom:12px;">
+                ভর্তির সময় ক্যাডেট কোন হেডের জন্য কত টাকা পরিশোধ করছে তা সিলেক্ট করে এন্ট্রি করুন:
+              </p>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Payment Head</label>
+                  <select id="paid-head-choice">
+                    <option value="Admission Fees">Admission Fees</option>
+                    <option value="Monthly Study Fees">Monthly Study Fees</option>
+                    <option value="Hostel Fees">Hostel Fees</option>
+                    <option value="Dress & Material Fees">Dress & Material Fees</option>
+                    <option value="Other Fees">Other Fees</option>
+                    <option value="Combined Admission & First Month">Combined Admission & First Month</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Amount Paid Now (₹)</label>
+                  <input type="number" id="paid-now-amount" placeholder="Amount Paid" oninput="calculateBalance()" required />
+                </div>
+                <div class="form-group">
+                  <label>Remaining Admission Due Balance (₹)</label>
+                  <input type="number" id="calc-remaining-due" readonly style="background:#eee; font-weight:bold; color:var(--primary-red);" />
+                </div>
+              </div>
             </div>
 
-            <div class="form-group">
-              <label>Upcoming Due 2: Purpose Head</label>
-              <select id="due2-head">
-                <option value="Admission Fees Due">Admission Fees Due</option>
-                <option value="Monthly Tuition Fees">Monthly Tuition Fees</option>
-                <option value="Hostel Fees">Hostel Fees</option>
-                <option value="Miscellaneous Fees">Miscellaneous Fees</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Due 2 Date</label>
-              <input type="date" id="due2-date" />
-            </div>
-            <div class="form-group">
-              <label>Due 2 Amount (₹)</label>
-              <input type="number" id="due2-amt" />
+            <!-- PART C: UPCOMING DUES & MONTHLY SUB-BUTTON -->
+            <div class="step-box highlight">
+              <div class="step-title">
+                <span>Part 3: Upcoming Dues & Monthly Schedule (ভবিষ্যতের কিস্তি ও মাসিক ফি)</span>
+              </div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Upcoming Due 1: Purpose Head</label>
+                  <select id="due1-head">
+                    <option value="Admission Fees Due">Admission Fees Due</option>
+                    <option value="Monthly Study Fees">Monthly Study Fees</option>
+                    <option value="Hostel Fees">Hostel Fees</option>
+                    <option value="Dress & Material Fees">Dress & Material Fees</option>
+                    <option value="Other Fees">Other Fees</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Due 1 Date</label>
+                  <input type="date" id="due1-date" />
+                </div>
+                <div class="form-group">
+                  <label>Due 1 Amount (₹)</label>
+                  <input type="number" id="due1-amt" />
+                </div>
+
+                <div class="form-group">
+                  <label>Upcoming Due 2: Purpose Head</label>
+                  <select id="due2-head">
+                    <option value="Admission Fees Due">Admission Fees Due</option>
+                    <option value="Monthly Study Fees">Monthly Study Fees</option>
+                    <option value="Hostel Fees">Hostel Fees</option>
+                    <option value="Dress & Material Fees">Dress & Material Fees</option>
+                    <option value="Other Fees">Other Fees</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Due 2 Date</label>
+                  <input type="date" id="due2-date" />
+                </div>
+                <div class="form-group">
+                  <label>Due 2 Amount (₹)</label>
+                  <input type="number" id="due2-amt" />
+                </div>
+              </div>
             </div>
 
             <div class="form-group">
@@ -750,7 +829,7 @@
         </form>
       </div>
 
-      <!-- Compact Cadet Roster Table -->
+      <!-- Compact Cadet Directory Table -->
       <div class="card">
         <div class="card-header">
           <span>Registered Cadets Directory (Session Apr 2026 – Mar 2027)</span>
@@ -760,11 +839,11 @@
             <thead>
               <tr>
                 <th>Cadet Name & Batch</th>
-                <th>Contact</th>
+                <th>Phone</th>
                 <th>Admission Date</th>
                 <th>Admission Due</th>
-                <th>Upcoming Dues</th>
-                <th>Monthly Fees Clearance</th>
+                <th>Upcoming Due</th>
+                <th>Monthly Schedule (Apr 26 - Mar 27)</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -809,8 +888,9 @@
               <label>Purpose</label>
               <select id="inc-purpose" required>
                 <option value="Admission Fee">Admission Fee</option>
-                <option value="Monthly Fee">Monthly Fee</option>
-                <option value="Dress/Material Fees">Dress/Material Fees</option>
+                <option value="Monthly Study Fees">Monthly Study Fees</option>
+                <option value="Hostel Fees">Hostel Fees</option>
+                <option value="Dress & Material Fees">Dress & Material Fees</option>
                 <option value="Other Fees">Other Fees</option>
                 <option value="Donation">Donation</option>
               </select>
@@ -915,24 +995,24 @@
 
   </div>
 
-  <!-- MONTHLY FEES MODAL -->
+  <!-- MONTHLY FEES SUB-MODAL WINDOW -->
   <div id="monthly-fee-modal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-title">
-        <span id="modal-cadet-title">Monthly Tuition & Hostel Fee Register</span>
+        <span id="modal-cadet-title">Monthly Schedule (Apr 2026 – Mar 2027)</span>
         <button type="button" onclick="closeMonthModal()" style="border:none; background:none; font-size:1.4rem; cursor:pointer; font-weight:bold;">&times;</button>
       </div>
       <p style="font-size:0.8rem; color:#6B7280; margin-bottom:12px;">
-        Months prior to admission date are inactive. Click active month badge to toggle <strong style="color:var(--primary-red);">RED (PAID)</strong> status.
+        Months prior to admission date are disabled (inactive). Click an active month to toggle <strong style="color:var(--primary-red);">RED (PAID)</strong>.
       </p>
       <div class="months-container" id="modal-months-container"></div>
       <div style="text-align: right; margin-top: 16px;">
-        <button type="button" class="btn-print" onclick="closeMonthModal()">Done / Close</button>
+        <button type="button" class="btn-print" onclick="closeMonthModal()">Close / Done</button>
       </div>
     </div>
   </div>
 
-  <!-- Print Engine -->
+  <!-- Hidden Print Engine -->
   <div id="print-section">
     <div class="print-box">
       <div class="print-header">
@@ -947,7 +1027,6 @@
   </div>
 
   <script>
-    // Robust Local Data Store (Always Instant & Reliable)
     const ACADEMIC_MONTHS = [
       { key: "2026-04", label: "Apr 2026", order: 4 },
       { key: "2026-05", label: "May 2026", order: 5 },
@@ -973,7 +1052,7 @@
     let currentUser = null;
     let activeModalStudentIdx = null;
 
-    // Direct, Standalone Password Toggle
+    // Instant Password Eye Toggle
     function togglePasswordVisibility() {
       const passInput = document.getElementById("login-password");
       const btn = document.getElementById("eye-toggle-btn");
@@ -996,10 +1075,11 @@
       if (el) el.style.display = (val === "Male") ? "flex" : "none";
     }
 
-    function calculateTotalAssigned() {
-      const admissionFee = parseFloat(document.getElementById("fee-head-admission").value) || 0;
-      const paidNow = parseFloat(document.getElementById("std-paid-now").value) || 0;
-      const balEl = document.getElementById("std-balance-due");
+    // Auto-calculate Balance Due
+    function calculateBalance() {
+      const admissionFee = parseFloat(document.getElementById("fix-admission").value) || 0;
+      const paidNow = parseFloat(document.getElementById("paid-now-amount").value) || 0;
+      const balEl = document.getElementById("calc-remaining-due");
       if (balEl) balEl.value = Math.max(0, admissionFee - paidNow);
     }
 
@@ -1035,11 +1115,9 @@
       }
     }
 
-    // Page Load Setup
+    // Auto Login Check
     window.addEventListener("DOMContentLoaded", () => {
       initGenerators();
-
-      // Check Saved Session
       const saved = localStorage.getItem("ff_remembered_admin");
       if (saved) {
         try {
@@ -1051,14 +1129,13 @@
       }
     });
 
-    // Unbreakable Login Handler
+    // Login Controller
     document.getElementById("login-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const id = document.getElementById("login-identifier").value.trim().toLowerCase();
       const pass = document.getElementById("login-password").value.trim();
       const remember = document.getElementById("remember-me-checkbox").checked;
 
-      // 1. Super Admins
       const SUPER_ADMINS = [
         { email: "supriyaskkundu@gmail.com", name: "Super Admin (Supriya)" },
         { email: "ersadsir1986@gmail.com", name: "Super Admin (Ersad)" }
@@ -1080,7 +1157,6 @@
         return;
       }
 
-      // 2. Staff Check
       const staffMember = DB.staff.find(s => s.phone === id && s.password === pass);
       if (staffMember) {
         currentUser = { ...staffMember };
@@ -1088,7 +1164,6 @@
         return;
       }
 
-      // 3. Student Check
       const student = DB.students.find(s => s.ph1 === id && s.password === pass);
       if (student) {
         currentUser = { ...student, role: "Student" };
@@ -1131,7 +1206,7 @@
       document.getElementById("login-password").value = "";
     }
 
-    // Staff Registration
+    // Staff Submit
     document.getElementById("staff-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const newStaff = {
@@ -1200,13 +1275,13 @@
       window.print();
     }
 
-    // Student Registration
+    // Student Admission Submit
     document.getElementById("student-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const admDate = document.getElementById("std-admission-date").value;
       const cadetName = document.getElementById("std-name").value;
-      const paidNow = parseFloat(document.getElementById("std-paid-now").value) || 0;
-      const paidHead = document.getElementById("paid-purpose-head").value;
+      const paidNow = parseFloat(document.getElementById("paid-now-amount").value) || 0;
+      const paidHead = document.getElementById("paid-head-choice").value;
 
       const newStudent = {
         id: "STD-" + Date.now(),
@@ -1227,14 +1302,18 @@
         chest: document.getElementById("std-chest").value || "N/A",
         address: document.getElementById("std-address").value,
         
-        admission_fee: parseFloat(document.getElementById("fee-head-admission").value) || 0,
-        tuition_fee: parseFloat(document.getElementById("fee-head-tuition").value) || 0,
-        hostel_fee: parseFloat(document.getElementById("fee-head-hostel").value) || 0,
-        dress_fee: parseFloat(document.getElementById("fee-head-misc").value) || 0,
+        // Step 1: Fixed Fee Breakdown
+        admission_fee: parseFloat(document.getElementById("fix-admission").value) || 0,
+        tuition_fee: parseFloat(document.getElementById("fix-tuition").value) || 0,
+        hostel_fee: parseFloat(document.getElementById("fix-hostel").value) || 0,
+        dress_fee: parseFloat(document.getElementById("fix-dress").value) || 0,
+        other_fee: parseFloat(document.getElementById("fix-other").value) || 0,
         
+        // Step 2: Payment at Admission
         paid: paidNow,
-        remaining: parseFloat(document.getElementById("std-balance-due").value) || 0,
+        remaining: parseFloat(document.getElementById("calc-remaining-due").value) || 0,
         
+        // Step 3: Upcoming Dues
         due1_head: document.getElementById("due1-head").value,
         due1_date: document.getElementById("due1-date").value,
         due1_amt: parseFloat(document.getElementById("due1-amt").value) || 0,
@@ -1251,6 +1330,7 @@
       DB.students.push(newStudent);
       localStorage.setItem("ff_students", JSON.stringify(DB.students));
 
+      // Auto-record admission income
       if (paidNow > 0) {
         DB.incomes.push({
           id: "INC-" + Date.now(),
@@ -1263,11 +1343,12 @@
       }
 
       renderRoster();
-      alert(`Cadet registered! Assigned Password: ${newStudent.password}`);
+      alert(`Cadet registered! Assigned Password for Student Zone: ${newStudent.password}`);
       document.getElementById("student-form").reset();
       initGenerators();
     });
 
+    // Helper: Map Date to Academic Month Order
     function getMonthOrder(dateStr) {
       if (!dateStr) return 0;
       const parts = dateStr.split("-");
@@ -1278,6 +1359,7 @@
       return 0;
     }
 
+    // Modal Controller for Monthly Schedule (Apr 26 to Mar 27)
     function openMonthModal(studentIdx) {
       activeModalStudentIdx = studentIdx;
       const student = DB.students[studentIdx];
@@ -1294,8 +1376,11 @@
         const isPaid = paidArr.includes(m.label);
 
         let badgeClass = "month-badge";
-        if (isInactive) badgeClass += " disabled-month";
-        else if (isPaid) badgeClass += " paid";
+        if (isInactive) {
+          badgeClass += " disabled-month";
+        } else if (isPaid) {
+          badgeClass += " paid";
+        }
 
         const badge = document.createElement("div");
         badge.className = badgeClass;
@@ -1316,6 +1401,7 @@
       activeModalStudentIdx = null;
     }
 
+    // Toggle month payment
     function toggleMonthPaidFromModal(monthLabel) {
       if (activeModalStudentIdx === null) return;
       const student = DB.students[activeModalStudentIdx];
@@ -1331,7 +1417,7 @@
           DB.incomes.push({
             id: "INC-" + Date.now(),
             date: new Date().toISOString().split("T")[0],
-            purpose: "Monthly Fee",
+            purpose: "Monthly Study & Hostel Fee",
             person: `${student.name} (${monthLabel})`,
             amount: monthlySum
           });
@@ -1345,6 +1431,7 @@
       openMonthModal(activeModalStudentIdx);
     }
 
+    // Render Compact Directory
     function renderRoster() {
       const tbody = document.getElementById("student-roster-body");
       if (!tbody) return;
@@ -1368,8 +1455,8 @@
             ${s.due1_date ? `${s.due1_date} (₹${s.due1_amt})` : '—'}
           </td>
           <td>
-            <button type="button" class="month-select-dropdown" onclick="openMonthModal(${idx})">
-              📅 Status: <strong>${paidArr.length} Paid</strong>
+            <button type="button" class="btn-sub-action" onclick="openMonthModal(${idx})">
+              📅 Status (${paidArr.length} Paid)
             </button>
           </td>
           <td>
@@ -1402,7 +1489,7 @@
       alert(`Re-admission completed for ${student.name}. Previous records archived.`);
     }
 
-    // Income Form Submit
+    // Income Entry Submit
     document.getElementById("income-entry-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const newIncome = {
@@ -1420,7 +1507,7 @@
       renderFinanceDashboard();
     });
 
-    // Expense Form Submit
+    // Expense Entry Submit
     document.getElementById("expense-entry-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const newExpense = {
@@ -1554,8 +1641,8 @@
         <h4 style="margin: 14px 0 6px 0; color: #0A192F;">Official Financial Ledger</h4>
         <table class="print-table">
           <tr><th>Admission Fee</th><td>₹${s.admission_fee}</td><th>Total Paid</th><td>₹${s.paid}</td></tr>
-          <tr><th>Remaining Admission Due</th><td>₹${s.remaining}</td><th>Misc / Kit Fees</th><td>₹${s.dress_fee}</td></tr>
-          <tr><th>Hostel Fees (Monthly)</th><td>₹${s.hostel_fee}</td><th>Tuition Fees (Monthly)</th><td>₹${s.tuition_fee}</td></tr>
+          <tr><th>Remaining Admission Due</th><td>₹${s.remaining}</td><th>Dress / Kit Fees</th><td>₹${s.dress_fee}</td></tr>
+          <tr><th>Hostel Fees (Monthly)</th><td>₹${s.hostel_fee}</td><th>Study Fees (Monthly)</th><td>₹${s.tuition_fee}</td></tr>
           <tr><th>Upcoming Due 1</th><td>${s.due1_date || 'N/A'} (₹${s.due1_amt})</td><th>Cleared Months</th><td>${paidMonthsSummary}</td></tr>
         </table>
         <div class="signature-row">
