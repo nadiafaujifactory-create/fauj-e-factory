@@ -146,7 +146,6 @@
       border-bottom: 1px dashed var(--border-gray);
     }
 
-    /* Sub-card Box for Structured Steps */
     .step-box {
       background: #F8FAFC;
       border: 1px solid #E2E8F0;
@@ -155,10 +154,6 @@
       padding: 16px;
       margin-bottom: 16px;
       grid-column: 1 / -1;
-    }
-
-    .step-box.highlight {
-      border-left-color: var(--primary-red);
     }
 
     .step-box.success {
@@ -314,6 +309,45 @@
       cursor: not-allowed;
     }
 
+    .btn-add-entry {
+      background: var(--navy-light);
+      color: white;
+      border: 1px dashed #CBD5E1;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .btn-add-entry:hover {
+      background: var(--navy-blue);
+    }
+
+    /* Additional Dynamic Row Style */
+    .dynamic-pay-row {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr auto;
+      gap: 10px;
+      align-items: center;
+      background: white;
+      padding: 10px;
+      border: 1px solid #E2E8F0;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    .btn-del-row {
+      background: #FEE2E2;
+      color: #991B1B;
+      border: none;
+      padding: 8px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
     .finance-split-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -323,6 +357,9 @@
 
     @media (max-width: 850px) {
       .finance-split-grid {
+        grid-template-columns: 1fr;
+      }
+      .dynamic-pay-row {
         grid-template-columns: 1fr;
       }
     }
@@ -407,18 +444,6 @@
       background-color: #f9fafb;
     }
 
-    .month-select-dropdown {
-      padding: 6px 8px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      border-radius: 4px;
-      cursor: pointer;
-      background: white;
-      border: 1px solid var(--navy-blue);
-      color: var(--navy-blue);
-    }
-
-    /* Modal for Monthly Matrix */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -484,7 +509,6 @@
       text-decoration: line-through;
     }
 
-    /* Print Template */
     #print-section { display: none; }
 
     @media print {
@@ -619,14 +643,14 @@
 
       <!-- Cadet Admission Form -->
       <div class="card">
-        <div class="card-header">Cadet Admission & Structured Fee Formulation</div>
+        <div class="card-header">Cadet Admission & Multi-Tier Fee Form</div>
         <form id="student-form">
           <div class="form-grid">
             
             <div class="section-subtitle">1. Personal & Identity Details</div>
             <div class="form-group">
               <label>Admission Date</label>
-              <input type="date" id="std-admission-date" required />
+              <input type="date" id="std-admission-date" onchange="onAdmissionDateChange()" required />
             </div>
             <div class="form-group">
               <label>Cadet Full Name</label>
@@ -703,117 +727,94 @@
               <textarea id="std-address" rows="2" required></textarea>
             </div>
 
-            <!-- ========================================== -->
-            <!-- 3. REORGANIZED STRUCTURED FEE SYSTEM       -->
-            <!-- ========================================== -->
-
-            <!-- PART A: FIXED FEE STRUCTURE -->
+            <!-- ========================================================= -->
+            <!-- PART 1: FEE FIXATION & TOTAL FIXED FEES                   -->
+            <!-- ========================================================= -->
             <div class="step-box">
               <div class="step-title">
                 <span>Part 1: Fee Fixation (নির্ধারিত ফি ফিক্সডকরণ)</span>
               </div>
-              <p style="font-size:0.8rem; color:#6B7280; margin-bottom:12px;">
-                ক্যাডেটের জন্য কোন হেডে কত ফি ধার্য করা হচ্ছে তা এখানে লিখে ফিক্সড করুন:
-              </p>
               <div class="form-grid">
                 <div class="form-group">
                   <label>1. Admission Fees (₹)</label>
-                  <input type="number" id="fix-admission" placeholder="Amount" oninput="calculateBalance()" required />
+                  <input type="number" id="fix-admission" placeholder="Amount" oninput="calculateTotalFixedAndDue()" required />
                 </div>
                 <div class="form-group">
-                  <label>2. Monthly Study Fees (₹)</label>
-                  <input type="number" id="fix-tuition" placeholder="Monthly Study Fees" />
+                  <label>2. Monthly Study Fees (₹ / month)</label>
+                  <input type="number" id="fix-tuition" placeholder="Monthly Study Fees" oninput="calculateTotalFixedAndDue()" />
                 </div>
                 <div class="form-group">
-                  <label>3. Hostel Fees (₹)</label>
-                  <input type="number" id="fix-hostel" placeholder="Hostel Fees" />
+                  <label>3. Hostel Fees (₹ / month)</label>
+                  <input type="number" id="fix-hostel" placeholder="Hostel Fees" oninput="calculateTotalFixedAndDue()" />
                 </div>
                 <div class="form-group">
                   <label>4. Dress & Material Fees (₹)</label>
-                  <input type="number" id="fix-dress" placeholder="Dress & Material Fees" />
+                  <input type="number" id="fix-dress" placeholder="Dress & Material Fees" oninput="calculateTotalFixedAndDue()" />
                 </div>
                 <div class="form-group">
                   <label>5. Other Fees (₹)</label>
-                  <input type="number" id="fix-other" placeholder="Other Miscellaneous Fees" />
+                  <input type="number" id="fix-other" placeholder="Other Miscellaneous Fees" oninput="calculateTotalFixedAndDue()" />
+                </div>
+                <div class="form-group">
+                  <label style="color:var(--primary-red);">Total Fixed Fees (মোট ধার্য ফি) (₹)</label>
+                  <input type="number" id="total-fixed-fees-display" readonly style="background:#F1F5F9; font-weight:bold; color:var(--navy-blue);" />
                 </div>
               </div>
             </div>
 
-            <!-- PART B: PAYMENT AT ADMISSION -->
+            <!-- ========================================================= -->
+            <!-- PART 2: PAYMENT & DYNAMIC DUE BALANCE + RUNNING PAYMENTS  -->
+            <!-- ========================================================= -->
             <div class="step-box success">
               <div class="step-title">
-                <span>Part 2: Payment at the Time of Admission (ভর্তির সময় জমা)</span>
+                <span>Part 2: Payments & Dynamic Due Balance (পেমেন্ট ও পরিবর্তনশীল বকেয়া হিসাব)</span>
               </div>
-              <p style="font-size:0.8rem; color:#6B7280; margin-bottom:12px;">
-                ভর্তির সময় ক্যাডেট কোন হেডের জন্য কত টাকা পরিশোধ করছে তা সিলেক্ট করে এন্ট্রি করুন:
+              
+              <!-- First Payment (At Admission) -->
+              <p style="font-size:0.85rem; font-weight:700; color:var(--navy-blue); margin-bottom:8px;">
+                Initial Payment at the Time of Admission:
               </p>
-              <div class="form-grid">
+              <div class="form-grid" style="align-items: flex-end;">
                 <div class="form-group">
-                  <label>Payment Head</label>
-                  <select id="paid-head-choice">
+                  <label>Purpose / Payment Head</label>
+                  <select id="paid-head-choice" onchange="onPaymentHeadChange()">
                     <option value="Admission Fees">Admission Fees</option>
                     <option value="Monthly Study Fees">Monthly Study Fees</option>
                     <option value="Hostel Fees">Hostel Fees</option>
                     <option value="Dress & Material Fees">Dress & Material Fees</option>
                     <option value="Other Fees">Other Fees</option>
-                    <option value="Combined Admission & First Month">Combined Admission & First Month</option>
                   </select>
                 </div>
+
+                <!-- Monthly Dropdown (Appears conditionally for Monthly Study/Hostel) -->
+                <div class="form-group" id="month-target-picker-group" style="display:none;">
+                  <label>Target Month (কোন মাসের ফি)</label>
+                  <select id="paid-target-month" onchange="calculateDynamicDue()"></select>
+                </div>
+
                 <div class="form-group">
                   <label>Amount Paid Now (₹)</label>
-                  <input type="number" id="paid-now-amount" placeholder="Amount Paid" oninput="calculateBalance()" required />
+                  <input type="number" id="paid-now-amount" placeholder="Amount Paid" oninput="calculateDynamicDue()" required />
                 </div>
+                
                 <div class="form-group">
-                  <label>Remaining Admission Due Balance (₹)</label>
-                  <input type="number" id="calc-remaining-due" readonly style="background:#eee; font-weight:bold; color:var(--primary-red);" />
+                  <label id="due-balance-label" style="color:var(--primary-red);">Remaining Due (সিলেক্টেড হেডের ডিউ) (₹)</label>
+                  <input type="number" id="calc-remaining-due" readonly style="background:#FEF2F2; font-weight:bold; color:var(--primary-red);" />
                 </div>
               </div>
-            </div>
 
-            <!-- PART C: UPCOMING DUES & MONTHLY SUB-BUTTON -->
-            <div class="step-box highlight">
-              <div class="step-title">
-                <span>Part 3: Upcoming Dues & Monthly Schedule (ভবিষ্যতের কিস্তি ও মাসিক ফি)</span>
+              <!-- Future Running Payments / Installment History -->
+              <div class="section-subtitle" style="margin-top: 16px; margin-bottom: 10px;">
+                Future Payments / Installments Ledger (ভবিষ্যতে টাকা দিলে এখানে যোগ করুন)
               </div>
-              <div class="form-grid">
-                <div class="form-group">
-                  <label>Upcoming Due 1: Purpose Head</label>
-                  <select id="due1-head">
-                    <option value="Admission Fees Due">Admission Fees Due</option>
-                    <option value="Monthly Study Fees">Monthly Study Fees</option>
-                    <option value="Hostel Fees">Hostel Fees</option>
-                    <option value="Dress & Material Fees">Dress & Material Fees</option>
-                    <option value="Other Fees">Other Fees</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Due 1 Date</label>
-                  <input type="date" id="due1-date" />
-                </div>
-                <div class="form-group">
-                  <label>Due 1 Amount (₹)</label>
-                  <input type="number" id="due1-amt" />
-                </div>
+              
+              <div id="dynamic-payments-container">
+                <!-- Dynamically added rows go here -->
+              </div>
 
-                <div class="form-group">
-                  <label>Upcoming Due 2: Purpose Head</label>
-                  <select id="due2-head">
-                    <option value="Admission Fees Due">Admission Fees Due</option>
-                    <option value="Monthly Study Fees">Monthly Study Fees</option>
-                    <option value="Hostel Fees">Hostel Fees</option>
-                    <option value="Dress & Material Fees">Dress & Material Fees</option>
-                    <option value="Other Fees">Other Fees</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Due 2 Date</label>
-                  <input type="date" id="due2-date" />
-                </div>
-                <div class="form-group">
-                  <label>Due 2 Amount (₹)</label>
-                  <input type="number" id="due2-amt" />
-                </div>
-              </div>
+              <button type="button" class="btn-add-entry" onclick="addPaymentRow()">
+                ➕ Add Another Payment / Future Installment
+              </button>
             </div>
 
             <div class="form-group">
@@ -842,7 +843,7 @@
                 <th>Phone</th>
                 <th>Admission Date</th>
                 <th>Admission Due</th>
-                <th>Upcoming Due</th>
+                <th>Total Paid</th>
                 <th>Monthly Schedule (Apr 26 - Mar 27)</th>
                 <th>Actions</th>
               </tr>
@@ -995,15 +996,15 @@
 
   </div>
 
-  <!-- MONTHLY FEES SUB-MODAL WINDOW -->
+  <!-- MONTHLY FEES MODAL -->
   <div id="monthly-fee-modal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-title">
-        <span id="modal-cadet-title">Monthly Schedule (Apr 2026 – Mar 2027)</span>
+        <span id="modal-cadet-title">Monthly Clearances (Apr 2026 – Mar 2027)</span>
         <button type="button" onclick="closeMonthModal()" style="border:none; background:none; font-size:1.4rem; cursor:pointer; font-weight:bold;">&times;</button>
       </div>
       <p style="font-size:0.8rem; color:#6B7280; margin-bottom:12px;">
-        Months prior to admission date are disabled (inactive). Click an active month to toggle <strong style="color:var(--primary-red);">RED (PAID)</strong>.
+        Months prior to admission date are inactive. Click an active month to toggle <strong style="color:var(--primary-red);">RED (PAID)</strong>.
       </p>
       <div class="months-container" id="modal-months-container"></div>
       <div style="text-align: right; margin-top: 16px;">
@@ -1027,6 +1028,7 @@
   </div>
 
   <script>
+    // Standard Academic Year Months: Apr 2026 to Mar 2027
     const ACADEMIC_MONTHS = [
       { key: "2026-04", label: "Apr 2026", order: 4 },
       { key: "2026-05", label: "May 2026", order: 5 },
@@ -1052,7 +1054,7 @@
     let currentUser = null;
     let activeModalStudentIdx = null;
 
-    // Instant Password Eye Toggle
+    // Eye Toggle
     function togglePasswordVisibility() {
       const passInput = document.getElementById("login-password");
       const btn = document.getElementById("eye-toggle-btn");
@@ -1075,12 +1077,177 @@
       if (el) el.style.display = (val === "Male") ? "flex" : "none";
     }
 
-    // Auto-calculate Balance Due
-    function calculateBalance() {
-      const admissionFee = parseFloat(document.getElementById("fix-admission").value) || 0;
+    // Helper: Determine Academic Order of a Date
+    function getMonthOrder(dateStr) {
+      if (!dateStr) return 0;
+      const parts = dateStr.split("-");
+      const yr = parseInt(parts[0], 10);
+      const mo = parseInt(parts[1], 10);
+      if (yr === 2026 && mo >= 4) return mo;
+      if (yr === 2027 && mo <= 3) return mo + 12;
+      return 0;
+    }
+
+    // Helper: Count remaining active months up to March 2027
+    function getRemainingMonthsCount(admDateStr) {
+      const admOrder = getMonthOrder(admDateStr);
+      if (admOrder < 4) return 12;
+      if (admOrder > 15) return 1;
+      return (15 - admOrder + 1); // e.g. August (8) to March (15) = 8 months
+    }
+
+    // 1. Calculate Total Fixed Fees (Part 1)
+    function calculateTotalFixedAndDue() {
+      const adm = parseFloat(document.getElementById("fix-admission").value) || 0;
+      const tuition = parseFloat(document.getElementById("fix-tuition").value) || 0;
+      const hostel = parseFloat(document.getElementById("fix-hostel").value) || 0;
+      const dress = parseFloat(document.getElementById("fix-dress").value) || 0;
+      const other = parseFloat(document.getElementById("fix-other").value) || 0;
+
+      const admDate = document.getElementById("std-admission-date").value || new Date().toISOString().split("T")[0];
+      const activeMonths = getRemainingMonthsCount(admDate);
+
+      // Total Fixed Fees across admission & active session
+      const totalFixed = adm + dress + other + ((tuition + hostel) * activeMonths);
+      document.getElementById("total-fixed-fees-display").value = totalFixed;
+
+      calculateDynamicDue();
+    }
+
+    // 2. On changing Payment Head choice in Part 2
+    function onPaymentHeadChange() {
+      const head = document.getElementById("paid-head-choice").value;
+      const monthGroup = document.getElementById("month-target-picker-group");
+
+      if (head === "Monthly Study Fees" || head === "Hostel Fees") {
+        monthGroup.style.display = "flex";
+        populateActiveMonthsDropdown();
+      } else {
+        monthGroup.style.display = "none";
+      }
+
+      calculateDynamicDue();
+    }
+
+    // Populate active months dropdown based on admission date
+    function populateActiveMonthsDropdown() {
+      const sel = document.getElementById("paid-target-month");
+      sel.innerHTML = "";
+      const admDate = document.getElementById("std-admission-date").value;
+      const admOrder = getMonthOrder(admDate);
+
+      ACADEMIC_MONTHS.forEach(m => {
+        if (m.order >= admOrder) {
+          const opt = document.createElement("option");
+          opt.value = m.label;
+          opt.innerText = m.label;
+          sel.appendChild(opt);
+        }
+      });
+    }
+
+    function onAdmissionDateChange() {
+      populateActiveMonthsDropdown();
+      calculateTotalFixedAndDue();
+    }
+
+    // 3. Dynamic Due Balance relative to selected Payment Head
+    function calculateDynamicDue() {
+      const head = document.getElementById("paid-head-choice").value;
       const paidNow = parseFloat(document.getElementById("paid-now-amount").value) || 0;
-      const balEl = document.getElementById("calc-remaining-due");
-      if (balEl) balEl.value = Math.max(0, admissionFee - paidNow);
+      const dueInput = document.getElementById("calc-remaining-due");
+      const dueLabel = document.getElementById("due-balance-label");
+
+      const admDate = document.getElementById("std-admission-date").value || new Date().toISOString().split("T")[0];
+      const activeMonths = getRemainingMonthsCount(admDate);
+
+      let targetFixed = 0;
+
+      if (head === "Admission Fees") {
+        targetFixed = parseFloat(document.getElementById("fix-admission").value) || 0;
+        dueLabel.innerText = "Admission Fee Remaining Due (₹):";
+      } else if (head === "Monthly Study Fees") {
+        const monthlyTuition = parseFloat(document.getElementById("fix-tuition").value) || 0;
+        targetFixed = monthlyTuition * activeMonths; // e.g. Aug to Mar = 8 months * monthly
+        dueLabel.innerText = `Study Fees Due (${activeMonths} active months total) (₹):`;
+      } else if (head === "Hostel Fees") {
+        const monthlyHostel = parseFloat(document.getElementById("fix-hostel").value) || 0;
+        targetFixed = monthlyHostel * activeMonths;
+        dueLabel.innerText = `Hostel Fees Due (${activeMonths} active months total) (₹):`;
+      } else if (head === "Dress & Material Fees") {
+        targetFixed = parseFloat(document.getElementById("fix-dress").value) || 0;
+        dueLabel.innerText = "Dress/Material Fee Remaining Due (₹):";
+      } else if (head === "Other Fees") {
+        targetFixed = parseFloat(document.getElementById("fix-other").value) || 0;
+        dueLabel.innerText = "Other Fee Remaining Due (₹):";
+      }
+
+      dueInput.value = Math.max(0, targetFixed - paidNow);
+    }
+
+    // 4. Add Future Installment / Running Payment Row
+    function addPaymentRow() {
+      const container = document.getElementById("dynamic-payments-container");
+      const rowId = "pay_row_" + Date.now();
+
+      const admDate = document.getElementById("std-admission-date").value || new Date().toISOString().split("T")[0];
+      const admOrder = getMonthOrder(admDate);
+
+      // Build active months options
+      const monthOptionsHtml = ACADEMIC_MONTHS
+        .filter(m => m.order >= admOrder)
+        .map(m => `<option value="${m.label}">${m.label}</option>`)
+        .join("");
+
+      const row = document.createElement("div");
+      row.className = "dynamic-pay-row";
+      row.id = rowId;
+
+      row.innerHTML = `
+        <div class="form-group" style="margin:0;">
+          <label style="font-size:0.75rem;">Payment Head</label>
+          <select class="dyn-head" onchange="onDynHeadChange('${rowId}')">
+            <option value="Admission Fees Due">Admission Fees Due</option>
+            <option value="Monthly Study Fees">Monthly Study Fees</option>
+            <option value="Hostel Fees">Hostel Fees</option>
+            <option value="Dress & Material Fees">Dress & Material Fees</option>
+            <option value="Other Fees">Other Fees</option>
+          </select>
+        </div>
+        <div class="form-group dyn-month-group" id="${rowId}_month" style="margin:0; display:none;">
+          <label style="font-size:0.75rem;">Month</label>
+          <select class="dyn-month-picker">${monthOptionsHtml}</select>
+        </div>
+        <div class="form-group" style="margin:0;">
+          <label style="font-size:0.75rem;">Date</label>
+          <input type="date" class="dyn-date" value="${new Date().toISOString().split('T')[0]}" />
+        </div>
+        <div class="form-group" style="margin:0;">
+          <label style="font-size:0.75rem;">Amount (₹)</label>
+          <input type="number" class="dyn-amt" placeholder="Amount" />
+        </div>
+        <div>
+          <button type="button" class="btn-del-row" onclick="removePaymentRow('${rowId}')" title="Delete">✕</button>
+        </div>
+      `;
+
+      container.appendChild(row);
+    }
+
+    function onDynHeadChange(rowId) {
+      const row = document.getElementById(rowId);
+      const head = row.querySelector(".dyn-head").value;
+      const monthGrp = document.getElementById(rowId + "_month");
+      if (head === "Monthly Study Fees" || head === "Hostel Fees") {
+        monthGrp.style.display = "flex";
+      } else {
+        monthGrp.style.display = "none";
+      }
+    }
+
+    function removePaymentRow(rowId) {
+      const el = document.getElementById(rowId);
+      if (el) el.remove();
     }
 
     function initGenerators() {
@@ -1093,6 +1260,8 @@
       if (document.getElementById("std-admission-date")) document.getElementById("std-admission-date").value = today;
       if (document.getElementById("inc-date")) document.getElementById("inc-date").value = today;
       if (document.getElementById("exp-date")) document.getElementById("exp-date").value = today;
+
+      populateActiveMonthsDropdown();
     }
 
     function switchTab(tab) {
@@ -1129,7 +1298,7 @@
       }
     });
 
-    // Login Controller
+    // Login Handler
     document.getElementById("login-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const id = document.getElementById("login-identifier").value.trim().toLowerCase();
@@ -1206,7 +1375,7 @@
       document.getElementById("login-password").value = "";
     }
 
-    // Staff Submit
+    // Staff Registration
     document.getElementById("staff-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const newStaff = {
@@ -1275,13 +1444,49 @@
       window.print();
     }
 
-    // Student Admission Submit
+    // Cadet Registration Submit
     document.getElementById("student-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const admDate = document.getElementById("std-admission-date").value;
       const cadetName = document.getElementById("std-name").value;
       const paidNow = parseFloat(document.getElementById("paid-now-amount").value) || 0;
       const paidHead = document.getElementById("paid-head-choice").value;
+      const targetMonth = (paidHead === "Monthly Study Fees" || paidHead === "Hostel Fees")
+        ? document.getElementById("paid-target-month").value : "";
+
+      // Collect running additional payments
+      const dynRows = document.querySelectorAll(".dynamic-pay-row");
+      const additionalPayments = [];
+      let totalRunningPaid = paidNow;
+
+      dynRows.forEach(row => {
+        const h = row.querySelector(".dyn-head").value;
+        const d = row.querySelector(".dyn-date").value;
+        const a = parseFloat(row.querySelector(".dyn-amt").value) || 0;
+        const m = (h === "Monthly Study Fees" || h === "Hostel Fees")
+          ? row.querySelector(".dyn-month-picker").value : "";
+
+        if (a > 0) {
+          totalRunningPaid += a;
+          additionalPayments.push({ head: h, date: d, amount: a, month: m });
+          // Post to income ledger
+          DB.incomes.push({
+            id: "INC-" + Date.now() + Math.random(),
+            date: d,
+            purpose: h + (m ? ` (${m})` : ""),
+            person: cadetName,
+            amount: a
+          });
+        }
+      });
+
+      const initialPaidMonths = [];
+      if (targetMonth) initialPaidMonths.push(targetMonth);
+      additionalPayments.forEach(p => {
+        if (p.month && !initialPaidMonths.includes(p.month)) {
+          initialPaidMonths.push(p.month);
+        }
+      });
 
       const newStudent = {
         id: "STD-" + Date.now(),
@@ -1302,64 +1507,47 @@
         chest: document.getElementById("std-chest").value || "N/A",
         address: document.getElementById("std-address").value,
         
-        // Step 1: Fixed Fee Breakdown
+        // Part 1: Fixed Fees
         admission_fee: parseFloat(document.getElementById("fix-admission").value) || 0,
         tuition_fee: parseFloat(document.getElementById("fix-tuition").value) || 0,
         hostel_fee: parseFloat(document.getElementById("fix-hostel").value) || 0,
         dress_fee: parseFloat(document.getElementById("fix-dress").value) || 0,
         other_fee: parseFloat(document.getElementById("fix-other").value) || 0,
+        total_fixed: parseFloat(document.getElementById("total-fixed-fees-display").value) || 0,
         
-        // Step 2: Payment at Admission
-        paid: paidNow,
+        // Part 2: Payments
+        paid: totalRunningPaid,
         remaining: parseFloat(document.getElementById("calc-remaining-due").value) || 0,
-        
-        // Step 3: Upcoming Dues
-        due1_head: document.getElementById("due1-head").value,
-        due1_date: document.getElementById("due1-date").value,
-        due1_amt: parseFloat(document.getElementById("due1-amt").value) || 0,
-        
-        due2_head: document.getElementById("due2-head").value,
-        due2_date: document.getElementById("due2-date").value,
-        due2_amt: parseFloat(document.getElementById("due2-amt").value) || 0,
-        
+        additional_payments: additionalPayments,
+
         password: document.getElementById("std-generated-pw").value,
         notes: document.getElementById("std-notes").value,
-        paid_months: []
+        paid_months: initialPaidMonths
       };
 
       DB.students.push(newStudent);
       localStorage.setItem("ff_students", JSON.stringify(DB.students));
 
-      // Auto-record admission income
+      // Record first payment to income ledger
       if (paidNow > 0) {
         DB.incomes.push({
           id: "INC-" + Date.now(),
           date: admDate,
-          purpose: paidHead,
+          purpose: paidHead + (targetMonth ? ` (${targetMonth})` : ""),
           person: cadetName,
           amount: paidNow
         });
-        localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
       }
+      localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
 
       renderRoster();
       alert(`Cadet registered! Assigned Password for Student Zone: ${newStudent.password}`);
       document.getElementById("student-form").reset();
+      document.getElementById("dynamic-payments-container").innerHTML = "";
       initGenerators();
     });
 
-    // Helper: Map Date to Academic Month Order
-    function getMonthOrder(dateStr) {
-      if (!dateStr) return 0;
-      const parts = dateStr.split("-");
-      const yr = parseInt(parts[0], 10);
-      const mo = parseInt(parts[1], 10);
-      if (yr === 2026 && mo >= 4) return mo;
-      if (yr === 2027 && mo <= 3) return mo + 12;
-      return 0;
-    }
-
-    // Modal Controller for Monthly Schedule (Apr 26 to Mar 27)
+    // Monthly Fee Modal Controller
     function openMonthModal(studentIdx) {
       activeModalStudentIdx = studentIdx;
       const student = DB.students[studentIdx];
@@ -1401,7 +1589,6 @@
       activeModalStudentIdx = null;
     }
 
-    // Toggle month payment
     function toggleMonthPaidFromModal(monthLabel) {
       if (activeModalStudentIdx === null) return;
       const student = DB.students[activeModalStudentIdx];
@@ -1417,8 +1604,8 @@
           DB.incomes.push({
             id: "INC-" + Date.now(),
             date: new Date().toISOString().split("T")[0],
-            purpose: "Monthly Study & Hostel Fee",
-            person: `${student.name} (${monthLabel})`,
+            purpose: `Monthly Study & Hostel Fee (${monthLabel})`,
+            person: student.name,
             amount: monthlySum
           });
           localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
@@ -1451,9 +1638,7 @@
           <td style="font-weight:700; color:${s.remaining > 0 ? 'var(--primary-red)' : 'var(--success-green)'};">
             ₹${s.remaining}
           </td>
-          <td style="font-size:0.8rem;">
-            ${s.due1_date ? `${s.due1_date} (₹${s.due1_amt})` : '—'}
-          </td>
+          <td>₹${s.paid}</td>
           <td>
             <button type="button" class="btn-sub-action" onclick="openMonthModal(${idx})">
               📅 Status (${paidArr.length} Paid)
@@ -1478,10 +1663,6 @@
       student.admission_fee = 0;
       student.paid = 0;
       student.remaining = 0;
-      student.due1_date = "";
-      student.due1_amt = 0;
-      student.due2_date = "";
-      student.due2_amt = 0;
       student.notes = (student.notes || "") + ` | Re-Admitted on ${new Date().toLocaleDateString()}`;
 
       localStorage.setItem("ff_students", JSON.stringify(DB.students));
@@ -1489,7 +1670,7 @@
       alert(`Re-admission completed for ${student.name}. Previous records archived.`);
     }
 
-    // Income Entry Submit
+    // Income Form Submit
     document.getElementById("income-entry-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const newIncome = {
@@ -1507,7 +1688,7 @@
       renderFinanceDashboard();
     });
 
-    // Expense Entry Submit
+    // Expense Form Submit
     document.getElementById("expense-entry-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const newExpense = {
@@ -1640,10 +1821,10 @@
         </table>
         <h4 style="margin: 14px 0 6px 0; color: #0A192F;">Official Financial Ledger</h4>
         <table class="print-table">
-          <tr><th>Admission Fee</th><td>₹${s.admission_fee}</td><th>Total Paid</th><td>₹${s.paid}</td></tr>
-          <tr><th>Remaining Admission Due</th><td>₹${s.remaining}</td><th>Dress / Kit Fees</th><td>₹${s.dress_fee}</td></tr>
+          <tr><th>Total Fixed Session Fees</th><td>₹${s.total_fixed || 0}</td><th>Total Paid So Far</th><td>₹${s.paid}</td></tr>
+          <tr><th>Admission Fee Assigned</th><td>₹${s.admission_fee}</td><th>Dress / Kit Fees</th><td>₹${s.dress_fee}</td></tr>
           <tr><th>Hostel Fees (Monthly)</th><td>₹${s.hostel_fee}</td><th>Study Fees (Monthly)</th><td>₹${s.tuition_fee}</td></tr>
-          <tr><th>Upcoming Due 1</th><td>${s.due1_date || 'N/A'} (₹${s.due1_amt})</td><th>Cleared Months</th><td>${paidMonthsSummary}</td></tr>
+          <tr><th>Remaining Due Balance</th><td>₹${s.remaining}</td><th>Cleared Months</th><td>${paidMonthsSummary}</td></tr>
         </table>
         <div class="signature-row">
           <div class="signature-line">Candidate Signature</div>
