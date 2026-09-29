@@ -214,18 +214,18 @@
       background: var(--navy-blue);
       color: var(--pure-white);
       border: none;
-      padding: 6px 12px;
+      padding: 6px 10px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
 
-    .btn-attendance {
-      background: #0D9488;
+    .btn-action-inactive {
+      background: #D97706;
       color: white;
       border: none;
-      padding: 6px 10px;
+      padding: 6px 8px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 700;
@@ -233,16 +233,40 @@
       white-space: nowrap;
     }
 
-    .btn-copy {
-      background: #4B5563;
+    .btn-action-active {
+      background: #059669;
       color: white;
       border: none;
-      padding: 10px 14px;
+      padding: 6px 8px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
+      white-space: nowrap;
     }
+
+    .btn-action-delete {
+      background: #DC2626;
+      color: white;
+      border: none;
+      padding: 6px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.75rem;
+      white-space: nowrap;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .status-badge.active { background: #DEF7EC; color: #03543F; }
+    .status-badge.inactive { background: #FDE8E8; color: #9B1C1C; }
 
     .table-container {
       overflow-x: auto;
@@ -272,84 +296,16 @@
       background-color: #f9fafb;
     }
 
-    .schedule-control-bar {
-      background: #EDF2F7;
-      border: 1px solid #CBD5E0;
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 12px;
-      align-items: flex-end;
-    }
-
-    .schedule-grid-box {
-      background: white;
-      border-radius: 8px;
-      border: 1px solid #E2E8F0;
-      padding: 16px;
-      margin-bottom: 20px;
-      border-left: 4px solid var(--navy-blue);
-    }
-
-    .schedule-grid-box.test-box {
-      border-left-color: var(--primary-red);
-    }
-
-    .schedule-box-header {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--navy-blue);
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .editable-cell input {
-      width: 100%;
-      padding: 6px 8px;
+    .password-badge {
+      background: #F3F4F6;
+      border: 1px solid #D1D5DB;
+      padding: 3px 6px;
+      font-family: monospace;
       font-size: 0.85rem;
-      border: 1px solid #CBD5E0;
+      font-weight: bold;
+      color: #1F2937;
       border-radius: 4px;
     }
-
-    /* Modal Styling */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(10, 25, 47, 0.7);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal-card {
-      background: white;
-      border-radius: 8px;
-      padding: 24px;
-      max-width: 650px;
-      width: 90%;
-      max-height: 85vh;
-      overflow-y: auto;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      border-top: 5px solid var(--primary-red);
-    }
-
-    .att-badge {
-      padding: 6px 12px;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      cursor: pointer;
-      user-select: none;
-      border: 1px solid #CBD5E0;
-    }
-
-    .att-badge.present { background: #DEF7EC; color: #03543F; border-color: #03543F; }
-    .att-badge.absent { background: #FDE8E8; color: #9B1C1C; border-color: #9B1C1C; }
 
     #print-section { display: none; }
 
@@ -378,6 +334,7 @@
 </head>
 <body>
 
+  <!-- App Header -->
   <header class="navbar">
     <div class="brand-wrap">
       <img src="logo.png" alt="FAUJ-E-FACTORY" class="brand-logo" onerror="this.style.display='none'" />
@@ -385,8 +342,7 @@
     </div>
     <div id="nav-controls" style="display: none; align-items: center;">
       <div class="nav-tabs" id="admin-nav-tabs" style="display: none; margin-right: 16px;">
-        <button type="button" class="tab-btn active" id="btn-tab-schedule" onclick="switchTab('schedule')">Weekly Routine & Tests</button>
-        <button type="button" class="tab-btn" id="btn-tab-cadets" onclick="switchTab('cadets')">Cadets & Admissions</button>
+        <button type="button" class="tab-btn active" id="btn-tab-students" onclick="switchTab('students')">Students & Admissions</button>
         <button type="button" class="tab-btn" id="btn-tab-finance" onclick="switchTab('finance')">Income & Expenditure</button>
       </div>
       <span class="user-tag" id="current-user-tag"></span>
@@ -422,121 +378,136 @@
       </form>
     </div>
 
-    <!-- 2. WEEKLY SCHEDULE BOARD -->
-    <div id="tab-schedule-content" style="display: none;">
-      <div class="card">
-        <div class="card-header">
-          <span>Weekly Academy Routine & Mock Test Schedule</span>
-          <div>
-            <button type="button" class="btn-copy" onclick="openCopyScheduleModal()" title="Copy this routine to other days of the week">📋 Copy Routine to Other Days</button>
-            <button type="button" class="btn-print" onclick="printRoutineSheet()">🖨️ Print / Save (PDF)</button>
+    <!-- 2. STUDENTS & ADMISSIONS PORTAL (TAB 1) -->
+    <div id="tab-students-content" style="display: none;">
+      
+      <!-- Staff Profile Creation (Super Admin Only) -->
+      <div class="card" id="staff-creation-box">
+        <div class="card-header">Create Official / Faculty Profile</div>
+        <form id="staff-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="staff-name" required />
+            </div>
+            <div class="form-group">
+              <label>Phone Number (Login ID)</label>
+              <input type="tel" id="staff-phone" required />
+            </div>
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input type="date" id="staff-dob" required />
+            </div>
+            <div class="form-group">
+              <label>Designation</label>
+              <select id="staff-role" required>
+                <option value="Official">Official</option>
+                <option value="Faculty">Faculty</option>
+              </select>
+            </div>
+            <div class="form-group" id="staff-pw-group">
+              <label>Generated Access Password (Super Admin View Only)</label>
+              <input type="text" id="staff-password" readonly style="background:#eee; font-weight:bold;" />
+            </div>
           </div>
-        </div>
-
-        <!-- Schedule Controls -->
-        <div class="schedule-control-bar">
-          <div class="form-group">
-            <label>From (Date)</label>
-            <input type="date" id="sch-from-date" onchange="generateWeekRangeDates()" />
-          </div>
-          <div class="form-group">
-            <label>To (Date)</label>
-            <input type="date" id="sch-to-date" onchange="generateWeekRangeDates()" />
-          </div>
-          <div class="form-group">
-            <label>Group / Batch</label>
-            <select id="sch-batch-select" onchange="loadRoutineForCurrentSelection()">
-              <option value="ALL">ALL (Common Drill / Tests)</option>
-              <option value="H1">H1</option><option value="H2">H2</option>
-              <option value="H3">H3</option><option value="H4">H4</option>
-              <option value="G1">G1</option><option value="G2">G2</option>
-              <option value="G3">G3</option><option value="G4">G4</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Scheduled Date (Week Range)</label>
-            <select id="sch-day-select" onchange="loadRoutineForCurrentSelection()"></select>
-          </div>
-          <div>
-            <button type="button" class="btn-primary" onclick="saveRoutineForCurrentSelection()">💾 Save Routine</button>
-          </div>
-        </div>
-
-        <!-- Classes Section (With Direct Attendance Link - Point 5) -->
-        <div class="schedule-grid-box">
-          <div class="schedule-box-header">
-            <span>📚 Daily Academic Classes (Min. 3-4 Sessions)</span>
-            <button type="button" class="btn-print" style="background:var(--navy-light);" onclick="addClassRow()">+ Add Class Row</button>
-          </div>
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th style="width: 14%;">Time</th>
-                  <th style="width: 16%;">Class / Teacher</th>
-                  <th style="width: 14%;">Subject</th>
-                  <th style="width: 24%;">Topic</th>
-                  <th style="width: 18%;">Note</th>
-                  <th style="width: 10%;">Attendance</th>
-                  <th style="width: 4%;">Del</th>
-                </tr>
-              </thead>
-              <tbody id="class-rows-body"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Tests Section (With Direct Attendance Link - Point 5) -->
-        <div class="schedule-grid-box test-box">
-          <div class="schedule-box-header" style="color:var(--primary-red);">
-            <span>🎯 Tests of the Day & Mock Assessments (Min. 3-4 Sessions)</span>
-            <button type="button" class="btn-print" style="background:var(--primary-red);" onclick="addTestRow()">+ Add Test Row</button>
-          </div>
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th style="width: 25%;">Test Name</th>
-                  <th style="width: 15%;">Timing</th>
-                  <th style="width: 15%;">Total Marks</th>
-                  <th style="width: 31%;">Syllabus</th>
-                  <th style="width: 10%;">Attendance</th>
-                  <th style="width: 4%;">Del</th>
-                </tr>
-              </thead>
-              <tbody id="test-rows-body"></tbody>
-            </table>
-          </div>
-        </div>
-
+          <button type="submit" class="btn-primary">Generate & Save Staff Profile</button>
+        </form>
       </div>
-    </div>
 
-    <!-- 3. CADETS & ADMISSIONS PORTAL -->
-    <div id="tab-cadets-content" style="display: none;">
-      <div class="card">
-        <div class="card-header">Registered Cadets Directory</div>
+      <!-- Staff Directory with Delete & Inactive Controls -->
+      <div class="card" id="staff-directory-box">
+        <div class="card-header">Official & Faculty Directory</div>
         <div class="table-container">
           <table>
             <thead>
               <tr>
-                <th>Cadet Name & Batch</th>
-                <th>Phone</th>
+                <th>Designation</th>
+                <th>Name</th>
+                <th>Phone (Login ID)</th>
+                <th>Date of Birth</th>
+                <th id="th-staff-pw">Access Password</th>
+                <th>Status</th>
+                <th>Profile Controls</th>
+              </tr>
+            </thead>
+            <tbody id="staff-roster-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Student Admission Form (Super Admin Only) -->
+      <div class="card" id="student-admission-box">
+        <div class="card-header">Student Admission Form</div>
+        <form id="student-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Admission Date</label>
+              <input type="date" id="std-admission-date" required />
+            </div>
+            <div class="form-group">
+              <label>Student Full Name</label>
+              <input type="text" id="std-name" required />
+            </div>
+            <div class="form-group">
+              <label>Guardian's Name</label>
+              <input type="text" id="std-guardian" required />
+            </div>
+            <div class="form-group">
+              <label>Primary Phone (Phone 1 - Login ID)</label>
+              <input type="tel" id="std-ph1" required />
+            </div>
+            <div class="form-group">
+              <label>Batch</label>
+              <select id="std-batch" required>
+                <option value="G1">G1</option><option value="G2">G2</option>
+                <option value="G3">G3</option><option value="G4">G4</option>
+                <option value="H1">H1</option><option value="H2">H2</option>
+                <option value="H3">H3</option><option value="H4">H4</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Admission Fee (₹)</label>
+              <input type="number" id="std-admission-fee" required />
+            </div>
+            <div class="form-group">
+              <label>Paid at Admission (₹)</label>
+              <input type="number" id="std-paid-now" required />
+            </div>
+            <div class="form-group" id="student-pw-group">
+              <label>Generated Student Password (Super Admin View Only)</label>
+              <input type="text" id="std-generated-pw" readonly style="background:#eee; font-weight:bold;" />
+            </div>
+          </div>
+          <button type="submit" class="btn-primary">Register Student to Cloud</button>
+        </form>
+      </div>
+
+      <!-- Student Directory with Delete & Inactive Controls -->
+      <div class="card">
+        <div class="card-header">Registered Students Directory</div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Student Name & Batch</th>
+                <th>Login Phone</th>
                 <th>Admission Date</th>
-                <th>Due Balance</th>
-                <th>Total Paid</th>
+                <th id="th-student-pw">Access Password</th>
+                <th>Status</th>
+                <th>Profile Controls</th>
               </tr>
             </thead>
             <tbody id="student-roster-body"></tbody>
           </table>
         </div>
       </div>
+
     </div>
 
-    <!-- 4. INCOME & EXPENDITURE PORTAL -->
+    <!-- 3. FINANCE PORTAL (TAB 2) -->
     <div id="tab-finance-content" style="display: none;">
       <div class="card">
-        <div class="card-header" style="color:var(--success-green);">Income & Ledger</div>
+        <div class="card-header" style="color:var(--success-green);">Income & Cash Ledger</div>
         <div class="table-container">
           <table>
             <thead>
@@ -550,78 +521,23 @@
       </div>
     </div>
 
-    <!-- 5. STUDENTS' ZONE VIEW -->
+    <!-- 4. STUDENTS' PERSONAL DESK (NO PASSWORD VISIBLE) -->
     <div id="student-zone-view" style="display: none;">
       <div class="card">
-        <div class="card-header">CADET'S PERSONAL DESK & SCHEDULE</div>
-        <div id="student-desk-content"></div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- POINT 4: COPY ROUTINE MODAL -->
-  <div id="copy-routine-modal" class="modal-overlay">
-    <div class="modal-card">
-      <div class="card-header" style="border:none; margin:0; padding:0 0 12px 0;">
-        <span>Copy Current Day's Routine to Other Days</span>
-        <button type="button" onclick="closeCopyScheduleModal()" style="border:none; background:none; font-size:1.4rem; cursor:pointer;">&times;</button>
-      </div>
-      <p style="font-size:0.85rem; color:#4B5563; margin-bottom:14px;">
-        Select the target dates of this week where you want to copy today's classes and test schedule:
-      </p>
-      <div id="copy-target-dates-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:18px;"></div>
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <button type="button" class="btn-print" style="background:#6B7280;" onclick="toggleSelectAllCopyDates()">Select All Days</button>
-        <button type="button" class="btn-primary" onclick="executeCopySchedule()">Apply & Replicate Routine</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- POINT 5: IN-LINE ATTENDANCE REGISTER MODAL -->
-  <div id="session-attendance-modal" class="modal-overlay">
-    <div class="modal-card">
-      <div class="card-header" style="border:none; margin:0; padding:0 0 10px 0;">
-        <span id="att-modal-title">Session Attendance Register</span>
-        <button type="button" onclick="closeAttendanceModal()" style="border:none; background:none; font-size:1.4rem; cursor:pointer;">&times;</button>
-      </div>
-      <p id="att-modal-sub" style="font-size:0.8rem; color:#6B7280; margin-bottom:12px;"></p>
-      
-      <div class="table-container" style="max-height: 50vh;">
-        <table>
-          <thead>
-            <tr>
-              <th>Cadet Full Name</th>
-              <th>Batch</th>
-              <th>Status (Tap to Change)</th>
-            </tr>
-          </thead>
-          <tbody id="att-cadet-list-body"></tbody>
-        </table>
-      </div>
-
-      <div style="display:flex; justify-content:space-between; margin-top:16px;">
-        <span id="att-summary-count" style="font-weight:700; font-size:0.85rem;"></span>
-        <button type="button" class="btn-primary" onclick="saveSessionAttendance()">Save Register</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Print Engine -->
-  <div id="print-section">
-    <div class="print-box">
-      <div class="print-header">
-        <img src="logo.png" alt="FAUJ-E-FACTORY" onerror="this.style.display='none'" />
-        <div style="text-align:right;">
-          <h2 style="color:#0A192F;">FAUJ-E-FACTORY</h2>
-          <p id="print-doc-subtitle" style="font-weight:700; color:#E52521;">Daily Order & Routine Sheet</p>
+        <div class="card-header">
+          <span>STUDENT'S PERSONAL DESK</span>
+          <button type="button" class="btn-print" onclick="window.print()">🖨️ Print Student Profile</button>
         </div>
+        <div id="personal-desk-content"></div>
       </div>
-      <div id="printable-details"></div>
     </div>
+
   </div>
 
   <script>
+    const SUPABASE_REST_URL = "https://dyldejdkgfnyvunkrddh.supabase.co/rest/v1";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5bGRlamRrZ2ZueXZ1bmtyZGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2MDE4OTYsImV4cCI6MjEwNjE3Nzg5Nn0._JUB9WjiB3aJAdEZZyADueL9i6iyf7us6dD8L3S1o0E";
+
     function safeGet(key) {
       try {
         const val = localStorage.getItem(key);
@@ -636,13 +552,53 @@
       staff: safeGet("ff_staff"),
       students: safeGet("ff_students"),
       incomes: safeGet("ff_incomes"),
-      expenses: safeGet("ff_expenses"),
-      schedules: safeGet("ff_schedules"),
-      attendance: safeGet("ff_attendance") // logs attendance per session
+      expenses: safeGet("ff_expenses")
     };
 
     let currentUser = null;
-    let currentAttContext = null;
+
+    async function cloudFetch(endpoint, method = "GET", body = null) {
+      try {
+        const headers = {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json"
+        };
+        const opt = { method, headers };
+        if (body) opt.body = JSON.stringify(body);
+        const res = await fetch(`${SUPABASE_REST_URL}/${endpoint}`, opt);
+        if (!res.ok) return null;
+        return await res.json();
+      } catch (e) {
+        return null;
+      }
+    }
+
+    async function syncFromCloud() {
+      const [staffData, studentData, incomeData] = await Promise.all([
+        cloudFetch("ff_staff?select=*"),
+        cloudFetch("ff_students?select=*"),
+        cloudFetch("ff_incomes?select=*")
+      ]);
+
+      if (staffData && Array.isArray(staffData)) {
+        DB.staff = staffData;
+        localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
+      }
+      if (studentData && Array.isArray(studentData)) {
+        DB.students = studentData;
+        localStorage.setItem("ff_students", JSON.stringify(DB.students));
+      }
+      if (incomeData && Array.isArray(incomeData)) {
+        DB.incomes = incomeData;
+        localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
+      }
+
+      if (currentUser && currentUser.role === "SuperAdmin") {
+        renderStaffDirectory();
+        renderRoster();
+      }
+    }
 
     function togglePasswordVisibility() {
       const passInput = document.getElementById("login-password");
@@ -657,422 +613,221 @@
       }
     }
 
-    // Schedule Date Range
-    function initWeekRange() {
-      const today = new Date();
-      const curr = new Date(today);
-      const first = curr.getDate() - curr.getDay() + 1; // Monday
-      const last = first + 6;
-
-      const firstday = new Date(curr.setDate(first));
-      const lastday = new Date(curr.setDate(last));
-
-      document.getElementById("sch-from-date").value = firstday.toISOString().split("T")[0];
-      document.getElementById("sch-to-date").value = lastday.toISOString().split("T")[0];
-      generateWeekRangeDates();
+    function generateSecurePassword() {
+      return "FF" + Math.floor(100000 + Math.random() * 900000);
     }
 
-    function generateWeekRangeDates() {
-      const fromStr = document.getElementById("sch-from-date").value;
-      const toStr = document.getElementById("sch-to-date").value;
-      const daySelect = document.getElementById("sch-day-select");
-      daySelect.innerHTML = "";
+    function initGenerators() {
+      const sp = document.getElementById("staff-password");
+      if (sp) sp.value = generateSecurePassword();
+      const stp = document.getElementById("std-generated-pw");
+      if (stp) stp.value = generateSecurePassword();
 
-      if (!fromStr || !toStr) return;
-
-      let start = new Date(fromStr);
-      const end = new Date(toStr);
-
-      while (start <= end) {
-        const opt = document.createElement("option");
-        const dateVal = start.toISOString().split("T")[0];
-        const dayName = start.toLocaleDateString("en-US", { weekday: "short" });
-        opt.value = dateVal;
-        opt.innerText = `${dateVal} (${dayName})`;
-        daySelect.appendChild(opt);
-        start.setDate(start.getDate() + 1);
-      }
-
-      loadRoutineForCurrentSelection();
+      const today = new Date().toISOString().split("T")[0];
+      if (document.getElementById("std-admission-date")) document.getElementById("std-admission-date").value = today;
     }
 
-    function loadRoutineForCurrentSelection() {
-      const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-day-select").value;
-      const key = `${batch}_${date}`;
+    // PROFILE CONTROLS: TOGGLE INACTIVE & DELETE (STAFF)
+    function toggleStaffStatus(idx) {
+      if (currentUser.role !== "SuperAdmin") return;
+      const st = DB.staff[idx];
+      const newStatus = (st.status === "Inactive") ? "Active" : "Inactive";
+      st.status = newStatus;
+      localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
+      renderStaffDirectory();
 
-      const saved = DB.schedules.find(s => s.key === key);
-
-      const classTbody = document.getElementById("class-rows-body");
-      const testTbody = document.getElementById("test-rows-body");
-      classTbody.innerHTML = "";
-      testTbody.innerHTML = "";
-
-      const classes = (saved && saved.classes && saved.classes.length) ? saved.classes : [
-        { time: "09:30 AM - 11:00 AM", teacher: "Maths Faculty", subject: "Arithmetic", topic: "Number Systems & Algebra", note: "Bring Notebook" },
-        { time: "11:30 AM - 01:00 PM", teacher: "English Faculty", subject: "English", topic: "Tenses & Voice Change", note: "Grammar Practice Set" },
-        { time: "02:00 PM - 03:30 PM", teacher: "GS Faculty", subject: "General Science", topic: "Physics Units & Motion", note: "Handouts provided" },
-        { time: "04:00 PM - 05:30 PM", teacher: "Reasoning Faculty", subject: "Reasoning", topic: "Blood Relations & Coding", note: "Daily Drill" }
-      ];
-
-      const tests = (saved && saved.tests && saved.tests.length) ? saved.tests : [
-        { name: "Morning Rapid Test", time: "08:30 AM - 09:00 AM", marks: "25", syllabus: "English & Current Affairs" },
-        { name: "Subject Assessment", time: "01:00 PM - 01:45 PM", marks: "50", syllabus: "Maths Sectional Test" },
-        { name: "Mock Examination", time: "06:00 PM - 07:30 PM", marks: "100", syllabus: "Full Combined Model Paper" }
-      ];
-
-      classes.forEach((c, idx) => renderClassRow(c, idx));
-      tests.forEach((t, idx) => renderTestRow(t, idx));
+      cloudFetch(`ff_staff?id=eq.${st.id}`, "PATCH", { status: newStatus });
+      alert(`Staff [${st.name}] status updated to: ${newStatus}`);
     }
 
-    function addClassRow(data = {}) {
-      const idx = document.querySelectorAll("#class-rows-body tr").length;
-      renderClassRow({
-        time: data.time || "",
-        teacher: data.teacher || "",
-        subject: data.subject || "",
-        topic: data.topic || "",
-        note: data.note || ""
-      }, idx);
+    function deleteStaffProfile(idx) {
+      if (currentUser.role !== "SuperAdmin") return;
+      const st = DB.staff[idx];
+      if (!confirm(`Are you sure you want to permanently DELETE official profile: ${st.name}?`)) return;
+
+      DB.staff.splice(idx, 1);
+      localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
+      renderStaffDirectory();
+
+      cloudFetch(`ff_staff?id=eq.${st.id}`, "DELETE");
+      alert(`Profile ${st.name} deleted successfully.`);
     }
 
-    // Class row with Point 5 Attendance Link
-    function renderClassRow(c, idx) {
-      const tbody = document.getElementById("class-rows-body");
-      const tr = document.createElement("tr");
-      tr.className = "class-row-item";
-      tr.innerHTML = `
-        <td class="editable-cell"><input type="text" class="c-time" value="${c.time}" placeholder="e.g. 10:00 - 11:30 AM" /></td>
-        <td class="editable-cell"><input type="text" class="c-teacher" value="${c.teacher}" placeholder="Teacher Name" /></td>
-        <td class="editable-cell"><input type="text" class="c-subject" value="${c.subject}" placeholder="Subject" /></td>
-        <td class="editable-cell"><input type="text" class="c-topic" value="${c.topic}" placeholder="Topic / Lesson" /></td>
-        <td class="editable-cell"><input type="text" class="c-note" value="${c.note}" placeholder="Notes" /></td>
-        <td style="text-align:center;">
-          <button type="button" class="btn-attendance" onclick="openAttendanceModal('Class', '${c.subject || 'Session'}', '${c.time}')">📋 Roll Call</button>
-        </td>
-        <td style="text-align:center;"><button type="button" style="color:red; cursor:pointer;" onclick="this.closest('tr').remove()">✕</button></td>
-      `;
-      tbody.appendChild(tr);
-    }
-
-    function addTestRow(data = {}) {
-      const idx = document.querySelectorAll("#test-rows-body tr").length;
-      renderTestRow({
-        name: data.name || "",
-        time: data.time || "",
-        marks: data.marks || "",
-        syllabus: data.syllabus || ""
-      }, idx);
-    }
-
-    // Test row with Point 5 Attendance Link
-    function renderTestRow(t, idx) {
-      const tbody = document.getElementById("test-rows-body");
-      const tr = document.createElement("tr");
-      tr.className = "test-row-item";
-      tr.innerHTML = `
-        <td class="editable-cell"><input type="text" class="t-name" value="${t.name}" placeholder="Test Name" /></td>
-        <td class="editable-cell"><input type="text" class="t-time" value="${t.time}" placeholder="Timing" /></td>
-        <td class="editable-cell"><input type="text" class="t-marks" value="${t.marks}" placeholder="Total Marks" /></td>
-        <td class="editable-cell"><input type="text" class="t-syllabus" value="${t.syllabus}" placeholder="Syllabus" /></td>
-        <td style="text-align:center;">
-          <button type="button" class="btn-attendance" style="background:#E52521;" onclick="openAttendanceModal('Test', '${t.name || 'Exam'}', '${t.time}')">🎯 Exam Roll</button>
-        </td>
-        <td style="text-align:center;"><button type="button" style="color:red; cursor:pointer;" onclick="this.closest('tr').remove()">✕</button></td>
-      `;
-      tbody.appendChild(tr);
-    }
-
-    function saveRoutineForCurrentSelection() {
-      const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-day-select").value;
-      const key = `${batch}_${date}`;
-
-      const classRows = document.querySelectorAll(".class-row-item");
-      const classes = [];
-      classRows.forEach(r => {
-        classes.push({
-          time: r.querySelector(".c-time").value,
-          teacher: r.querySelector(".c-teacher").value,
-          subject: r.querySelector(".c-subject").value,
-          topic: r.querySelector(".c-topic").value,
-          note: r.querySelector(".c-note").value
-        });
-      });
-
-      const testRows = document.querySelectorAll(".test-row-item");
-      const tests = [];
-      testRows.forEach(r => {
-        tests.push({
-          name: r.querySelector(".t-name").value,
-          time: r.querySelector(".t-time").value,
-          marks: r.querySelector(".t-marks").value,
-          syllabus: r.querySelector(".t-syllabus").value
-        });
-      });
-
-      const idx = DB.schedules.findIndex(s => s.key === key);
-      const payload = { key, batch, date, classes, tests, updatedAt: new Date().toISOString() };
-
-      if (idx > -1) DB.schedules[idx] = payload;
-      else DB.schedules.push(payload);
-
-      localStorage.setItem("ff_schedules", JSON.stringify(DB.schedules));
-      alert(`Routine saved for [${batch}] on ${date}!`);
-    }
-
-    // POINT 4: COPY ROUTINE ENGINE
-    function openCopyScheduleModal() {
-      const currentDate = document.getElementById("sch-day-select").value;
-      const daySelect = document.getElementById("sch-day-select");
-      const listContainer = document.getElementById("copy-target-dates-list");
-      listContainer.innerHTML = "";
-
-      let count = 0;
-      for (let i = 0; i < daySelect.options.length; i++) {
-        const d = daySelect.options[i].value;
-        const text = daySelect.options[i].innerText;
-        if (d !== currentDate) {
-          count++;
-          const label = document.createElement("label");
-          label.style = "display:flex; align-items:center; gap:8px; font-size:0.85rem; cursor:pointer;";
-          label.innerHTML = `<input type="checkbox" class="copy-target-date" value="${d}" checked /> <span>${text}</span>`;
-          listContainer.appendChild(label);
-        }
-      }
-
-      if (count === 0) {
-        alert("No other dates in the week range to copy to.");
-        return;
-      }
-
-      document.getElementById("copy-routine-modal").style.display = "flex";
-    }
-
-    function closeCopyScheduleModal() {
-      document.getElementById("copy-routine-modal").style.display = "none";
-    }
-
-    function toggleSelectAllCopyDates() {
-      const checkboxes = document.querySelectorAll(".copy-target-date");
-      const allChecked = Array.from(checkboxes).every(c => c.checked);
-      checkboxes.forEach(c => c.checked = !allChecked);
-    }
-
-    function executeCopySchedule() {
-      const batch = document.getElementById("sch-batch-select").value;
-      const sourceDate = document.getElementById("sch-day-select").value;
-      const sourceKey = `${batch}_${sourceDate}`;
-      const sourceData = DB.schedules.find(s => s.key === sourceKey);
-
-      // Read current rows if not explicitly saved
-      const classRows = document.querySelectorAll(".class-row-item");
-      const currentClasses = [];
-      classRows.forEach(r => {
-        currentClasses.push({
-          time: r.querySelector(".c-time").value,
-          teacher: r.querySelector(".c-teacher").value,
-          subject: r.querySelector(".c-subject").value,
-          topic: r.querySelector(".c-topic").value,
-          note: r.querySelector(".c-note").value
-        });
-      });
-
-      const testRows = document.querySelectorAll(".test-row-item");
-      const currentTests = [];
-      testRows.forEach(r => {
-        currentTests.push({
-          name: r.querySelector(".t-name").value,
-          time: r.querySelector(".t-time").value,
-          marks: r.querySelector(".t-marks").value,
-          syllabus: r.querySelector(".t-syllabus").value
-        });
-      });
-
-      const checkedDates = Array.from(document.querySelectorAll(".copy-target-date:checked")).map(c => c.value);
-      if (checkedDates.length === 0) {
-        alert("Please select at least one date.");
-        return;
-      }
-
-      checkedDates.forEach(targetDate => {
-        const targetKey = `${batch}_${targetDate}`;
-        const payload = {
-          key: targetKey,
-          batch,
-          date: targetDate,
-          classes: JSON.parse(JSON.stringify(currentClasses)),
-          tests: JSON.parse(JSON.stringify(currentTests)),
-          updatedAt: new Date().toISOString()
-        };
-
-        const idx = DB.schedules.findIndex(s => s.key === targetKey);
-        if (idx > -1) DB.schedules[idx] = payload;
-        else DB.schedules.push(payload);
-      });
-
-      localStorage.setItem("ff_schedules", JSON.stringify(DB.schedules));
-      alert(`Copied routine from ${sourceDate} to ${checkedDates.length} selected days!`);
-      closeCopyScheduleModal();
-    }
-
-    // POINT 5: DIRECT ATTENDANCE REGISTER
-    function openAttendanceModal(type, title, time) {
-      const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-day-select").value;
-
-      currentAttContext = {
-        type,
-        title,
-        time,
-        batch,
-        date,
-        key: `ATT_${batch}_${date}_${title}_${time}`
-      };
-
-      document.getElementById("att-modal-title").innerText = `${type} Attendance: ${title} (${time})`;
-      document.getElementById("att-modal-sub").innerText = `Batch: ${batch} | Date: ${date}`;
-
-      // Filter enrolled cadets for this batch (or all)
-      const cadets = (batch === "ALL") 
-        ? DB.students 
-        : DB.students.filter(s => s.batch === batch);
-
-      const tbody = document.getElementById("att-cadet-list-body");
+    function renderStaffDirectory() {
+      const tbody = document.getElementById("staff-roster-body");
+      if (!tbody) return;
       tbody.innerHTML = "";
 
-      if (cadets.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6B7280;">No registered cadets found in batch [${batch}].</td></tr>`;
-        document.getElementById("att-summary-count").innerText = "";
-        document.getElementById("session-attendance-modal").style.display = "flex";
-        return;
-      }
+      const isSuperAdmin = (currentUser && currentUser.role === "SuperAdmin");
+      const thPw = document.getElementById("th-staff-pw");
+      if (thPw) thPw.style.display = isSuperAdmin ? "" : "none";
 
-      const existingRecord = DB.attendance.find(a => a.key === currentAttContext.key);
-      const savedMap = existingRecord ? existingRecord.records : {};
-
-      cadets.forEach(cadet => {
-        const status = savedMap[cadet.id] || "Present";
+      DB.staff.forEach((st, idx) => {
+        const isInactive = (st.status === "Inactive");
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td><strong>${cadet.name}</strong></td>
-          <td>${cadet.batch}</td>
-          <td>
-            <span class="att-badge ${status.toLowerCase()}" data-id="${cadet.id}" onclick="toggleAttBadge(this)">
-              ${status}
-            </span>
+          <td><strong>${st.role}</strong></td>
+          <td>${st.name}</td>
+          <td>${st.phone}</td>
+          <td>${st.dob}</td>
+          ${isSuperAdmin ? `<td><span class="password-badge">${st.password}</span></td>` : ''}
+          <td><span class="status-badge ${isInactive ? 'inactive' : 'active'}">${st.status || 'Active'}</span></td>
+          <td style="display:flex; gap:6px;">
+            ${isSuperAdmin ? `
+              <button type="button" class="${isInactive ? 'btn-action-active' : 'btn-action-inactive'}" onclick="toggleStaffStatus(${idx})">
+                ${isInactive ? 'Activate' : 'Make Inactive'}
+              </button>
+              <button type="button" class="btn-action-delete" onclick="deleteStaffProfile(${idx})">Delete</button>
+            ` : '<span>Restricted</span>'}
           </td>
         `;
         tbody.appendChild(tr);
       });
-
-      updateAttSummary();
-      document.getElementById("session-attendance-modal").style.display = "flex";
     }
 
-    function toggleAttBadge(badge) {
-      if (badge.innerText === "Present") {
-        badge.innerText = "Absent";
-        badge.className = "att-badge absent";
-      } else {
-        badge.innerText = "Present";
-        badge.className = "att-badge present";
+    // PROFILE CONTROLS: TOGGLE INACTIVE & DELETE (STUDENT)
+    function toggleStudentStatus(idx) {
+      if (currentUser.role !== "SuperAdmin") return;
+      const s = DB.students[idx];
+      const newStatus = (s.status === "Inactive") ? "Active" : "Inactive";
+      s.status = newStatus;
+      localStorage.setItem("ff_students", JSON.stringify(DB.students));
+      renderRoster();
+
+      cloudFetch(`ff_students?id=eq.${s.id}`, "PATCH", { status: newStatus });
+      alert(`Student [${s.name}] status updated to: ${newStatus}`);
+    }
+
+    function deleteStudentProfile(idx) {
+      if (currentUser.role !== "SuperAdmin") return;
+      const s = DB.students[idx];
+      if (!confirm(`Are you sure you want to permanently DELETE Student profile: ${s.name}?`)) return;
+
+      DB.students.splice(idx, 1);
+      localStorage.setItem("ff_students", JSON.stringify(DB.students));
+      renderRoster();
+
+      cloudFetch(`ff_students?id=eq.${s.id}`, "DELETE");
+      alert(`Student ${s.name} deleted.`);
+    }
+
+    function renderRoster() {
+      const tbody = document.getElementById("student-roster-body");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      const isSuperAdmin = (currentUser && currentUser.role === "SuperAdmin");
+      const thPw = document.getElementById("th-student-pw");
+      if (thPw) thPw.style.display = isSuperAdmin ? "" : "none";
+
+      DB.students.forEach((s, idx) => {
+        const isInactive = (s.status === "Inactive");
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${s.name}</strong> (${s.batch})</td>
+          <td>${s.ph1}</td>
+          <td>${s.date}</td>
+          ${isSuperAdmin ? `<td><span class="password-badge">${s.password}</span></td>` : ''}
+          <td><span class="status-badge ${isInactive ? 'inactive' : 'active'}">${s.status || 'Active'}</span></td>
+          <td style="display:flex; gap:6px;">
+            ${isSuperAdmin ? `
+              <button type="button" class="${isInactive ? 'btn-action-active' : 'btn-action-inactive'}" onclick="toggleStudentStatus(${idx})">
+                ${isInactive ? 'Activate' : 'Make Inactive'}
+              </button>
+              <button type="button" class="btn-action-delete" onclick="deleteStudentProfile(${idx})">Delete</button>
+            ` : '<span>Restricted</span>'}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Staff Submit (Super Admin Only)
+    document.getElementById("staff-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (currentUser.role !== "SuperAdmin") {
+        alert("Only Super Admin can register official accounts.");
+        return;
       }
-      updateAttSummary();
-    }
 
-    function updateAttSummary() {
-      const badges = document.querySelectorAll("#att-cadet-list-body .att-badge");
-      let presentCount = 0;
-      badges.forEach(b => {
-        if (b.innerText === "Present") presentCount++;
-      });
-      document.getElementById("att-summary-count").innerText = `Present: ${presentCount} / ${badges.length}`;
-    }
-
-    function closeAttendanceModal() {
-      document.getElementById("session-attendance-modal").style.display = "none";
-      currentAttContext = null;
-    }
-
-    function saveSessionAttendance() {
-      if (!currentAttContext) return;
-
-      const records = {};
-      const badges = document.querySelectorAll("#att-cadet-list-body .att-badge");
-      badges.forEach(b => {
-        records[b.getAttribute("data-id")] = b.innerText;
-      });
-
-      const payload = {
-        ...currentAttContext,
-        records,
-        recordedAt: new Date().toISOString()
+      const newStaff = {
+        id: "STAFF-" + Date.now(),
+        name: document.getElementById("staff-name").value,
+        phone: document.getElementById("staff-phone").value,
+        dob: document.getElementById("staff-dob").value,
+        role: document.getElementById("staff-role").value,
+        password: document.getElementById("staff-password").value,
+        status: "Active"
       };
 
-      const idx = DB.attendance.findIndex(a => a.key === currentAttContext.key);
-      if (idx > -1) DB.attendance[idx] = payload;
-      else DB.attendance.push(payload);
+      DB.staff.push(newStaff);
+      localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
+      renderStaffDirectory();
+      alert(`Staff profile created for ${newStaff.name}. Access Password: ${newStaff.password}`);
+      document.getElementById("staff-form").reset();
+      initGenerators();
 
-      localStorage.setItem("ff_attendance", JSON.stringify(DB.attendance));
-      alert("Attendance register locked and saved!");
-      closeAttendanceModal();
-    }
+      cloudFetch("ff_staff", "POST", newStaff);
+    });
 
-    function printRoutineSheet() {
-      const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-day-select").value;
-      const key = `${batch}_${date}`;
-      const saved = DB.schedules.find(s => s.key === key);
+    // Student Submit (Super Admin Only)
+    document.getElementById("student-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (currentUser.role !== "SuperAdmin") {
+        alert("Only Super Admin can register students.");
+        return;
+      }
 
-      document.getElementById("print-doc-subtitle").innerText = `DAILY ORDER & ACADEMIC ROUTINE (BATCH: ${batch})`;
-      const p = document.getElementById("printable-details");
+      const admFee = parseFloat(document.getElementById("std-admission-fee").value) || 0;
+      const paid = parseFloat(document.getElementById("std-paid-now").value) || 0;
 
-      const classes = saved ? saved.classes : [];
-      const tests = saved ? saved.tests : [];
+      const newStudent = {
+        id: "STD-" + Date.now(),
+        date: document.getElementById("std-admission-date").value,
+        name: document.getElementById("std-name").value,
+        guardian: document.getElementById("std-guardian").value,
+        ph1: document.getElementById("std-ph1").value,
+        batch: document.getElementById("std-batch").value,
+        admission_fee: admFee,
+        paid: paid,
+        remaining: Math.max(0, admFee - paid),
+        password: document.getElementById("std-generated-pw").value,
+        status: "Active"
+      };
 
-      let classTrs = classes.map(c => `
-        <tr><td><strong>${c.time}</strong></td><td>${c.teacher}</td><td>${c.subject}</td><td>${c.topic}</td><td>${c.note}</td></tr>
-      `).join("");
+      DB.students.push(newStudent);
+      localStorage.setItem("ff_students", JSON.stringify(DB.students));
 
-      let testTrs = tests.map(t => `
-        <tr><td><strong>${t.name}</strong></td><td>${t.time}</td><td>${t.marks}</td><td>${t.syllabus}</td></tr>
-      `).join("");
+      if (paid > 0) {
+        const incItem = {
+          id: "INC-" + Date.now(),
+          date: newStudent.date,
+          purpose: "Admission Fee",
+          person: newStudent.name,
+          amount: paid
+        };
+        DB.incomes.push(incItem);
+        localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
+        cloudFetch("ff_incomes", "POST", incItem);
+      }
 
-      p.innerHTML = `
-        <div style="display:flex; justify-content:space-between; margin-bottom:14px;">
-          <div><p><strong>Scheduled Date:</strong> ${date}</p><p><strong>Target Formation:</strong> ${batch}</p></div>
-          <div style="text-align:right;"><p><strong>Campus:</strong> Headquarters Campus</p><p><strong>Status:</strong> Approved Daily Routine</p></div>
-        </div>
-        <h4 style="margin:10px 0 6px 0; color:#0A192F;">1. Academic Lectures & Routine Sessions</h4>
-        <table class="print-table">
-          <thead><tr><th>Time</th><th>Teacher</th><th>Subject</th><th>Topic</th><th>Note</th></tr></thead>
-          <tbody>${classTrs || '<tr><td colspan="5">No classes scheduled.</td></tr>'}</tbody>
-        </table>
-        <h4 style="margin:14px 0 6px 0; color:#E52521;">2. Evaluative Tests & Daily Benchmarks</h4>
-        <table class="print-table">
-          <thead><tr><th>Test Name</th><th>Timing</th><th>Marks</th><th>Syllabus</th></tr></thead>
-          <tbody>${testTrs || '<tr><td colspan="4">No tests scheduled.</td></tr>'}</tbody>
-        </table>
-        <div class="signature-row">
-          <div class="signature-line">Officer In-Charge</div>
-          <div class="signature-line">Super Admin / Director</div>
-        </div>
-      `;
+      renderRoster();
+      alert(`Student registered! Access Password: ${newStudent.password}`);
+      document.getElementById("student-form").reset();
+      initGenerators();
 
-      window.print();
-    }
+      cloudFetch("ff_students", "POST", newStudent);
+    });
 
     function switchTab(tab) {
-      document.getElementById("tab-schedule-content").style.display = (tab === 'schedule') ? 'block' : 'none';
-      document.getElementById("tab-cadets-content").style.display = (tab === 'cadets') ? 'block' : 'none';
+      document.getElementById("tab-students-content").style.display = (tab === 'students') ? 'block' : 'none';
       document.getElementById("tab-finance-content").style.display = (tab === 'finance') ? 'block' : 'none';
 
-      document.getElementById("btn-tab-schedule").classList.toggle("active", tab === 'schedule');
-      document.getElementById("btn-tab-cadets").classList.toggle("active", tab === 'cadets');
+      document.getElementById("btn-tab-students").classList.toggle("active", tab === 'students');
       document.getElementById("btn-tab-finance").classList.toggle("active", tab === 'finance');
     }
 
+    // Login Controller
     document.getElementById("login-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const id = document.getElementById("login-identifier").value.trim().toLowerCase();
@@ -1091,31 +846,74 @@
         return;
       }
 
-      const cadet = DB.students.find(s => s.ph1 === id && s.password === pass);
-      if (cadet) {
-        currentUser = { ...cadet, role: "Student" };
+      const staff = DB.staff.find(s => s.phone === id && s.password === pass);
+      if (staff) {
+        if (staff.status === "Inactive") {
+          alert("Your official account is currently INACTIVE. Contact Super Admin.");
+          return;
+        }
+        currentUser = { ...staff };
         startSession();
         return;
       }
 
-      alert("Invalid credentials.");
+      const student = DB.students.find(s => s.ph1 === id && s.password === pass);
+      if (student) {
+        if (student.status === "Inactive") {
+          alert("Your Student Portal access is marked INACTIVE. Contact Administrator.");
+          return;
+        }
+        currentUser = { ...student, role: "Student" };
+        startSession();
+        return;
+      }
+
+      alert("Invalid identifier or password.");
     });
 
     function startSession() {
       document.getElementById("login-view").style.display = "none";
       document.getElementById("nav-controls").style.display = "flex";
-      document.getElementById("current-user-tag").innerText = `${currentUser.name} (${currentUser.role})`;
+      document.getElementById("current-user-tag").innerText = `${currentUser.name} (${currentUser.role || 'Student'})`;
 
-      if (currentUser.role === "SuperAdmin" || currentUser.role === "Official") {
+      const isSuperAdmin = (currentUser.role === "SuperAdmin");
+
+      if (isSuperAdmin) {
         document.getElementById("admin-nav-tabs").style.display = "flex";
-        switchTab("schedule");
-        initWeekRange();
+        document.getElementById("staff-creation-box").style.display = "block";
+        document.getElementById("student-admission-box").style.display = "block";
+        document.getElementById("staff-directory-box").style.display = "block";
+        switchTab("students");
+        renderStaffDirectory();
+        renderRoster();
+      } else if (currentUser.role === "Official" || currentUser.role === "Faculty") {
+        document.getElementById("admin-nav-tabs").style.display = "flex";
+        document.getElementById("staff-creation-box").style.display = "none";
+        document.getElementById("student-admission-box").style.display = "none";
+        document.getElementById("staff-directory-box").style.display = "none";
+        switchTab("students");
+        renderRoster();
       } else {
+        // Individual Student Personal Desk (PASSWORD COMPLETELY HIDDEN)
         document.getElementById("admin-nav-tabs").style.display = "none";
         document.getElementById("student-zone-view").style.display = "block";
-        document.getElementById("student-desk-content").innerHTML = `
-          <p>Welcome, Cadet <strong>${currentUser.name}</strong> (Batch: ${currentUser.batch})</p>
-          <p style="margin-top:8px;">View your daily class and exam routine directly from the central board.</p>
+        
+        document.getElementById("personal-desk-content").innerHTML = `
+          <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:20px; margin-bottom:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <h3 style="color:var(--navy-blue); margin-bottom:4px;">${currentUser.name}</h3>
+                <p style="font-size:0.9rem; color:#4B5563;">Batch / Section: <strong>${currentUser.batch}</strong></p>
+                <p style="font-size:0.9rem; color:#4B5563;">Guardian: <strong>${currentUser.guardian}</strong></p>
+                <p style="font-size:0.9rem; color:#4B5563;">Registered Phone: <strong>${currentUser.ph1}</strong></p>
+              </div>
+              <div style="text-align:right;">
+                <span class="status-badge active" style="font-size:0.85rem;">Enrolled Student</span>
+                <p style="font-size:0.8rem; color:#6B7280; margin-top:6px;">Admission: ${currentUser.date}</p>
+              </div>
+            </div>
+          </div>
+          <p style="font-size:0.85rem; color:#6B7280;">• For fee clearances or schedule assistance, please contact the academy administration office.</p>
         `;
       }
     }
@@ -1123,16 +921,16 @@
     function logout() {
       currentUser = null;
       document.getElementById("login-view").style.display = "block";
-      document.getElementById("tab-schedule-content").style.display = "none";
-      document.getElementById("tab-cadets-content").style.display = "none";
+      document.getElementById("tab-students-content").style.display = "none";
       document.getElementById("tab-finance-content").style.display = "none";
       document.getElementById("student-zone-view").style.display = "none";
       document.getElementById("nav-controls").style.display = "none";
     }
 
     window.addEventListener("DOMContentLoaded", () => {
-      initWeekRange();
+      initGenerators();
+      syncFromCloud();
     });
   </script>
 </body>
-  </html>
+</html>
