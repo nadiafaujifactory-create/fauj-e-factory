@@ -277,6 +277,17 @@
       font-size: 0.8rem;
     }
 
+    .btn-receipt {
+      background: #047857;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+
     .btn-sub-action {
       background: var(--navy-blue);
       color: white;
@@ -511,6 +522,7 @@
       text-decoration: line-through;
     }
 
+    /* Print Template */
     #print-section { display: none; }
 
     @media print {
@@ -898,7 +910,7 @@
               <label>Amount (₹)</label>
               <input type="number" id="inc-amount" min="1" placeholder="Enter Amount" required />
             </div>
-            <button type="submit" class="btn-primary" style="background:var(--success-green); width: 100%;">+ Save Income Entry</button>
+            <button type="submit" class="btn-primary" style="background:var(--success-green); width: 100%;">+ Save Income & Issue Receipt</button>
           </form>
         </div>
 
@@ -948,6 +960,7 @@
                   <th>Purpose</th>
                   <th>Person</th>
                   <th>Amount (₹)</th>
+                  <th>Receipt</th>
                 </tr>
               </thead>
               <tbody id="income-table-body"></tbody>
@@ -1007,7 +1020,7 @@
     </div>
   </div>
 
-  <!-- Hidden Print Engine -->
+  <!-- PRINT ENGINE (INVOICE / RECEIPT / BIO-DATA) -->
   <div id="print-section">
     <div class="print-box">
       <div class="print-header">
@@ -1022,13 +1035,9 @@
   </div>
 
   <script>
-    // ------------------------------------------------------------------
-    // SAFE NATIVE STORAGE & CLOUD REST ENGINE (ZERO DEPENDENCY)
-    // ------------------------------------------------------------------
     const SUPABASE_REST_URL = "https://dyldejdkgfnyvunkrddh.supabase.co/rest/v1";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5bGRlamRrZ2ZueXZ1bmtyZGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2MDE4OTYsImV4cCI6MjEwNjE3Nzg5Nn0._JUB9WjiB3aJAdEZZyADueL9i6iyf7us6dD8L3S1o0E";
 
-    // Safe parser that NEVER throws or crashes script
     function safeGet(key) {
       try {
         const val = localStorage.getItem(key);
@@ -1065,7 +1074,7 @@
     let currentUser = null;
     let activeModalStudentIdx = null;
 
-    // DIRECT NATIVE SUPABASE REST SYNC (NO EXTERNAL SCRIPTS NEEDED)
+    // DIRECT NATIVE SUPABASE REST SYNC
     async function cloudFetch(endpoint, method = "GET", body = null) {
       try {
         const headers = {
@@ -1115,7 +1124,6 @@
       }
     }
 
-    // Direct, Standalone Password Toggle
     function togglePasswordVisibility() {
       const passInput = document.getElementById("login-password");
       const btn = document.getElementById("eye-toggle-btn");
@@ -1337,11 +1345,9 @@
       }
     }
 
-    // Auto Login & Instant Init
     window.addEventListener("DOMContentLoaded", () => {
       initGenerators();
 
-      // Check Saved Session
       const saved = localStorage.getItem("ff_remembered_admin");
       if (saved) {
         try {
@@ -1352,11 +1358,10 @@
         }
       }
 
-      // Background cloud fetch (non-blocking)
       syncFromCloud();
     });
 
-    // Login Handler (Zero Dependency, Always Instant)
+    // Login Handler
     document.getElementById("login-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const id = document.getElementById("login-identifier").value.trim().toLowerCase();
@@ -1452,7 +1457,6 @@
       document.getElementById("staff-form").reset();
       initGenerators();
 
-      // Cloud REST Background Sync
       cloudFetch("ff_staff", "POST", newStaff);
     });
 
@@ -1588,26 +1592,32 @@
       DB.students.push(newStudent);
       localStorage.setItem("ff_students", JSON.stringify(DB.students));
 
+      let lastIncomeItem = null;
       if (paidNow > 0) {
-        const initInc = {
+        lastIncomeItem = {
           id: "INC-" + Date.now(),
           date: admDate,
           purpose: paidHead + (targetMonth ? ` (${targetMonth})` : ""),
           person: cadetName,
           amount: paidNow
         };
-        DB.incomes.push(initInc);
-        cloudFetch("ff_incomes", "POST", initInc);
+        DB.incomes.push(lastIncomeItem);
+        cloudFetch("ff_incomes", "POST", lastIncomeItem);
       }
       localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
 
       renderRoster();
       alert(`Cadet registered! Assigned Password for Student Zone: ${newStudent.password}`);
+      
+      // Auto Invoice Prompt for Admission Payment
+      if (lastIncomeItem && confirm("Would you like to print/generate an official Money Receipt for this payment?")) {
+        printInvoice(lastIncomeItem);
+      }
+
       document.getElementById("student-form").reset();
       document.getElementById("dynamic-payments-container").innerHTML = "";
       initGenerators();
 
-      // Cloud REST Background Sync
       cloudFetch("ff_students", "POST", newStudent);
     });
 
@@ -1660,21 +1670,23 @@
       const idx = monthsList.indexOf(monthLabel);
       const monthlySum = (Number(student.tuition_fee) || 0) + (Number(student.hostel_fee) || 0);
 
+      let issuedReceiptItem = null;
+
       if (idx > -1) {
         monthsList.splice(idx, 1);
       } else {
         monthsList.push(monthLabel);
         if (monthlySum > 0) {
-          const incRecord = {
+          issuedReceiptItem = {
             id: "INC-" + Date.now(),
             date: new Date().toISOString().split("T")[0],
             purpose: `Monthly Study & Hostel Fee (${monthLabel})`,
             person: student.name,
             amount: monthlySum
           };
-          DB.incomes.push(incRecord);
+          DB.incomes.push(issuedReceiptItem);
           localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
-          cloudFetch("ff_incomes", "POST", incRecord);
+          cloudFetch("ff_incomes", "POST", issuedReceiptItem);
         }
       }
 
@@ -1683,8 +1695,11 @@
       renderRoster();
       openMonthModal(activeModalStudentIdx);
 
-      // Cloud PATCH Update
       cloudFetch(`ff_students?id=eq.${student.id}`, "PATCH", { paid_months: monthsList });
+
+      if (issuedReceiptItem && confirm(`Generate official receipt for ${student.name} (${monthLabel})?`)) {
+        printInvoice(issuedReceiptItem);
+      }
     }
 
     function renderRoster() {
@@ -1746,7 +1761,7 @@
       });
     }
 
-    // Income Form Submit
+    // Income Form Submit & Direct Invoice Option
     document.getElementById("income-entry-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const newIncome = {
@@ -1764,6 +1779,10 @@
       renderFinanceDashboard();
 
       cloudFetch("ff_incomes", "POST", newIncome);
+
+      if (confirm("Would you like to print/generate the Money Receipt for this entry?")) {
+        printInvoice(newIncome);
+      }
     });
 
     // Expense Form Submit
@@ -1786,6 +1805,7 @@
       cloudFetch("ff_expenses", "POST", newExpense);
     });
 
+    // Render Ledger with Receipt Button
     function renderFinanceDashboard() {
       let totalIncome = 0;
       let totalExpense = 0;
@@ -1795,7 +1815,7 @@
         incTbody.innerHTML = "";
         const sortedIncomes = [...DB.incomes].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-        sortedIncomes.forEach(inc => {
+        sortedIncomes.forEach((inc, idx) => {
           totalIncome += (Number(inc.amount) || 0);
           const tr = document.createElement("tr");
           tr.innerHTML = `
@@ -1803,6 +1823,9 @@
             <td><strong>${inc.purpose}</strong></td>
             <td>${inc.person}</td>
             <td style="color:var(--success-green); font-weight:700;">+₹${Number(inc.amount).toLocaleString("en-IN")}</td>
+            <td>
+              <button type="button" class="btn-receipt" onclick="printInvoiceByIndex(${idx})">🧾 Receipt</button>
+            </td>
           `;
           incTbody.appendChild(tr);
         });
@@ -1837,6 +1860,64 @@
         netElem.innerText = "₹" + net.toLocaleString("en-IN");
         netElem.style.color = (net >= 0) ? "var(--navy-blue)" : "var(--primary-red)";
       }
+    }
+
+    // -------------------------------------------------------------
+    // MONEY RECEIPT / INVOICE PRINT ENGINE
+    // -------------------------------------------------------------
+    function printInvoiceByIndex(sortedIndex) {
+      const sortedIncomes = [...DB.incomes].sort((a, b) => new Date(b.date) - new Date(a.date));
+      const entry = sortedIncomes[sortedIndex];
+      if (entry) printInvoice(entry);
+    }
+
+    function printInvoice(item) {
+      document.getElementById("print-document-title").innerText = "OFFICIAL MONEY RECEIPT / INVOICE";
+      const p = document.getElementById("printable-details");
+      
+      const receiptNo = item.id ? item.id.replace("INC-", "REC/") : "REC/" + Math.floor(1000 + Math.random() * 9000);
+
+      p.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+          <div>
+            <p style="font-size: 0.9rem; margin-bottom: 4px;"><strong>Receipt No:</strong> <span style="font-family: monospace; color: #E52521;">${receiptNo}</span></p>
+            <p style="font-size: 0.9rem; margin-bottom: 4px;"><strong>Date of Payment:</strong> ${item.date}</p>
+            <p style="font-size: 0.9rem;"><strong>Payment Mode:</strong> Cash / Online Clearing</p>
+          </div>
+          <div style="text-align: right;">
+            <p style="font-size: 0.85rem; color: #6B7280;">FAUJ-E-FACTORY HEADQUARTERS</p>
+            <p style="font-size: 0.85rem; color: #6B7280;">Official Finance & Accounts Division</p>
+            <span style="display: inline-block; background: #DEF7EC; color: #03543F; font-weight: 800; font-size: 0.85rem; padding: 4px 10px; border-radius: 4px; margin-top: 4px;">PAYMENT RECEIVED</span>
+          </div>
+        </div>
+
+        <table class="print-table">
+          <tr>
+            <th style="width: 30%;">Received With Thanks From</th>
+            <td style="font-size: 1.05rem; font-weight: bold; color: #0A192F;">${item.person}</td>
+          </tr>
+          <tr>
+            <th>Particulars / Payment Purpose</th>
+            <td style="font-weight: 600;">${item.purpose}</td>
+          </tr>
+          <tr>
+            <th>Total Amount Paid</th>
+            <td style="font-size: 1.25rem; font-weight: 800; color: #E52521;">₹${Number(item.amount).toLocaleString('en-IN')} /-</td>
+          </tr>
+        </table>
+
+        <div style="margin-top: 20px; padding: 12px; background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 4px; font-size: 0.8rem; color: #4B5563;">
+          <p>• This is a computer-generated, authorized financial acknowledgment voucher issued by <strong>FAUJ-E-FACTORY</strong>.</p>
+          <p>• Fees once cleared are subject to institutional academy training regulations.</p>
+        </div>
+
+        <div class="signature-row" style="margin-top: 60px;">
+          <div class="signature-line">Cadet / Depositor Signature</div>
+          <div class="signature-line">Authorized Signatory / Accountant</div>
+        </div>
+      `;
+
+      window.print();
     }
 
     function renderStudentPortal(student) {
@@ -1914,4 +1995,4 @@
     }
   </script>
 </body>
-</html>
+  </html>
