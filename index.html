@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FAUJ-E-FACTORY - Management & Finance</title>
+  <title>FAUJ-E-FACTORY - Management, Finance & Routine</title>
   <style>
     :root {
       --primary-red: #E52521;
@@ -136,40 +136,6 @@
       align-items: center;
     }
 
-    .section-subtitle {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--primary-red);
-      grid-column: 1 / -1;
-      margin-top: 14px;
-      padding-bottom: 4px;
-      border-bottom: 1px dashed var(--border-gray);
-    }
-
-    .step-box {
-      background: #F8FAFC;
-      border: 1px solid #E2E8F0;
-      border-left: 4px solid var(--navy-blue);
-      border-radius: 6px;
-      padding: 16px;
-      margin-bottom: 16px;
-      grid-column: 1 / -1;
-    }
-
-    .step-box.success {
-      border-left-color: var(--success-green);
-    }
-
-    .step-title {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--navy-blue);
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -181,10 +147,6 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
-    }
-
-    .form-group.full-width {
-      grid-column: 1 / -1;
     }
 
     label {
@@ -233,33 +195,15 @@
       z-index: 10;
     }
 
-    .remember-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 12px 0 18px 0;
-      font-size: 0.85rem;
-      color: var(--navy-blue);
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .remember-wrap input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      accent-color: var(--primary-red);
-      cursor: pointer;
-    }
-
     .btn-primary {
       background: var(--primary-red);
       color: var(--pure-white);
       font-weight: 700;
-      padding: 12px 20px;
+      padding: 10px 18px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
 
     .btn-primary:hover {
@@ -270,163 +214,34 @@
       background: var(--navy-blue);
       color: var(--pure-white);
       border: none;
-      padding: 6px 10px;
+      padding: 6px 12px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
     }
 
-    .btn-receipt {
-      background: #047857;
+    .btn-attendance {
+      background: #0D9488;
       color: white;
       border: none;
-      padding: 4px 8px;
+      padding: 6px 10px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 700;
       font-size: 0.75rem;
+      white-space: nowrap;
     }
 
-    .btn-sub-action {
-      background: var(--navy-blue);
+    .btn-copy {
+      background: #4B5563;
       color: white;
       border: none;
-      padding: 8px 14px;
+      padding: 10px 14px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 700;
       font-size: 0.85rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .btn-sub-action:hover {
-      background: var(--primary-red);
-    }
-
-    .btn-readmit {
-      background: var(--success-green);
-      color: var(--pure-white);
-      border: none;
-      padding: 6px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.8rem;
-      margin-left: 4px;
-    }
-
-    .btn-readmit:disabled {
-      background: #9CA3AF;
-      cursor: not-allowed;
-    }
-
-    .btn-add-entry {
-      background: var(--navy-light);
-      color: white;
-      border: 1px dashed #CBD5E1;
-      padding: 8px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.85rem;
-      margin-top: 8px;
-    }
-
-    .btn-add-entry:hover {
-      background: var(--navy-blue);
-    }
-
-    .dynamic-pay-row {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr 1fr 1fr auto;
-      gap: 10px;
-      align-items: center;
-      background: white;
-      padding: 10px;
-      border: 1px solid #E2E8F0;
-      border-radius: 4px;
-      margin-bottom: 8px;
-    }
-
-    .btn-del-row {
-      background: #FEE2E2;
-      color: #991B1B;
-      border: none;
-      padding: 8px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .finance-split-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 24px;
-    }
-
-    @media (max-width: 850px) {
-      .finance-split-grid {
-        grid-template-columns: 1fr;
-      }
-      .dynamic-pay-row {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .finance-column-box {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.06);
-      padding: 18px;
-      border-top: 4px solid var(--navy-blue);
-    }
-
-    .finance-column-box.income-box { border-top-color: var(--success-green); }
-    .finance-column-box.expense-box { border-top-color: var(--primary-red); }
-
-    .finance-box-title {
-      font-size: 1.15rem;
-      font-weight: 800;
-      margin-bottom: 14px;
-    }
-    .finance-box-title.income-title { color: #065F46; }
-    .finance-box-title.expense-title { color: #991B1B; }
-
-    .metric-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-
-    .metric-box {
-      background: white;
-      padding: 16px 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      border-left: 5px solid var(--navy-blue);
-    }
-
-    .metric-box.inflow { border-left-color: var(--success-green); }
-    .metric-box.outflow { border-left-color: var(--primary-red); }
-
-    .metric-label {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #6B7280;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .metric-value {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-top: 6px;
-      color: var(--navy-blue);
     }
 
     .table-container {
@@ -457,6 +272,50 @@
       background-color: #f9fafb;
     }
 
+    .schedule-control-bar {
+      background: #EDF2F7;
+      border: 1px solid #CBD5E0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .schedule-grid-box {
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #E2E8F0;
+      padding: 16px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--navy-blue);
+    }
+
+    .schedule-grid-box.test-box {
+      border-left-color: var(--primary-red);
+    }
+
+    .schedule-box-header {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy-blue);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .editable-cell input {
+      width: 100%;
+      padding: 6px 8px;
+      font-size: 0.85rem;
+      border: 1px solid #CBD5E0;
+      border-radius: 4px;
+    }
+
+    /* Modal Styling */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -471,58 +330,27 @@
       background: white;
       border-radius: 8px;
       padding: 24px;
-      max-width: 550px;
+      max-width: 650px;
       width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
       box-shadow: 0 10px 25px rgba(0,0,0,0.3);
       border-top: 5px solid var(--primary-red);
     }
 
-    .modal-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--navy-blue);
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .months-container {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin: 16px 0;
-    }
-
-    .month-badge {
-      text-align: center;
-      padding: 10px 4px;
-      border: 2px solid var(--navy-blue);
-      border-radius: 6px;
+    .att-badge {
+      padding: 6px 12px;
+      border-radius: 4px;
       font-size: 0.75rem;
       font-weight: 700;
       cursor: pointer;
       user-select: none;
-      background: white;
-      color: var(--navy-blue);
-      transition: all 0.2s ease;
+      border: 1px solid #CBD5E0;
     }
 
-    .month-badge.paid {
-      background-color: var(--primary-red) !important;
-      border-color: var(--primary-red) !important;
-      color: var(--pure-white) !important;
-    }
+    .att-badge.present { background: #DEF7EC; color: #03543F; border-color: #03543F; }
+    .att-badge.absent { background: #FDE8E8; color: #9B1C1C; border-color: #9B1C1C; }
 
-    .month-badge.disabled-month {
-      background-color: #E5E7EB !important;
-      border-color: #D1D5DB !important;
-      color: #9CA3AF !important;
-      cursor: not-allowed !important;
-      text-decoration: line-through;
-    }
-
-    /* Print Template */
     #print-section { display: none; }
 
     @media print {
@@ -532,28 +360,24 @@
         display: block !important;
         position: absolute;
         left: 0; top: 0; width: 100%;
-        background: white; padding: 24px; color: black;
+        background: white; padding: 20px; color: black;
       }
-      .print-box { border: 2px solid #0A192F; padding: 24px; }
+      .print-box { border: 2px solid #0A192F; padding: 20px; }
       .print-header {
         display: flex; align-items: center; justify-content: space-between;
-        border-bottom: 2px solid #E52521; padding-bottom: 12px; margin-bottom: 16px;
+        border-bottom: 2px solid #E52521; padding-bottom: 10px; margin-bottom: 14px;
       }
-      .print-header img { height: 70px; width: 70px; object-fit: contain; }
-      .print-title-wrap { text-align: right; }
-      .print-title-wrap h2 { font-size: 1.8rem; color: #0A192F; }
-      .print-title-wrap p { font-size: 0.95rem; font-weight: 700; color: #E52521; }
-      .print-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
-      .print-table th, .print-table td { border: 1px solid #D1D5DB; padding: 8px 12px; font-size: 0.9rem; }
-      .print-table th { background-color: #F3F4F6 !important; color: #0A192F !important; text-align: left; }
-      .signature-row { margin-top: 50px; display: flex; justify-content: space-between; }
-      .signature-line { border-top: 1px solid #333; width: 200px; text-align: center; padding-top: 6px; font-size: 0.85rem; }
+      .print-header img { height: 60px; width: 60px; object-fit: contain; }
+      .print-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+      .print-table th, .print-table td { border: 1px solid #CBD5E0; padding: 6px 10px; font-size: 0.85rem; }
+      .print-table th { background-color: #F1F5F9 !important; color: #0A192F !important; }
+      .signature-row { margin-top: 40px; display: flex; justify-content: space-between; }
+      .signature-line { border-top: 1px solid #333; width: 180px; text-align: center; padding-top: 6px; font-size: 0.85rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top App Navigation -->
   <header class="navbar">
     <div class="brand-wrap">
       <img src="logo.png" alt="FAUJ-E-FACTORY" class="brand-logo" onerror="this.style.display='none'" />
@@ -561,7 +385,8 @@
     </div>
     <div id="nav-controls" style="display: none; align-items: center;">
       <div class="nav-tabs" id="admin-nav-tabs" style="display: none; margin-right: 16px;">
-        <button type="button" class="tab-btn active" id="btn-tab-cadets" onclick="switchTab('cadets')">Cadets & Admissions</button>
+        <button type="button" class="tab-btn active" id="btn-tab-schedule" onclick="switchTab('schedule')">Weekly Routine & Tests</button>
+        <button type="button" class="tab-btn" id="btn-tab-cadets" onclick="switchTab('cadets')">Cadets & Admissions</button>
         <button type="button" class="tab-btn" id="btn-tab-finance" onclick="switchTab('finance')">Income & Expenditure</button>
       </div>
       <span class="user-tag" id="current-user-tag"></span>
@@ -589,258 +414,108 @@
             <button type="button" class="toggle-password-btn" id="eye-toggle-btn" onclick="togglePasswordVisibility()" title="Show/Hide Password">👁️</button>
           </div>
         </div>
-
-        <label class="remember-wrap">
+        <label style="display:flex; align-items:center; gap:8px; margin:12px 0 16px 0; font-size:0.85rem; cursor:pointer;">
           <input type="checkbox" id="remember-me-checkbox" />
           <span>Remember me on this device (Super Admin)</span>
         </label>
-
         <button type="submit" class="btn-primary" style="width: 100%;">Sign In</button>
       </form>
     </div>
 
-    <!-- 2. CADETS & ADMISSIONS PORTAL (TAB 1) -->
-    <div id="tab-cadets-content" style="display: none;">
-      
-      <!-- Staff Profile Generation -->
-      <div class="card" id="staff-creation-box">
-        <div class="card-header">Create Official / Faculty Profile</div>
-        <form id="staff-form">
-          <div class="form-grid">
-            <div class="form-group">
-              <label>Full Name</label>
-              <input type="text" id="staff-name" required />
-            </div>
-            <div class="form-group">
-              <label>Phone Number (Login ID)</label>
-              <input type="tel" id="staff-phone" required />
-            </div>
-            <div class="form-group">
-              <label>Date of Birth</label>
-              <input type="date" id="staff-dob" required />
-            </div>
-            <div class="form-group">
-              <label>Designation</label>
-              <select id="staff-role" required>
-                <option value="Official">Official</option>
-                <option value="Faculty">Faculty</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Generated Password</label>
-              <input type="text" id="staff-password" readonly style="background:#eee; font-weight:bold;" />
-            </div>
-          </div>
-          <button type="submit" class="btn-primary">Generate & Save Staff Profile</button>
-        </form>
-      </div>
-
-      <!-- Staff / Faculty Directory -->
-      <div class="card" id="staff-directory-box">
-        <div class="card-header">Official & Faculty Directory</div>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Designation</th>
-                <th>Name</th>
-                <th>Phone (Login ID)</th>
-                <th>Date of Birth</th>
-                <th>Access Password</th>
-                <th>Print Action</th>
-              </tr>
-            </thead>
-            <tbody id="staff-roster-body"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Cadet Admission Form -->
-      <div class="card">
-        <div class="card-header">Cadet Admission & Multi-Tier Fee Form</div>
-        <form id="student-form">
-          <div class="form-grid">
-            
-            <div class="section-subtitle">1. Personal & Identity Details</div>
-            <div class="form-group">
-              <label>Admission Date</label>
-              <input type="date" id="std-admission-date" onchange="onAdmissionDateChange()" required />
-            </div>
-            <div class="form-group">
-              <label>Cadet Full Name</label>
-              <input type="text" id="std-name" required />
-            </div>
-            <div class="form-group">
-              <label>Cadet Photo</label>
-              <input type="file" id="std-photo" accept="image/*" />
-            </div>
-            <div class="form-group">
-              <label>Guardian's Name</label>
-              <input type="text" id="std-guardian" required />
-            </div>
-            <div class="form-group">
-              <label>Primary Phone (Phone 1 - Login ID)</label>
-              <input type="tel" id="std-ph1" required />
-            </div>
-            <div class="form-group">
-              <label>Secondary Phone (Phone 2)</label>
-              <input type="tel" id="std-ph2" />
-            </div>
-            <div class="form-group">
-              <label>Date of Birth</label>
-              <input type="date" id="std-dob" required />
-            </div>
-            <div class="form-group">
-              <label>Aadhaar Number</label>
-              <input type="text" id="std-aadhar" placeholder="Enter Aadhaar Number" required />
-            </div>
-            <div class="form-group">
-              <label>Batch</label>
-              <select id="std-batch" required>
-                <option value="G1">G1</option><option value="G2">G2</option>
-                <option value="G3">G3</option><option value="G4">G4</option>
-                <option value="H1">H1</option><option value="H2">H2</option>
-                <option value="H3">H3</option><option value="H4">H4</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Gender</label>
-              <select id="std-gender" onchange="toggleChestField(this.value)">
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Reference</label>
-              <input type="text" id="std-ref" />
-            </div>
-
-            <div class="section-subtitle">2. Academic & Physical Standards</div>
-            <div class="form-group">
-              <label>Educational Qualifications</label>
-              <input type="text" id="std-qual" required />
-            </div>
-            <div class="form-group">
-              <label>% of Last Passed Exam</label>
-              <input type="number" step="0.01" id="std-marks" required />
-            </div>
-            <div class="form-group">
-              <label>Height (cm)</label>
-              <input type="number" id="std-height" required />
-            </div>
-            <div class="form-group">
-              <label>Weight (kg)</label>
-              <input type="number" id="std-weight" required />
-            </div>
-            <div class="form-group" id="chest-group">
-              <label>Chest (cm) [Male Only]</label>
-              <input type="number" id="std-chest" />
-            </div>
-            <div class="form-group full-width">
-              <label>Permanent Address</label>
-              <textarea id="std-address" rows="2" required></textarea>
-            </div>
-
-            <!-- PART 1: FEE FIXATION -->
-            <div class="step-box">
-              <div class="step-title">
-                <span>Part 1: Fee Fixation (নির্ধারিত ফি ফিক্সডকরণ)</span>
-              </div>
-              <div class="form-grid">
-                <div class="form-group">
-                  <label>1. Admission Fees (₹)</label>
-                  <input type="number" id="fix-admission" placeholder="Amount" oninput="calculateTotalFixedAndDue()" required />
-                </div>
-                <div class="form-group">
-                  <label>2. Monthly Study Fees (₹ / month)</label>
-                  <input type="number" id="fix-tuition" placeholder="Monthly Study Fees" oninput="calculateTotalFixedAndDue()" />
-                </div>
-                <div class="form-group">
-                  <label>3. Hostel Fees (₹ / month)</label>
-                  <input type="number" id="fix-hostel" placeholder="Hostel Fees" oninput="calculateTotalFixedAndDue()" />
-                </div>
-                <div class="form-group">
-                  <label>4. Dress & Material Fees (₹)</label>
-                  <input type="number" id="fix-dress" placeholder="Dress & Material Fees" oninput="calculateTotalFixedAndDue()" />
-                </div>
-                <div class="form-group">
-                  <label>5. Other Fees (₹)</label>
-                  <input type="number" id="fix-other" placeholder="Other Miscellaneous Fees" oninput="calculateTotalFixedAndDue()" />
-                </div>
-                <div class="form-group">
-                  <label style="color:var(--primary-red);">Total Fixed Fees (মোট ধার্য ফি) (₹)</label>
-                  <input type="number" id="total-fixed-fees-display" readonly style="background:#F1F5F9; font-weight:bold; color:var(--navy-blue);" />
-                </div>
-              </div>
-            </div>
-
-            <!-- PART 2: PAYMENT & DYNAMIC DUE BALANCE -->
-            <div class="step-box success">
-              <div class="step-title">
-                <span>Part 2: Payments & Dynamic Due Balance (পেমেন্ট ও পরিবর্তনশীল বকেয়া হিসাব)</span>
-              </div>
-              
-              <p style="font-size:0.85rem; font-weight:700; color:var(--navy-blue); margin-bottom:8px;">
-                Initial Payment at the Time of Admission:
-              </p>
-              <div class="form-grid" style="align-items: flex-end;">
-                <div class="form-group">
-                  <label>Purpose / Payment Head</label>
-                  <select id="paid-head-choice" onchange="onPaymentHeadChange()">
-                    <option value="Admission Fees">Admission Fees</option>
-                    <option value="Monthly Study Fees">Monthly Study Fees</option>
-                    <option value="Hostel Fees">Hostel Fees</option>
-                    <option value="Dress & Material Fees">Dress & Material Fees</option>
-                    <option value="Other Fees">Other Fees</option>
-                  </select>
-                </div>
-
-                <div class="form-group" id="month-target-picker-group" style="display:none;">
-                  <label>Target Month (কোন মাসের ফি)</label>
-                  <select id="paid-target-month" onchange="calculateDynamicDue()"></select>
-                </div>
-
-                <div class="form-group">
-                  <label>Amount Paid Now (₹)</label>
-                  <input type="number" id="paid-now-amount" placeholder="Amount Paid" oninput="calculateDynamicDue()" required />
-                </div>
-                
-                <div class="form-group">
-                  <label id="due-balance-label" style="color:var(--primary-red);">Remaining Due (সিলেক্টেড হেডের ডিউ) (₹)</label>
-                  <input type="number" id="calc-remaining-due" readonly style="background:#FEF2F2; font-weight:bold; color:var(--primary-red);" />
-                </div>
-              </div>
-
-              <!-- Future Running Payments -->
-              <div class="section-subtitle" style="margin-top: 16px; margin-bottom: 10px;">
-                Future Payments / Installments Ledger (ভবিষ্যতে টাকা দিলে এখানে যোগ করুন)
-              </div>
-              
-              <div id="dynamic-payments-container"></div>
-
-              <button type="button" class="btn-add-entry" onclick="addPaymentRow()">
-                ➕ Add Another Payment / Future Installment
-              </button>
-            </div>
-
-            <div class="form-group">
-              <label>Generated Cadet Password</label>
-              <input type="text" id="std-generated-pw" readonly style="background:#eee; font-weight:bold;" />
-            </div>
-            <div class="form-group full-width">
-              <label>Administrative Notes</label>
-              <textarea id="std-notes" rows="2"></textarea>
-            </div>
-          </div>
-          <button type="submit" class="btn-primary">Complete Admission & Save Record</button>
-        </form>
-      </div>
-
-      <!-- Compact Cadet Directory Table -->
+    <!-- 2. WEEKLY SCHEDULE BOARD -->
+    <div id="tab-schedule-content" style="display: none;">
       <div class="card">
         <div class="card-header">
-          <span>Registered Cadets Directory (Session Apr 2026 – Mar 2027)</span>
+          <span>Weekly Academy Routine & Mock Test Schedule</span>
+          <div>
+            <button type="button" class="btn-copy" onclick="openCopyScheduleModal()" title="Copy this routine to other days of the week">📋 Copy Routine to Other Days</button>
+            <button type="button" class="btn-print" onclick="printRoutineSheet()">🖨️ Print / Save (PDF)</button>
+          </div>
         </div>
+
+        <!-- Schedule Controls -->
+        <div class="schedule-control-bar">
+          <div class="form-group">
+            <label>From (Date)</label>
+            <input type="date" id="sch-from-date" onchange="generateWeekRangeDates()" />
+          </div>
+          <div class="form-group">
+            <label>To (Date)</label>
+            <input type="date" id="sch-to-date" onchange="generateWeekRangeDates()" />
+          </div>
+          <div class="form-group">
+            <label>Group / Batch</label>
+            <select id="sch-batch-select" onchange="loadRoutineForCurrentSelection()">
+              <option value="ALL">ALL (Common Drill / Tests)</option>
+              <option value="H1">H1</option><option value="H2">H2</option>
+              <option value="H3">H3</option><option value="H4">H4</option>
+              <option value="G1">G1</option><option value="G2">G2</option>
+              <option value="G3">G3</option><option value="G4">G4</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Scheduled Date (Week Range)</label>
+            <select id="sch-day-select" onchange="loadRoutineForCurrentSelection()"></select>
+          </div>
+          <div>
+            <button type="button" class="btn-primary" onclick="saveRoutineForCurrentSelection()">💾 Save Routine</button>
+          </div>
+        </div>
+
+        <!-- Classes Section (With Direct Attendance Link - Point 5) -->
+        <div class="schedule-grid-box">
+          <div class="schedule-box-header">
+            <span>📚 Daily Academic Classes (Min. 3-4 Sessions)</span>
+            <button type="button" class="btn-print" style="background:var(--navy-light);" onclick="addClassRow()">+ Add Class Row</button>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 14%;">Time</th>
+                  <th style="width: 16%;">Class / Teacher</th>
+                  <th style="width: 14%;">Subject</th>
+                  <th style="width: 24%;">Topic</th>
+                  <th style="width: 18%;">Note</th>
+                  <th style="width: 10%;">Attendance</th>
+                  <th style="width: 4%;">Del</th>
+                </tr>
+              </thead>
+              <tbody id="class-rows-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tests Section (With Direct Attendance Link - Point 5) -->
+        <div class="schedule-grid-box test-box">
+          <div class="schedule-box-header" style="color:var(--primary-red);">
+            <span>🎯 Tests of the Day & Mock Assessments (Min. 3-4 Sessions)</span>
+            <button type="button" class="btn-print" style="background:var(--primary-red);" onclick="addTestRow()">+ Add Test Row</button>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 25%;">Test Name</th>
+                  <th style="width: 15%;">Timing</th>
+                  <th style="width: 15%;">Total Marks</th>
+                  <th style="width: 31%;">Syllabus</th>
+                  <th style="width: 10%;">Attendance</th>
+                  <th style="width: 4%;">Del</th>
+                </tr>
+              </thead>
+              <tbody id="test-rows-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 3. CADETS & ADMISSIONS PORTAL -->
+    <div id="tab-cadets-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">Registered Cadets Directory</div>
         <div class="table-container">
           <table>
             <thead>
@@ -848,186 +523,98 @@
                 <th>Cadet Name & Batch</th>
                 <th>Phone</th>
                 <th>Admission Date</th>
-                <th>Admission Due</th>
+                <th>Due Balance</th>
                 <th>Total Paid</th>
-                <th>Monthly Schedule (Apr 26 - Mar 27)</th>
-                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="student-roster-body"></tbody>
           </table>
         </div>
       </div>
-
     </div>
 
-    <!-- 3. DATE-WISE INCOME & EXPENDITURE PORTAL (TAB 2) -->
+    <!-- 4. INCOME & EXPENDITURE PORTAL -->
     <div id="tab-finance-content" style="display: none;">
-      
-      <div class="metric-grid">
-        <div class="metric-box inflow">
-          <div class="metric-label">Total Realized Income</div>
-          <div class="metric-value" id="stat-total-inflow">₹0</div>
-        </div>
-        <div class="metric-box outflow">
-          <div class="metric-label">Total Expenditure</div>
-          <div class="metric-value" id="stat-total-outflow">₹0</div>
-        </div>
-        <div class="metric-box">
-          <div class="metric-label">Net Balance in Hand</div>
-          <div class="metric-value" id="stat-net-balance">₹0</div>
+      <div class="card">
+        <div class="card-header" style="color:var(--success-green);">Income & Ledger</div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th><th>Purpose</th><th>Person</th><th>Amount (₹)</th>
+              </tr>
+            </thead>
+            <tbody id="income-table-body"></tbody>
+          </table>
         </div>
       </div>
-
-      <div class="finance-split-grid">
-        
-        <!-- COLUMN 1: INCOME ENTRY -->
-        <div class="finance-column-box income-box">
-          <div class="finance-box-title income-title">
-            <span>+ Record Date-Wise Income</span>
-          </div>
-          <form id="income-entry-form">
-            <div class="form-group" style="margin-bottom: 12px;">
-              <label>Date</label>
-              <input type="date" id="inc-date" required />
-            </div>
-            <div class="form-group" style="margin-bottom: 12px;">
-              <label>Purpose</label>
-              <select id="inc-purpose" required>
-                <option value="Admission Fee">Admission Fee</option>
-                <option value="Monthly Study Fees">Monthly Study Fees</option>
-                <option value="Hostel Fees">Hostel Fees</option>
-                <option value="Dress & Material Fees">Dress & Material Fees</option>
-                <option value="Other Fees">Other Fees</option>
-                <option value="Donation">Donation</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin-bottom: 12px;">
-              <label>Person (Received From)</label>
-              <input type="text" id="inc-person" placeholder="Cadet / Guardian / Donor Name" required />
-            </div>
-            <div class="form-group" style="margin-bottom: 18px;">
-              <label>Amount (₹)</label>
-              <input type="number" id="inc-amount" min="1" placeholder="Enter Amount" required />
-            </div>
-            <button type="submit" class="btn-primary" style="background:var(--success-green); width: 100%;">+ Save Income & Issue Receipt</button>
-          </form>
-        </div>
-
-        <!-- COLUMN 2: EXPENDITURE ENTRY -->
-        <div class="finance-column-box expense-box">
-          <div class="finance-box-title expense-title">
-            <span>- Record Date-Wise Expenditure</span>
-          </div>
-          <form id="expense-entry-form">
-            <div class="form-group" style="margin-bottom: 12px;">
-              <label>Date</label>
-              <input type="date" id="exp-date" required />
-            </div>
-            <div class="form-group" style="margin-bottom: 12px;">
-              <label>Purpose</label>
-              <select id="exp-purpose" required>
-                <option value="Vegetable">Vegetable</option>
-                <option value="Meat/Egg">Meat/Egg</option>
-                <option value="Food Miscellaneous">Food Miscellaneous</option>
-                <option value="Other Miscellaneous">Other Miscellaneous</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin-bottom: 12px;">
-              <label>Person (Paid To / Handler)</label>
-              <input type="text" id="exp-person" placeholder="Vendor / Staff / Receiver Name" required />
-            </div>
-            <div class="form-group" style="margin-bottom: 18px;">
-              <label>Amount (₹)</label>
-              <input type="number" id="exp-amount" min="1" placeholder="Enter Amount" required />
-            </div>
-            <button type="submit" class="btn-primary" style="background:var(--primary-red); width: 100%;">- Save Expenditure Entry</button>
-          </form>
-        </div>
-
-      </div>
-
-      <div class="finance-split-grid">
-        <div class="card" style="margin-bottom: 0;">
-          <div class="card-header" style="color:var(--success-green);">
-            <span>Income Ledger</span>
-          </div>
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Purpose</th>
-                  <th>Person</th>
-                  <th>Amount (₹)</th>
-                  <th>Receipt</th>
-                </tr>
-              </thead>
-              <tbody id="income-table-body"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="card" style="margin-bottom: 0;">
-          <div class="card-header" style="color:var(--primary-red);">
-            <span>Expenditure Ledger</span>
-          </div>
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Purpose</th>
-                  <th>Person</th>
-                  <th>Amount (₹)</th>
-                </tr>
-              </thead>
-              <tbody id="expense-table-body"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
     </div>
 
-    <!-- 4. STUDENTS' ZONE VIEW -->
+    <!-- 5. STUDENTS' ZONE VIEW -->
     <div id="student-zone-view" style="display: none;">
       <div class="card">
-        <div class="card-header">
-          <span>STUDENT'S ZONE - CADET STATUS SHEET</span>
-          <button type="button" class="btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
-        </div>
-        <div id="student-summary-content"></div>
+        <div class="card-header">CADET'S PERSONAL DESK & SCHEDULE</div>
+        <div id="student-desk-content"></div>
       </div>
     </div>
 
   </div>
 
-  <!-- MONTHLY FEES MODAL -->
-  <div id="monthly-fee-modal" class="modal-overlay">
+  <!-- POINT 4: COPY ROUTINE MODAL -->
+  <div id="copy-routine-modal" class="modal-overlay">
     <div class="modal-card">
-      <div class="modal-title">
-        <span id="modal-cadet-title">Monthly Clearances (Apr 2026 – Mar 2027)</span>
-        <button type="button" onclick="closeMonthModal()" style="border:none; background:none; font-size:1.4rem; cursor:pointer; font-weight:bold;">&times;</button>
+      <div class="card-header" style="border:none; margin:0; padding:0 0 12px 0;">
+        <span>Copy Current Day's Routine to Other Days</span>
+        <button type="button" onclick="closeCopyScheduleModal()" style="border:none; background:none; font-size:1.4rem; cursor:pointer;">&times;</button>
       </div>
-      <p style="font-size:0.8rem; color:#6B7280; margin-bottom:12px;">
-        Months prior to admission date are inactive. Click an active month to toggle <strong style="color:var(--primary-red);">RED (PAID)</strong>.
+      <p style="font-size:0.85rem; color:#4B5563; margin-bottom:14px;">
+        Select the target dates of this week where you want to copy today's classes and test schedule:
       </p>
-      <div class="months-container" id="modal-months-container"></div>
-      <div style="text-align: right; margin-top: 16px;">
-        <button type="button" class="btn-print" onclick="closeMonthModal()">Close / Done</button>
+      <div id="copy-target-dates-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:18px;"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <button type="button" class="btn-print" style="background:#6B7280;" onclick="toggleSelectAllCopyDates()">Select All Days</button>
+        <button type="button" class="btn-primary" onclick="executeCopySchedule()">Apply & Replicate Routine</button>
       </div>
     </div>
   </div>
 
-  <!-- PRINT ENGINE (INVOICE / RECEIPT / BIO-DATA) -->
+  <!-- POINT 5: IN-LINE ATTENDANCE REGISTER MODAL -->
+  <div id="session-attendance-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="card-header" style="border:none; margin:0; padding:0 0 10px 0;">
+        <span id="att-modal-title">Session Attendance Register</span>
+        <button type="button" onclick="closeAttendanceModal()" style="border:none; background:none; font-size:1.4rem; cursor:pointer;">&times;</button>
+      </div>
+      <p id="att-modal-sub" style="font-size:0.8rem; color:#6B7280; margin-bottom:12px;"></p>
+      
+      <div class="table-container" style="max-height: 50vh;">
+        <table>
+          <thead>
+            <tr>
+              <th>Cadet Full Name</th>
+              <th>Batch</th>
+              <th>Status (Tap to Change)</th>
+            </tr>
+          </thead>
+          <tbody id="att-cadet-list-body"></tbody>
+        </table>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; margin-top:16px;">
+        <span id="att-summary-count" style="font-weight:700; font-size:0.85rem;"></span>
+        <button type="button" class="btn-primary" onclick="saveSessionAttendance()">Save Register</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Print Engine -->
   <div id="print-section">
     <div class="print-box">
       <div class="print-header">
-        <img src="logo.png" alt="FAUJ-E-FACTORY Crest" onerror="this.style.display='none'" />
-        <div class="print-title-wrap">
-          <h2>FAUJ-E-FACTORY</h2>
-          <p id="print-document-title">Official Verification Record</p>
+        <img src="logo.png" alt="FAUJ-E-FACTORY" onerror="this.style.display='none'" />
+        <div style="text-align:right;">
+          <h2 style="color:#0A192F;">FAUJ-E-FACTORY</h2>
+          <p id="print-doc-subtitle" style="font-weight:700; color:#E52521;">Daily Order & Routine Sheet</p>
         </div>
       </div>
       <div id="printable-details"></div>
@@ -1035,94 +622,27 @@
   </div>
 
   <script>
-    const SUPABASE_REST_URL = "https://dyldejdkgfnyvunkrddh.supabase.co/rest/v1";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5bGRlamRrZ2ZueXZ1bmtyZGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2MDE4OTYsImV4cCI6MjEwNjE3Nzg5Nn0._JUB9WjiB3aJAdEZZyADueL9i6iyf7us6dD8L3S1o0E";
-
     function safeGet(key) {
       try {
         const val = localStorage.getItem(key);
         if (!val || val === "undefined" || val === "null") return [];
-        const parsed = JSON.parse(val);
-        return Array.isArray(parsed) ? parsed : [];
+        return JSON.parse(val);
       } catch (e) {
         return [];
       }
     }
 
-    const ACADEMIC_MONTHS = [
-      { key: "2026-04", label: "Apr 2026", order: 4 },
-      { key: "2026-05", label: "May 2026", order: 5 },
-      { key: "2026-06", label: "Jun 2026", order: 6 },
-      { key: "2026-07", label: "Jul 2026", order: 7 },
-      { key: "2026-08", label: "Aug 2026", order: 8 },
-      { key: "2026-09", label: "Sep 2026", order: 9 },
-      { key: "2026-10", label: "Oct 2026", order: 10 },
-      { key: "2026-11", label: "Nov 2026", order: 11 },
-      { key: "2026-12", label: "Dec 2026", order: 12 },
-      { key: "2027-01", label: "Jan 2027", order: 13 },
-      { key: "2027-02", label: "Feb 2027", order: 14 },
-      { key: "2027-03", label: "Mar 2027", order: 15 }
-    ];
-
     let DB = {
       staff: safeGet("ff_staff"),
       students: safeGet("ff_students"),
       incomes: safeGet("ff_incomes"),
-      expenses: safeGet("ff_expenses")
+      expenses: safeGet("ff_expenses"),
+      schedules: safeGet("ff_schedules"),
+      attendance: safeGet("ff_attendance") // logs attendance per session
     };
 
     let currentUser = null;
-    let activeModalStudentIdx = null;
-
-    // DIRECT NATIVE SUPABASE REST SYNC
-    async function cloudFetch(endpoint, method = "GET", body = null) {
-      try {
-        const headers = {
-          "apikey": SUPABASE_KEY,
-          "Authorization": "Bearer " + SUPABASE_KEY,
-          "Content-Type": "application/json"
-        };
-        const opt = { method, headers };
-        if (body) opt.body = JSON.stringify(body);
-        const res = await fetch(`${SUPABASE_REST_URL}/${endpoint}`, opt);
-        if (!res.ok) return null;
-        return await res.json();
-      } catch (e) {
-        return null;
-      }
-    }
-
-    async function syncFromCloud() {
-      const [staffData, studentData, incomeData, expenseData] = await Promise.all([
-        cloudFetch("ff_staff?select=*"),
-        cloudFetch("ff_students?select=*"),
-        cloudFetch("ff_incomes?select=*"),
-        cloudFetch("ff_expenses?select=*")
-      ]);
-
-      if (staffData && Array.isArray(staffData)) {
-        DB.staff = staffData;
-        localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
-      }
-      if (studentData && Array.isArray(studentData)) {
-        DB.students = studentData;
-        localStorage.setItem("ff_students", JSON.stringify(DB.students));
-      }
-      if (incomeData && Array.isArray(incomeData)) {
-        DB.incomes = incomeData;
-        localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
-      }
-      if (expenseData && Array.isArray(expenseData)) {
-        DB.expenses = expenseData;
-        localStorage.setItem("ff_expenses", JSON.stringify(DB.expenses));
-      }
-
-      if (currentUser) {
-        renderStaffDirectory();
-        renderRoster();
-        renderFinanceDashboard();
-      }
-    }
+    let currentAttContext = null;
 
     function togglePasswordVisibility() {
       const passInput = document.getElementById("login-password");
@@ -1137,273 +657,448 @@
       }
     }
 
-    function generateSecurePassword() {
-      return "FF" + Math.floor(100000 + Math.random() * 900000);
+    // Schedule Date Range
+    function initWeekRange() {
+      const today = new Date();
+      const curr = new Date(today);
+      const first = curr.getDate() - curr.getDay() + 1; // Monday
+      const last = first + 6;
+
+      const firstday = new Date(curr.setDate(first));
+      const lastday = new Date(curr.setDate(last));
+
+      document.getElementById("sch-from-date").value = firstday.toISOString().split("T")[0];
+      document.getElementById("sch-to-date").value = lastday.toISOString().split("T")[0];
+      generateWeekRangeDates();
     }
 
-    function toggleChestField(val) {
-      const el = document.getElementById("chest-group");
-      if (el) el.style.display = (val === "Male") ? "flex" : "none";
-    }
+    function generateWeekRangeDates() {
+      const fromStr = document.getElementById("sch-from-date").value;
+      const toStr = document.getElementById("sch-to-date").value;
+      const daySelect = document.getElementById("sch-day-select");
+      daySelect.innerHTML = "";
 
-    function getMonthOrder(dateStr) {
-      if (!dateStr) return 0;
-      const parts = dateStr.split("-");
-      const yr = parseInt(parts[0], 10);
-      const mo = parseInt(parts[1], 10);
-      if (yr === 2026 && mo >= 4) return mo;
-      if (yr === 2027 && mo <= 3) return mo + 12;
-      return 0;
-    }
+      if (!fromStr || !toStr) return;
 
-    function getRemainingMonthsCount(admDateStr) {
-      const admOrder = getMonthOrder(admDateStr);
-      if (admOrder < 4) return 12;
-      if (admOrder > 15) return 1;
-      return (15 - admOrder + 1);
-    }
+      let start = new Date(fromStr);
+      const end = new Date(toStr);
 
-    function calculateTotalFixedAndDue() {
-      const adm = parseFloat(document.getElementById("fix-admission").value) || 0;
-      const tuition = parseFloat(document.getElementById("fix-tuition").value) || 0;
-      const hostel = parseFloat(document.getElementById("fix-hostel").value) || 0;
-      const dress = parseFloat(document.getElementById("fix-dress").value) || 0;
-      const other = parseFloat(document.getElementById("fix-other").value) || 0;
-
-      const admDate = document.getElementById("std-admission-date").value || new Date().toISOString().split("T")[0];
-      const activeMonths = getRemainingMonthsCount(admDate);
-
-      const totalFixed = adm + dress + other + ((tuition + hostel) * activeMonths);
-      document.getElementById("total-fixed-fees-display").value = totalFixed;
-
-      calculateDynamicDue();
-    }
-
-    function onPaymentHeadChange() {
-      const head = document.getElementById("paid-head-choice").value;
-      const monthGroup = document.getElementById("month-target-picker-group");
-
-      if (head === "Monthly Study Fees" || head === "Hostel Fees") {
-        monthGroup.style.display = "flex";
-        populateActiveMonthsDropdown();
-      } else {
-        monthGroup.style.display = "none";
+      while (start <= end) {
+        const opt = document.createElement("option");
+        const dateVal = start.toISOString().split("T")[0];
+        const dayName = start.toLocaleDateString("en-US", { weekday: "short" });
+        opt.value = dateVal;
+        opt.innerText = `${dateVal} (${dayName})`;
+        daySelect.appendChild(opt);
+        start.setDate(start.getDate() + 1);
       }
 
-      calculateDynamicDue();
+      loadRoutineForCurrentSelection();
     }
 
-    function populateActiveMonthsDropdown() {
-      const sel = document.getElementById("paid-target-month");
-      if (!sel) return;
-      sel.innerHTML = "";
-      const admDate = document.getElementById("std-admission-date").value;
-      const admOrder = getMonthOrder(admDate);
+    function loadRoutineForCurrentSelection() {
+      const batch = document.getElementById("sch-batch-select").value;
+      const date = document.getElementById("sch-day-select").value;
+      const key = `${batch}_${date}`;
 
-      ACADEMIC_MONTHS.forEach(m => {
-        if (m.order >= admOrder) {
-          const opt = document.createElement("option");
-          opt.value = m.label;
-          opt.innerText = m.label;
-          sel.appendChild(opt);
-        }
+      const saved = DB.schedules.find(s => s.key === key);
+
+      const classTbody = document.getElementById("class-rows-body");
+      const testTbody = document.getElementById("test-rows-body");
+      classTbody.innerHTML = "";
+      testTbody.innerHTML = "";
+
+      const classes = (saved && saved.classes && saved.classes.length) ? saved.classes : [
+        { time: "09:30 AM - 11:00 AM", teacher: "Maths Faculty", subject: "Arithmetic", topic: "Number Systems & Algebra", note: "Bring Notebook" },
+        { time: "11:30 AM - 01:00 PM", teacher: "English Faculty", subject: "English", topic: "Tenses & Voice Change", note: "Grammar Practice Set" },
+        { time: "02:00 PM - 03:30 PM", teacher: "GS Faculty", subject: "General Science", topic: "Physics Units & Motion", note: "Handouts provided" },
+        { time: "04:00 PM - 05:30 PM", teacher: "Reasoning Faculty", subject: "Reasoning", topic: "Blood Relations & Coding", note: "Daily Drill" }
+      ];
+
+      const tests = (saved && saved.tests && saved.tests.length) ? saved.tests : [
+        { name: "Morning Rapid Test", time: "08:30 AM - 09:00 AM", marks: "25", syllabus: "English & Current Affairs" },
+        { name: "Subject Assessment", time: "01:00 PM - 01:45 PM", marks: "50", syllabus: "Maths Sectional Test" },
+        { name: "Mock Examination", time: "06:00 PM - 07:30 PM", marks: "100", syllabus: "Full Combined Model Paper" }
+      ];
+
+      classes.forEach((c, idx) => renderClassRow(c, idx));
+      tests.forEach((t, idx) => renderTestRow(t, idx));
+    }
+
+    function addClassRow(data = {}) {
+      const idx = document.querySelectorAll("#class-rows-body tr").length;
+      renderClassRow({
+        time: data.time || "",
+        teacher: data.teacher || "",
+        subject: data.subject || "",
+        topic: data.topic || "",
+        note: data.note || ""
+      }, idx);
+    }
+
+    // Class row with Point 5 Attendance Link
+    function renderClassRow(c, idx) {
+      const tbody = document.getElementById("class-rows-body");
+      const tr = document.createElement("tr");
+      tr.className = "class-row-item";
+      tr.innerHTML = `
+        <td class="editable-cell"><input type="text" class="c-time" value="${c.time}" placeholder="e.g. 10:00 - 11:30 AM" /></td>
+        <td class="editable-cell"><input type="text" class="c-teacher" value="${c.teacher}" placeholder="Teacher Name" /></td>
+        <td class="editable-cell"><input type="text" class="c-subject" value="${c.subject}" placeholder="Subject" /></td>
+        <td class="editable-cell"><input type="text" class="c-topic" value="${c.topic}" placeholder="Topic / Lesson" /></td>
+        <td class="editable-cell"><input type="text" class="c-note" value="${c.note}" placeholder="Notes" /></td>
+        <td style="text-align:center;">
+          <button type="button" class="btn-attendance" onclick="openAttendanceModal('Class', '${c.subject || 'Session'}', '${c.time}')">📋 Roll Call</button>
+        </td>
+        <td style="text-align:center;"><button type="button" style="color:red; cursor:pointer;" onclick="this.closest('tr').remove()">✕</button></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function addTestRow(data = {}) {
+      const idx = document.querySelectorAll("#test-rows-body tr").length;
+      renderTestRow({
+        name: data.name || "",
+        time: data.time || "",
+        marks: data.marks || "",
+        syllabus: data.syllabus || ""
+      }, idx);
+    }
+
+    // Test row with Point 5 Attendance Link
+    function renderTestRow(t, idx) {
+      const tbody = document.getElementById("test-rows-body");
+      const tr = document.createElement("tr");
+      tr.className = "test-row-item";
+      tr.innerHTML = `
+        <td class="editable-cell"><input type="text" class="t-name" value="${t.name}" placeholder="Test Name" /></td>
+        <td class="editable-cell"><input type="text" class="t-time" value="${t.time}" placeholder="Timing" /></td>
+        <td class="editable-cell"><input type="text" class="t-marks" value="${t.marks}" placeholder="Total Marks" /></td>
+        <td class="editable-cell"><input type="text" class="t-syllabus" value="${t.syllabus}" placeholder="Syllabus" /></td>
+        <td style="text-align:center;">
+          <button type="button" class="btn-attendance" style="background:#E52521;" onclick="openAttendanceModal('Test', '${t.name || 'Exam'}', '${t.time}')">🎯 Exam Roll</button>
+        </td>
+        <td style="text-align:center;"><button type="button" style="color:red; cursor:pointer;" onclick="this.closest('tr').remove()">✕</button></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function saveRoutineForCurrentSelection() {
+      const batch = document.getElementById("sch-batch-select").value;
+      const date = document.getElementById("sch-day-select").value;
+      const key = `${batch}_${date}`;
+
+      const classRows = document.querySelectorAll(".class-row-item");
+      const classes = [];
+      classRows.forEach(r => {
+        classes.push({
+          time: r.querySelector(".c-time").value,
+          teacher: r.querySelector(".c-teacher").value,
+          subject: r.querySelector(".c-subject").value,
+          topic: r.querySelector(".c-topic").value,
+          note: r.querySelector(".c-note").value
+        });
       });
+
+      const testRows = document.querySelectorAll(".test-row-item");
+      const tests = [];
+      testRows.forEach(r => {
+        tests.push({
+          name: r.querySelector(".t-name").value,
+          time: r.querySelector(".t-time").value,
+          marks: r.querySelector(".t-marks").value,
+          syllabus: r.querySelector(".t-syllabus").value
+        });
+      });
+
+      const idx = DB.schedules.findIndex(s => s.key === key);
+      const payload = { key, batch, date, classes, tests, updatedAt: new Date().toISOString() };
+
+      if (idx > -1) DB.schedules[idx] = payload;
+      else DB.schedules.push(payload);
+
+      localStorage.setItem("ff_schedules", JSON.stringify(DB.schedules));
+      alert(`Routine saved for [${batch}] on ${date}!`);
     }
 
-    function onAdmissionDateChange() {
-      populateActiveMonthsDropdown();
-      calculateTotalFixedAndDue();
-    }
+    // POINT 4: COPY ROUTINE ENGINE
+    function openCopyScheduleModal() {
+      const currentDate = document.getElementById("sch-day-select").value;
+      const daySelect = document.getElementById("sch-day-select");
+      const listContainer = document.getElementById("copy-target-dates-list");
+      listContainer.innerHTML = "";
 
-    function calculateDynamicDue() {
-      const head = document.getElementById("paid-head-choice").value;
-      const paidNow = parseFloat(document.getElementById("paid-now-amount").value) || 0;
-      const dueInput = document.getElementById("calc-remaining-due");
-      const dueLabel = document.getElementById("due-balance-label");
-
-      const admDate = document.getElementById("std-admission-date").value || new Date().toISOString().split("T")[0];
-      const activeMonths = getRemainingMonthsCount(admDate);
-
-      let targetFixed = 0;
-
-      if (head === "Admission Fees") {
-        targetFixed = parseFloat(document.getElementById("fix-admission").value) || 0;
-        dueLabel.innerText = "Admission Fee Remaining Due (₹):";
-      } else if (head === "Monthly Study Fees") {
-        const monthlyTuition = parseFloat(document.getElementById("fix-tuition").value) || 0;
-        targetFixed = monthlyTuition * activeMonths;
-        dueLabel.innerText = `Study Fees Due (${activeMonths} active months total) (₹):`;
-      } else if (head === "Hostel Fees") {
-        const monthlyHostel = parseFloat(document.getElementById("fix-hostel").value) || 0;
-        targetFixed = monthlyHostel * activeMonths;
-        dueLabel.innerText = `Hostel Fees Due (${activeMonths} active months total) (₹):`;
-      } else if (head === "Dress & Material Fees") {
-        targetFixed = parseFloat(document.getElementById("fix-dress").value) || 0;
-        dueLabel.innerText = "Dress/Material Fee Remaining Due (₹):";
-      } else if (head === "Other Fees") {
-        targetFixed = parseFloat(document.getElementById("fix-other").value) || 0;
-        dueLabel.innerText = "Other Fee Remaining Due (₹):";
+      let count = 0;
+      for (let i = 0; i < daySelect.options.length; i++) {
+        const d = daySelect.options[i].value;
+        const text = daySelect.options[i].innerText;
+        if (d !== currentDate) {
+          count++;
+          const label = document.createElement("label");
+          label.style = "display:flex; align-items:center; gap:8px; font-size:0.85rem; cursor:pointer;";
+          label.innerHTML = `<input type="checkbox" class="copy-target-date" value="${d}" checked /> <span>${text}</span>`;
+          listContainer.appendChild(label);
+        }
       }
 
-      dueInput.value = Math.max(0, targetFixed - paidNow);
+      if (count === 0) {
+        alert("No other dates in the week range to copy to.");
+        return;
+      }
+
+      document.getElementById("copy-routine-modal").style.display = "flex";
     }
 
-    function addPaymentRow() {
-      const container = document.getElementById("dynamic-payments-container");
-      const rowId = "pay_row_" + Date.now();
+    function closeCopyScheduleModal() {
+      document.getElementById("copy-routine-modal").style.display = "none";
+    }
 
-      const admDate = document.getElementById("std-admission-date").value || new Date().toISOString().split("T")[0];
-      const admOrder = getMonthOrder(admDate);
+    function toggleSelectAllCopyDates() {
+      const checkboxes = document.querySelectorAll(".copy-target-date");
+      const allChecked = Array.from(checkboxes).every(c => c.checked);
+      checkboxes.forEach(c => c.checked = !allChecked);
+    }
 
-      const monthOptionsHtml = ACADEMIC_MONTHS
-        .filter(m => m.order >= admOrder)
-        .map(m => `<option value="${m.label}">${m.label}</option>`)
-        .join("");
+    function executeCopySchedule() {
+      const batch = document.getElementById("sch-batch-select").value;
+      const sourceDate = document.getElementById("sch-day-select").value;
+      const sourceKey = `${batch}_${sourceDate}`;
+      const sourceData = DB.schedules.find(s => s.key === sourceKey);
 
-      const row = document.createElement("div");
-      row.className = "dynamic-pay-row";
-      row.id = rowId;
+      // Read current rows if not explicitly saved
+      const classRows = document.querySelectorAll(".class-row-item");
+      const currentClasses = [];
+      classRows.forEach(r => {
+        currentClasses.push({
+          time: r.querySelector(".c-time").value,
+          teacher: r.querySelector(".c-teacher").value,
+          subject: r.querySelector(".c-subject").value,
+          topic: r.querySelector(".c-topic").value,
+          note: r.querySelector(".c-note").value
+        });
+      });
 
-      row.innerHTML = `
-        <div class="form-group" style="margin:0;">
-          <label style="font-size:0.75rem;">Payment Head</label>
-          <select class="dyn-head" onchange="onDynHeadChange('${rowId}')">
-            <option value="Admission Fees Due">Admission Fees Due</option>
-            <option value="Monthly Study Fees">Monthly Study Fees</option>
-            <option value="Hostel Fees">Hostel Fees</option>
-            <option value="Dress & Material Fees">Dress & Material Fees</option>
-            <option value="Other Fees">Other Fees</option>
-          </select>
+      const testRows = document.querySelectorAll(".test-row-item");
+      const currentTests = [];
+      testRows.forEach(r => {
+        currentTests.push({
+          name: r.querySelector(".t-name").value,
+          time: r.querySelector(".t-time").value,
+          marks: r.querySelector(".t-marks").value,
+          syllabus: r.querySelector(".t-syllabus").value
+        });
+      });
+
+      const checkedDates = Array.from(document.querySelectorAll(".copy-target-date:checked")).map(c => c.value);
+      if (checkedDates.length === 0) {
+        alert("Please select at least one date.");
+        return;
+      }
+
+      checkedDates.forEach(targetDate => {
+        const targetKey = `${batch}_${targetDate}`;
+        const payload = {
+          key: targetKey,
+          batch,
+          date: targetDate,
+          classes: JSON.parse(JSON.stringify(currentClasses)),
+          tests: JSON.parse(JSON.stringify(currentTests)),
+          updatedAt: new Date().toISOString()
+        };
+
+        const idx = DB.schedules.findIndex(s => s.key === targetKey);
+        if (idx > -1) DB.schedules[idx] = payload;
+        else DB.schedules.push(payload);
+      });
+
+      localStorage.setItem("ff_schedules", JSON.stringify(DB.schedules));
+      alert(`Copied routine from ${sourceDate} to ${checkedDates.length} selected days!`);
+      closeCopyScheduleModal();
+    }
+
+    // POINT 5: DIRECT ATTENDANCE REGISTER
+    function openAttendanceModal(type, title, time) {
+      const batch = document.getElementById("sch-batch-select").value;
+      const date = document.getElementById("sch-day-select").value;
+
+      currentAttContext = {
+        type,
+        title,
+        time,
+        batch,
+        date,
+        key: `ATT_${batch}_${date}_${title}_${time}`
+      };
+
+      document.getElementById("att-modal-title").innerText = `${type} Attendance: ${title} (${time})`;
+      document.getElementById("att-modal-sub").innerText = `Batch: ${batch} | Date: ${date}`;
+
+      // Filter enrolled cadets for this batch (or all)
+      const cadets = (batch === "ALL") 
+        ? DB.students 
+        : DB.students.filter(s => s.batch === batch);
+
+      const tbody = document.getElementById("att-cadet-list-body");
+      tbody.innerHTML = "";
+
+      if (cadets.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6B7280;">No registered cadets found in batch [${batch}].</td></tr>`;
+        document.getElementById("att-summary-count").innerText = "";
+        document.getElementById("session-attendance-modal").style.display = "flex";
+        return;
+      }
+
+      const existingRecord = DB.attendance.find(a => a.key === currentAttContext.key);
+      const savedMap = existingRecord ? existingRecord.records : {};
+
+      cadets.forEach(cadet => {
+        const status = savedMap[cadet.id] || "Present";
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${cadet.name}</strong></td>
+          <td>${cadet.batch}</td>
+          <td>
+            <span class="att-badge ${status.toLowerCase()}" data-id="${cadet.id}" onclick="toggleAttBadge(this)">
+              ${status}
+            </span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      updateAttSummary();
+      document.getElementById("session-attendance-modal").style.display = "flex";
+    }
+
+    function toggleAttBadge(badge) {
+      if (badge.innerText === "Present") {
+        badge.innerText = "Absent";
+        badge.className = "att-badge absent";
+      } else {
+        badge.innerText = "Present";
+        badge.className = "att-badge present";
+      }
+      updateAttSummary();
+    }
+
+    function updateAttSummary() {
+      const badges = document.querySelectorAll("#att-cadet-list-body .att-badge");
+      let presentCount = 0;
+      badges.forEach(b => {
+        if (b.innerText === "Present") presentCount++;
+      });
+      document.getElementById("att-summary-count").innerText = `Present: ${presentCount} / ${badges.length}`;
+    }
+
+    function closeAttendanceModal() {
+      document.getElementById("session-attendance-modal").style.display = "none";
+      currentAttContext = null;
+    }
+
+    function saveSessionAttendance() {
+      if (!currentAttContext) return;
+
+      const records = {};
+      const badges = document.querySelectorAll("#att-cadet-list-body .att-badge");
+      badges.forEach(b => {
+        records[b.getAttribute("data-id")] = b.innerText;
+      });
+
+      const payload = {
+        ...currentAttContext,
+        records,
+        recordedAt: new Date().toISOString()
+      };
+
+      const idx = DB.attendance.findIndex(a => a.key === currentAttContext.key);
+      if (idx > -1) DB.attendance[idx] = payload;
+      else DB.attendance.push(payload);
+
+      localStorage.setItem("ff_attendance", JSON.stringify(DB.attendance));
+      alert("Attendance register locked and saved!");
+      closeAttendanceModal();
+    }
+
+    function printRoutineSheet() {
+      const batch = document.getElementById("sch-batch-select").value;
+      const date = document.getElementById("sch-day-select").value;
+      const key = `${batch}_${date}`;
+      const saved = DB.schedules.find(s => s.key === key);
+
+      document.getElementById("print-doc-subtitle").innerText = `DAILY ORDER & ACADEMIC ROUTINE (BATCH: ${batch})`;
+      const p = document.getElementById("printable-details");
+
+      const classes = saved ? saved.classes : [];
+      const tests = saved ? saved.tests : [];
+
+      let classTrs = classes.map(c => `
+        <tr><td><strong>${c.time}</strong></td><td>${c.teacher}</td><td>${c.subject}</td><td>${c.topic}</td><td>${c.note}</td></tr>
+      `).join("");
+
+      let testTrs = tests.map(t => `
+        <tr><td><strong>${t.name}</strong></td><td>${t.time}</td><td>${t.marks}</td><td>${t.syllabus}</td></tr>
+      `).join("");
+
+      p.innerHTML = `
+        <div style="display:flex; justify-content:space-between; margin-bottom:14px;">
+          <div><p><strong>Scheduled Date:</strong> ${date}</p><p><strong>Target Formation:</strong> ${batch}</p></div>
+          <div style="text-align:right;"><p><strong>Campus:</strong> Headquarters Campus</p><p><strong>Status:</strong> Approved Daily Routine</p></div>
         </div>
-        <div class="form-group dyn-month-group" id="${rowId}_month" style="margin:0; display:none;">
-          <label style="font-size:0.75rem;">Month</label>
-          <select class="dyn-month-picker">${monthOptionsHtml}</select>
-        </div>
-        <div class="form-group" style="margin:0;">
-          <label style="font-size:0.75rem;">Date</label>
-          <input type="date" class="dyn-date" value="${new Date().toISOString().split('T')[0]}" />
-        </div>
-        <div class="form-group" style="margin:0;">
-          <label style="font-size:0.75rem;">Amount (₹)</label>
-          <input type="number" class="dyn-amt" placeholder="Amount" />
-        </div>
-        <div>
-          <button type="button" class="btn-del-row" onclick="removePaymentRow('${rowId}')" title="Delete">✕</button>
+        <h4 style="margin:10px 0 6px 0; color:#0A192F;">1. Academic Lectures & Routine Sessions</h4>
+        <table class="print-table">
+          <thead><tr><th>Time</th><th>Teacher</th><th>Subject</th><th>Topic</th><th>Note</th></tr></thead>
+          <tbody>${classTrs || '<tr><td colspan="5">No classes scheduled.</td></tr>'}</tbody>
+        </table>
+        <h4 style="margin:14px 0 6px 0; color:#E52521;">2. Evaluative Tests & Daily Benchmarks</h4>
+        <table class="print-table">
+          <thead><tr><th>Test Name</th><th>Timing</th><th>Marks</th><th>Syllabus</th></tr></thead>
+          <tbody>${testTrs || '<tr><td colspan="4">No tests scheduled.</td></tr>'}</tbody>
+        </table>
+        <div class="signature-row">
+          <div class="signature-line">Officer In-Charge</div>
+          <div class="signature-line">Super Admin / Director</div>
         </div>
       `;
 
-      container.appendChild(row);
-    }
-
-    function onDynHeadChange(rowId) {
-      const row = document.getElementById(rowId);
-      const head = row.querySelector(".dyn-head").value;
-      const monthGrp = document.getElementById(rowId + "_month");
-      if (head === "Monthly Study Fees" || head === "Hostel Fees") {
-        monthGrp.style.display = "flex";
-      } else {
-        monthGrp.style.display = "none";
-      }
-    }
-
-    function removePaymentRow(rowId) {
-      const el = document.getElementById(rowId);
-      if (el) el.remove();
-    }
-
-    function initGenerators() {
-      const sp = document.getElementById("staff-password");
-      if (sp) sp.value = generateSecurePassword();
-      const stp = document.getElementById("std-generated-pw");
-      if (stp) stp.value = generateSecurePassword();
-
-      const today = new Date().toISOString().split("T")[0];
-      if (document.getElementById("std-admission-date")) document.getElementById("std-admission-date").value = today;
-      if (document.getElementById("inc-date")) document.getElementById("inc-date").value = today;
-      if (document.getElementById("exp-date")) document.getElementById("exp-date").value = today;
-
-      populateActiveMonthsDropdown();
+      window.print();
     }
 
     function switchTab(tab) {
-      const cadetView = document.getElementById("tab-cadets-content");
-      const financeView = document.getElementById("tab-finance-content");
-      const btnCadets = document.getElementById("btn-tab-cadets");
-      const btnFinance = document.getElementById("btn-tab-finance");
+      document.getElementById("tab-schedule-content").style.display = (tab === 'schedule') ? 'block' : 'none';
+      document.getElementById("tab-cadets-content").style.display = (tab === 'cadets') ? 'block' : 'none';
+      document.getElementById("tab-finance-content").style.display = (tab === 'finance') ? 'block' : 'none';
 
-      if (tab === "cadets") {
-        if (cadetView) cadetView.style.display = "block";
-        if (financeView) financeView.style.display = "none";
-        if (btnCadets) btnCadets.classList.add("active");
-        if (btnFinance) btnFinance.classList.remove("active");
-      } else {
-        if (cadetView) cadetView.style.display = "none";
-        if (financeView) financeView.style.display = "block";
-        if (btnCadets) btnCadets.classList.remove("active");
-        if (btnFinance) btnFinance.classList.add("active");
-        renderFinanceDashboard();
-      }
+      document.getElementById("btn-tab-schedule").classList.toggle("active", tab === 'schedule');
+      document.getElementById("btn-tab-cadets").classList.toggle("active", tab === 'cadets');
+      document.getElementById("btn-tab-finance").classList.toggle("active", tab === 'finance');
     }
 
-    window.addEventListener("DOMContentLoaded", () => {
-      initGenerators();
-
-      const saved = localStorage.getItem("ff_remembered_admin");
-      if (saved) {
-        try {
-          currentUser = JSON.parse(saved);
-          startSession();
-        } catch (e) {
-          localStorage.removeItem("ff_remembered_admin");
-        }
-      }
-
-      syncFromCloud();
-    });
-
-    // Login Handler
     document.getElementById("login-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const id = document.getElementById("login-identifier").value.trim().toLowerCase();
       const pass = document.getElementById("login-password").value.trim();
-      const remember = document.getElementById("remember-me-checkbox").checked;
 
       const SUPER_ADMINS = [
         { email: "supriyaskkundu@gmail.com", name: "Super Admin (Supriya)" },
         { email: "ersadsir1986@gmail.com", name: "Super Admin (Ersad)" }
       ];
-      const SUPER_ADMIN_PASSWORD = "Fauj-efactory2026";
 
-      const matched = SUPER_ADMINS.find(
-        a => a.email.toLowerCase() === id && pass === SUPER_ADMIN_PASSWORD
-      );
+      const matched = SUPER_ADMINS.find(a => a.email.toLowerCase() === id && pass === "Fauj-efactory2026");
 
       if (matched) {
         currentUser = { role: "SuperAdmin", name: matched.name, email: matched.email };
-        if (remember) {
-          localStorage.setItem("ff_remembered_admin", JSON.stringify(currentUser));
-        } else {
-          localStorage.removeItem("ff_remembered_admin");
-        }
         startSession();
         return;
       }
 
-      const staffMember = DB.staff.find(s => s.phone === id && s.password === pass);
-      if (staffMember) {
-        currentUser = { ...staffMember };
+      const cadet = DB.students.find(s => s.ph1 === id && s.password === pass);
+      if (cadet) {
+        currentUser = { ...cadet, role: "Student" };
         startSession();
         return;
       }
 
-      const student = DB.students.find(s => s.ph1 === id && s.password === pass);
-      if (student) {
-        currentUser = { ...student, role: "Student" };
-        startSession();
-        return;
-      }
-
-      alert("Invalid identifier or password.");
+      alert("Invalid credentials.");
     });
 
     function startSession() {
@@ -1413,586 +1108,31 @@
 
       if (currentUser.role === "SuperAdmin" || currentUser.role === "Official") {
         document.getElementById("admin-nav-tabs").style.display = "flex";
-        switchTab("cadets");
-        const isSuperAdmin = (currentUser.role === "SuperAdmin");
-        document.getElementById("staff-creation-box").style.display = isSuperAdmin ? "block" : "none";
-        document.getElementById("staff-directory-box").style.display = isSuperAdmin ? "block" : "none";
-        if (isSuperAdmin) renderStaffDirectory();
-        renderRoster();
-      } else if (currentUser.role === "Student") {
+        switchTab("schedule");
+        initWeekRange();
+      } else {
         document.getElementById("admin-nav-tabs").style.display = "none";
         document.getElementById("student-zone-view").style.display = "block";
-        renderStudentPortal(currentUser);
+        document.getElementById("student-desk-content").innerHTML = `
+          <p>Welcome, Cadet <strong>${currentUser.name}</strong> (Batch: ${currentUser.batch})</p>
+          <p style="margin-top:8px;">View your daily class and exam routine directly from the central board.</p>
+        `;
       }
     }
 
     function logout() {
-      localStorage.removeItem("ff_remembered_admin");
       currentUser = null;
       document.getElementById("login-view").style.display = "block";
+      document.getElementById("tab-schedule-content").style.display = "none";
       document.getElementById("tab-cadets-content").style.display = "none";
       document.getElementById("tab-finance-content").style.display = "none";
       document.getElementById("student-zone-view").style.display = "none";
       document.getElementById("nav-controls").style.display = "none";
-      document.getElementById("login-identifier").value = "";
-      document.getElementById("login-password").value = "";
     }
 
-    // Staff Submit
-    document.getElementById("staff-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const newStaff = {
-        id: "STAFF-" + Date.now(),
-        name: document.getElementById("staff-name").value,
-        phone: document.getElementById("staff-phone").value,
-        dob: document.getElementById("staff-dob").value,
-        role: document.getElementById("staff-role").value,
-        password: document.getElementById("staff-password").value
-      };
-
-      DB.staff.push(newStaff);
-      localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
-      renderStaffDirectory();
-      alert(`Staff profile created for ${newStaff.name}. Assigned Password: ${newStaff.password}`);
-      document.getElementById("staff-form").reset();
-      initGenerators();
-
-      cloudFetch("ff_staff", "POST", newStaff);
+    window.addEventListener("DOMContentLoaded", () => {
+      initWeekRange();
     });
-
-    function renderStaffDirectory() {
-      const tbody = document.getElementById("staff-roster-body");
-      if (!tbody) return;
-      tbody.innerHTML = "";
-      DB.staff.forEach((st, idx) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><strong>${st.role}</strong></td>
-          <td>${st.name}</td>
-          <td>${st.phone}</td>
-          <td>${st.dob}</td>
-          <td><code>${st.password}</code></td>
-          <td>
-            <button type="button" class="btn-print" onclick="printStaffProfile(${idx})">🖨️ Print / PDF</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function printStaffProfile(index) {
-      const st = DB.staff[index];
-      document.getElementById("print-document-title").innerText = "Official / Faculty Authorization Document";
-      const p = document.getElementById("printable-details");
-      p.innerHTML = `
-        <div style="display: flex; justify-content: space-between; margin-bottom: 24px;">
-          <div>
-            <h3>${st.name}</h3>
-            <p>Designation: <strong>${st.role}</strong></p>
-            <p>Login ID / Phone: ${st.phone}</p>
-            <p>Date of Birth: ${st.dob}</p>
-          </div>
-          <div style="width: 100px; height: 120px; border: 1px dashed #333; display: flex; align-items: center; justify-content: center; font-size: 10px;">
-            STAFF PHOTO
-          </div>
-        </div>
-        <table class="print-table">
-          <tr><th>Authorized Campus</th><td>FAUJ-E-FACTORY Headquarters</td></tr>
-          <tr><th>Account Scope</th><td>${st.role === "Official" ? "Admissions, Records & Finance" : "Physical Instruction & Academics"}</td></tr>
-          <tr><th>Access Credential</th><td><code>${st.password}</code></td></tr>
-        </table>
-        <div class="signature-row">
-          <div class="signature-line">Staff Signature</div>
-          <div class="signature-line">Director / Super Admin</div>
-        </div>
-      `;
-      window.print();
-    }
-
-    // Cadet Registration Submit
-    document.getElementById("student-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const admDate = document.getElementById("std-admission-date").value;
-      const cadetName = document.getElementById("std-name").value;
-      const paidNow = parseFloat(document.getElementById("paid-now-amount").value) || 0;
-      const paidHead = document.getElementById("paid-head-choice").value;
-      const targetMonth = (paidHead === "Monthly Study Fees" || paidHead === "Hostel Fees")
-        ? document.getElementById("paid-target-month").value : "";
-
-      const dynRows = document.querySelectorAll(".dynamic-pay-row");
-      const additionalPayments = [];
-      let totalRunningPaid = paidNow;
-
-      dynRows.forEach(row => {
-        const h = row.querySelector(".dyn-head").value;
-        const d = row.querySelector(".dyn-date").value;
-        const a = parseFloat(row.querySelector(".dyn-amt").value) || 0;
-        const m = (h === "Monthly Study Fees" || h === "Hostel Fees")
-          ? row.querySelector(".dyn-month-picker").value : "";
-
-        if (a > 0) {
-          totalRunningPaid += a;
-          additionalPayments.push({ head: h, date: d, amount: a, month: m });
-          
-          const incRecord = {
-            id: "INC-" + Date.now() + Math.random(),
-            date: d,
-            purpose: h + (m ? ` (${m})` : ""),
-            person: cadetName,
-            amount: a
-          };
-          DB.incomes.push(incRecord);
-          cloudFetch("ff_incomes", "POST", incRecord);
-        }
-      });
-
-      const initialPaidMonths = [];
-      if (targetMonth) initialPaidMonths.push(targetMonth);
-      additionalPayments.forEach(p => {
-        if (p.month && !initialPaidMonths.includes(p.month)) {
-          initialPaidMonths.push(p.month);
-        }
-      });
-
-      const newStudent = {
-        id: "STD-" + Date.now(),
-        date: admDate,
-        name: cadetName,
-        guardian: document.getElementById("std-guardian").value,
-        ph1: document.getElementById("std-ph1").value,
-        ph2: document.getElementById("std-ph2").value,
-        dob: document.getElementById("std-dob").value,
-        aadhar: document.getElementById("std-aadhar").value,
-        batch: document.getElementById("std-batch").value,
-        gender: document.getElementById("std-gender").value,
-        reference: document.getElementById("std-ref").value,
-        qualification: document.getElementById("std-qual").value,
-        marks: parseFloat(document.getElementById("std-marks").value) || 0,
-        height: parseFloat(document.getElementById("std-height").value) || 0,
-        weight: parseFloat(document.getElementById("std-weight").value) || 0,
-        chest: document.getElementById("std-chest").value || "N/A",
-        address: document.getElementById("std-address").value,
-        
-        admission_fee: parseFloat(document.getElementById("fix-admission").value) || 0,
-        tuition_fee: parseFloat(document.getElementById("fix-tuition").value) || 0,
-        hostel_fee: parseFloat(document.getElementById("fix-hostel").value) || 0,
-        dress_fee: parseFloat(document.getElementById("fix-dress").value) || 0,
-        other_fee: parseFloat(document.getElementById("fix-other").value) || 0,
-        total_fixed: parseFloat(document.getElementById("total-fixed-fees-display").value) || 0,
-        
-        paid: totalRunningPaid,
-        remaining: parseFloat(document.getElementById("calc-remaining-due").value) || 0,
-        additional_payments: additionalPayments,
-
-        password: document.getElementById("std-generated-pw").value,
-        notes: document.getElementById("std-notes").value,
-        paid_months: initialPaidMonths
-      };
-
-      DB.students.push(newStudent);
-      localStorage.setItem("ff_students", JSON.stringify(DB.students));
-
-      let lastIncomeItem = null;
-      if (paidNow > 0) {
-        lastIncomeItem = {
-          id: "INC-" + Date.now(),
-          date: admDate,
-          purpose: paidHead + (targetMonth ? ` (${targetMonth})` : ""),
-          person: cadetName,
-          amount: paidNow
-        };
-        DB.incomes.push(lastIncomeItem);
-        cloudFetch("ff_incomes", "POST", lastIncomeItem);
-      }
-      localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
-
-      renderRoster();
-      alert(`Cadet registered! Assigned Password for Student Zone: ${newStudent.password}`);
-      
-      // Auto Invoice Prompt for Admission Payment
-      if (lastIncomeItem && confirm("Would you like to print/generate an official Money Receipt for this payment?")) {
-        printInvoice(lastIncomeItem);
-      }
-
-      document.getElementById("student-form").reset();
-      document.getElementById("dynamic-payments-container").innerHTML = "";
-      initGenerators();
-
-      cloudFetch("ff_students", "POST", newStudent);
-    });
-
-    // Monthly Fee Modal Controller
-    function openMonthModal(studentIdx) {
-      activeModalStudentIdx = studentIdx;
-      const student = DB.students[studentIdx];
-      document.getElementById("modal-cadet-title").innerText = `${student.name} (${student.batch}) - Monthly Clearances`;
-
-      const admOrder = getMonthOrder(student.date);
-      const container = document.getElementById("modal-months-container");
-      container.innerHTML = "";
-
-      const paidArr = Array.isArray(student.paid_months) ? student.paid_months : [];
-
-      ACADEMIC_MONTHS.forEach(m => {
-        const isInactive = (m.order < admOrder);
-        const isPaid = paidArr.includes(m.label);
-
-        let badgeClass = "month-badge";
-        if (isInactive) {
-          badgeClass += " disabled-month";
-        } else if (isPaid) {
-          badgeClass += " paid";
-        }
-
-        const badge = document.createElement("div");
-        badge.className = badgeClass;
-        badge.innerText = m.label;
-
-        if (!isInactive) {
-          badge.onclick = () => toggleMonthPaidFromModal(m.label);
-        }
-
-        container.appendChild(badge);
-      });
-
-      document.getElementById("monthly-fee-modal").style.display = "flex";
-    }
-
-    function closeMonthModal() {
-      document.getElementById("monthly-fee-modal").style.display = "none";
-      activeModalStudentIdx = null;
-    }
-
-    function toggleMonthPaidFromModal(monthLabel) {
-      if (activeModalStudentIdx === null) return;
-      const student = DB.students[activeModalStudentIdx];
-      let monthsList = Array.isArray(student.paid_months) ? [...student.paid_months] : [];
-      const idx = monthsList.indexOf(monthLabel);
-      const monthlySum = (Number(student.tuition_fee) || 0) + (Number(student.hostel_fee) || 0);
-
-      let issuedReceiptItem = null;
-
-      if (idx > -1) {
-        monthsList.splice(idx, 1);
-      } else {
-        monthsList.push(monthLabel);
-        if (monthlySum > 0) {
-          issuedReceiptItem = {
-            id: "INC-" + Date.now(),
-            date: new Date().toISOString().split("T")[0],
-            purpose: `Monthly Study & Hostel Fee (${monthLabel})`,
-            person: student.name,
-            amount: monthlySum
-          };
-          DB.incomes.push(issuedReceiptItem);
-          localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
-          cloudFetch("ff_incomes", "POST", issuedReceiptItem);
-        }
-      }
-
-      student.paid_months = monthsList;
-      localStorage.setItem("ff_students", JSON.stringify(DB.students));
-      renderRoster();
-      openMonthModal(activeModalStudentIdx);
-
-      cloudFetch(`ff_students?id=eq.${student.id}`, "PATCH", { paid_months: monthsList });
-
-      if (issuedReceiptItem && confirm(`Generate official receipt for ${student.name} (${monthLabel})?`)) {
-        printInvoice(issuedReceiptItem);
-      }
-    }
-
-    function renderRoster() {
-      const tbody = document.getElementById("student-roster-body");
-      if (!tbody) return;
-      tbody.innerHTML = "";
-
-      DB.students.forEach((s, idx) => {
-        const paidArr = Array.isArray(s.paid_months) ? s.paid_months : [];
-        const admOrder = getMonthOrder(s.date);
-        const activeMonths = ACADEMIC_MONTHS.filter(m => m.order >= admOrder);
-        const isEligibleForReadmission = (s.remaining === 0) && (activeMonths.length > 0) && (paidArr.length >= activeMonths.length);
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><strong>${s.name}</strong> <span style="font-size:0.75rem; color:#6B7280;">(${s.batch})</span></td>
-          <td>${s.ph1}</td>
-          <td>${s.date || '—'}</td>
-          <td style="font-weight:700; color:${s.remaining > 0 ? 'var(--primary-red)' : 'var(--success-green)'};">
-            ₹${s.remaining}
-          </td>
-          <td>₹${s.paid}</td>
-          <td>
-            <button type="button" class="btn-sub-action" onclick="openMonthModal(${idx})">
-              📅 Status (${paidArr.length} Paid)
-            </button>
-          </td>
-          <td>
-            <button type="button" class="btn-print" onclick="printStudent(${idx})">🖨️ PDF</button>
-            <button type="button" class="btn-readmit" ${isEligibleForReadmission ? '' : 'disabled'} 
-                    title="${isEligibleForReadmission ? 'Ready for Re-Admission' : 'Requires zero due and all active months paid'}" 
-                    onclick="executeReAdmission(${idx})">Re-Admit</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function executeReAdmission(studentIndex) {
-      const student = DB.students[studentIndex];
-      if (!confirm(`Archive cycle for ${student.name} and execute Re-Admission?`)) return;
-
-      student.paid_months = [];
-      student.admission_fee = 0;
-      student.paid = 0;
-      student.remaining = 0;
-      student.notes = (student.notes || "") + ` | Re-Admitted on ${new Date().toLocaleDateString()}`;
-
-      localStorage.setItem("ff_students", JSON.stringify(DB.students));
-      renderRoster();
-      alert(`Re-admission completed for ${student.name}. Previous records archived.`);
-
-      cloudFetch(`ff_students?id=eq.${student.id}`, "PATCH", {
-        paid_months: [],
-        admission_fee: 0,
-        paid: 0,
-        remaining: 0,
-        notes: student.notes
-      });
-    }
-
-    // Income Form Submit & Direct Invoice Option
-    document.getElementById("income-entry-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const newIncome = {
-        id: "INC-" + Date.now(),
-        date: document.getElementById("inc-date").value,
-        purpose: document.getElementById("inc-purpose").value,
-        person: document.getElementById("inc-person").value.trim(),
-        amount: parseFloat(document.getElementById("inc-amount").value) || 0
-      };
-
-      DB.incomes.push(newIncome);
-      localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
-      document.getElementById("income-entry-form").reset();
-      initGenerators();
-      renderFinanceDashboard();
-
-      cloudFetch("ff_incomes", "POST", newIncome);
-
-      if (confirm("Would you like to print/generate the Money Receipt for this entry?")) {
-        printInvoice(newIncome);
-      }
-    });
-
-    // Expense Form Submit
-    document.getElementById("expense-entry-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const newExpense = {
-        id: "EXP-" + Date.now(),
-        date: document.getElementById("exp-date").value,
-        purpose: document.getElementById("exp-purpose").value,
-        person: document.getElementById("exp-person").value.trim(),
-        amount: parseFloat(document.getElementById("exp-amount").value) || 0
-      };
-
-      DB.expenses.push(newExpense);
-      localStorage.setItem("ff_expenses", JSON.stringify(DB.expenses));
-      document.getElementById("expense-entry-form").reset();
-      initGenerators();
-      renderFinanceDashboard();
-
-      cloudFetch("ff_expenses", "POST", newExpense);
-    });
-
-    // Render Ledger with Receipt Button
-    function renderFinanceDashboard() {
-      let totalIncome = 0;
-      let totalExpense = 0;
-
-      const incTbody = document.getElementById("income-table-body");
-      if (incTbody) {
-        incTbody.innerHTML = "";
-        const sortedIncomes = [...DB.incomes].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        sortedIncomes.forEach((inc, idx) => {
-          totalIncome += (Number(inc.amount) || 0);
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${inc.date}</td>
-            <td><strong>${inc.purpose}</strong></td>
-            <td>${inc.person}</td>
-            <td style="color:var(--success-green); font-weight:700;">+₹${Number(inc.amount).toLocaleString("en-IN")}</td>
-            <td>
-              <button type="button" class="btn-receipt" onclick="printInvoiceByIndex(${idx})">🧾 Receipt</button>
-            </td>
-          `;
-          incTbody.appendChild(tr);
-        });
-      }
-
-      const expTbody = document.getElementById("expense-table-body");
-      if (expTbody) {
-        expTbody.innerHTML = "";
-        const sortedExpenses = [...DB.expenses].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        sortedExpenses.forEach(exp => {
-          totalExpense += (Number(exp.amount) || 0);
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${exp.date}</td>
-            <td><strong>${exp.purpose}</strong></td>
-            <td>${exp.person}</td>
-            <td style="color:var(--primary-red); font-weight:700;">-₹${Number(exp.amount).toLocaleString("en-IN")}</td>
-          `;
-          expTbody.appendChild(tr);
-        });
-      }
-
-      const inEl = document.getElementById("stat-total-inflow");
-      if (inEl) inEl.innerText = "₹" + totalIncome.toLocaleString("en-IN");
-      const outEl = document.getElementById("stat-total-outflow");
-      if (outEl) outEl.innerText = "₹" + totalExpense.toLocaleString("en-IN");
-
-      const net = totalIncome - totalExpense;
-      const netElem = document.getElementById("stat-net-balance");
-      if (netElem) {
-        netElem.innerText = "₹" + net.toLocaleString("en-IN");
-        netElem.style.color = (net >= 0) ? "var(--navy-blue)" : "var(--primary-red)";
-      }
-    }
-
-    // -------------------------------------------------------------
-    // MONEY RECEIPT / INVOICE PRINT ENGINE
-    // -------------------------------------------------------------
-    function printInvoiceByIndex(sortedIndex) {
-      const sortedIncomes = [...DB.incomes].sort((a, b) => new Date(b.date) - new Date(a.date));
-      const entry = sortedIncomes[sortedIndex];
-      if (entry) printInvoice(entry);
-    }
-
-    function printInvoice(item) {
-      document.getElementById("print-document-title").innerText = "OFFICIAL MONEY RECEIPT / INVOICE";
-      const p = document.getElementById("printable-details");
-      
-      const receiptNo = item.id ? item.id.replace("INC-", "REC/") : "REC/" + Math.floor(1000 + Math.random() * 9000);
-
-      p.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
-          <div>
-            <p style="font-size: 0.9rem; margin-bottom: 4px;"><strong>Receipt No:</strong> <span style="font-family: monospace; color: #E52521;">${receiptNo}</span></p>
-            <p style="font-size: 0.9rem; margin-bottom: 4px;"><strong>Date of Payment:</strong> ${item.date}</p>
-            <p style="font-size: 0.9rem;"><strong>Payment Mode:</strong> Cash / Online Clearing</p>
-          </div>
-          <div style="text-align: right;">
-            <p style="font-size: 0.85rem; color: #6B7280;">FAUJ-E-FACTORY HEADQUARTERS</p>
-            <p style="font-size: 0.85rem; color: #6B7280;">Official Finance & Accounts Division</p>
-            <span style="display: inline-block; background: #DEF7EC; color: #03543F; font-weight: 800; font-size: 0.85rem; padding: 4px 10px; border-radius: 4px; margin-top: 4px;">PAYMENT RECEIVED</span>
-          </div>
-        </div>
-
-        <table class="print-table">
-          <tr>
-            <th style="width: 30%;">Received With Thanks From</th>
-            <td style="font-size: 1.05rem; font-weight: bold; color: #0A192F;">${item.person}</td>
-          </tr>
-          <tr>
-            <th>Particulars / Payment Purpose</th>
-            <td style="font-weight: 600;">${item.purpose}</td>
-          </tr>
-          <tr>
-            <th>Total Amount Paid</th>
-            <td style="font-size: 1.25rem; font-weight: 800; color: #E52521;">₹${Number(item.amount).toLocaleString('en-IN')} /-</td>
-          </tr>
-        </table>
-
-        <div style="margin-top: 20px; padding: 12px; background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 4px; font-size: 0.8rem; color: #4B5563;">
-          <p>• This is a computer-generated, authorized financial acknowledgment voucher issued by <strong>FAUJ-E-FACTORY</strong>.</p>
-          <p>• Fees once cleared are subject to institutional academy training regulations.</p>
-        </div>
-
-        <div class="signature-row" style="margin-top: 60px;">
-          <div class="signature-line">Cadet / Depositor Signature</div>
-          <div class="signature-line">Authorized Signatory / Accountant</div>
-        </div>
-      `;
-
-      window.print();
-    }
-
-    function renderStudentPortal(student) {
-      const target = document.getElementById("student-summary-content");
-      if (!target) return;
-      const paidArr = Array.isArray(student.paid_months) ? student.paid_months : [];
-      const admOrder = getMonthOrder(student.date);
-
-      const monthHtml = ACADEMIC_MONTHS.map(m => {
-        const isInactive = (m.order < admOrder);
-        const isPaid = paidArr.includes(m.label);
-        let badgeClass = "month-badge";
-        if (isInactive) badgeClass += " disabled-month";
-        else if (isPaid) badgeClass += " paid";
-        return `<div class="${badgeClass}" style="cursor: default;">${m.label}</div>`;
-      }).join("");
-
-      target.innerHTML = `
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-          <div><p><strong>Cadet:</strong> ${student.name}</p></div>
-          <div><p><strong>Batch:</strong> ${student.batch}</p></div>
-          <div><p><strong>Guardian:</strong> ${student.guardian}</p></div>
-          <div><p><strong>Primary Phone:</strong> ${student.ph1}</p></div>
-          <div><p><strong>Admission Balance Due:</strong> ₹${student.remaining}</p></div>
-          <div><p><strong>Monthly Tuition:</strong> ₹${student.tuition_fee} | <strong>Hostel:</strong> ₹${student.hostel_fee}</p></div>
-        </div>
-        <h4 style="color:var(--navy-blue); margin-bottom: 8px;">Academic Year Clearances (Red = Cleared)</h4>
-        <div class="months-container">${monthHtml}</div>
-      `;
-      preparePrintRecord(student);
-    }
-
-    function printStudent(index) {
-      const student = DB.students[index];
-      preparePrintRecord(student);
-      window.print();
-    }
-
-    function preparePrintRecord(s) {
-      document.getElementById("print-document-title").innerText = "Cadet Official Verification & Financial Record";
-      const p = document.getElementById("printable-details");
-      const paidArr = Array.isArray(s.paid_months) ? s.paid_months : [];
-      const paidMonthsSummary = paidArr.length ? paidArr.join(", ") : "None";
-
-      p.innerHTML = `
-        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-          <div>
-            <h3>${s.name}</h3>
-            <p>Batch: <strong>${s.batch}</strong> | Primary Phone: ${s.ph1}</p>
-            <p>Guardian: ${s.guardian}</p>
-            <p>Permanent Address: ${s.address}</p>
-          </div>
-          <div style="width: 100px; height: 120px; border: 1px dashed #333; display: flex; align-items: center; justify-content: center; font-size: 10px;">
-            PASSPORT PHOTO
-          </div>
-        </div>
-        <hr style="margin-bottom: 12px;"/>
-        <table class="print-table">
-          <tr><th>Height</th><td>${s.height} cm</td><th>Weight</th><td>${s.weight} kg</td></tr>
-          <tr><th>Chest</th><td>${s.chest} cm</td><th>Date of Birth</th><td>${s.dob}</td></tr>
-          <tr><th>Qualification</th><td>${s.qualification}</td><th>Last Exam %</th><td>${s.marks}%</td></tr>
-        </table>
-        <h4 style="margin: 14px 0 6px 0; color: #0A192F;">Official Financial Ledger</h4>
-        <table class="print-table">
-          <tr><th>Total Fixed Session Fees</th><td>₹${s.total_fixed || 0}</td><th>Total Paid So Far</th><td>₹${s.paid}</td></tr>
-          <tr><th>Admission Fee Assigned</th><td>₹${s.admission_fee}</td><th>Dress / Kit Fees</th><td>₹${s.dress_fee}</td></tr>
-          <tr><th>Hostel Fees (Monthly)</th><td>₹${s.hostel_fee}</td><th>Study Fees (Monthly)</th><td>₹${s.tuition_fee}</td></tr>
-          <tr><th>Remaining Due Balance</th><td>₹${s.remaining}</td><th>Cleared Months</th><td>${paidMonthsSummary}</td></tr>
-        </table>
-        <div class="signature-row">
-          <div class="signature-line">Candidate Signature</div>
-          <div class="signature-line">Super Admin / Authorized Signatory</div>
-        </div>
-      `;
-    }
   </script>
 </body>
   </html>
