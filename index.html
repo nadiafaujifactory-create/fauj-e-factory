@@ -34,7 +34,7 @@
       flex-direction: column;
     }
 
-    /* Mobile-Optimized Top Navbar */
+    /* Responsive Mobile Navbar */
     .navbar {
       background-color: var(--navy-blue);
       color: var(--pure-white);
@@ -224,6 +224,35 @@
       box-shadow: 0 0 0 2px rgba(229, 37, 33, 0.12);
     }
 
+    /* Permissions Selector Box */
+    .permissions-container {
+      background: #FFFFFF;
+      border: 1px solid var(--border-gray);
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 4px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .perm-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--navy-blue);
+      cursor: pointer;
+    }
+
+    .perm-item input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary-red);
+      cursor: pointer;
+    }
+
     .password-wrapper {
       position: relative;
       display: flex;
@@ -406,7 +435,7 @@
       color: #0F172A;
     }
 
-    /* Financial Dual Split Layout */
+    /* Financial Split Layout */
     .finance-split-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -647,7 +676,7 @@
     </div>
     <div id="nav-controls" style="display: none; align-items: center; gap: 8px;">
       <div class="nav-tabs" id="admin-nav-tabs" style="display: none;">
-        <button type="button" class="tab-btn active" id="btn-tab-students" onclick="switchTab('students')">Students & Admissions</button>
+        <button type="button" class="tab-btn" id="btn-tab-students" onclick="switchTab('students')">Students & Admissions</button>
         <button type="button" class="tab-btn" id="btn-tab-schedule" onclick="switchTab('schedule')">Weekly Routine & Tests</button>
         <button type="button" class="tab-btn" id="btn-tab-finance" onclick="switchTab('finance')">Income & Expenditure</button>
       </div>
@@ -670,7 +699,7 @@
       <form id="login-form">
         <div class="form-group" style="margin-bottom: 12px;">
           <label>Registered Mobile Number or Admin Email</label>
-          <input type="text" id="login-identifier" placeholder="10-digit Phone or Email" required autocomplete="username" />
+          <input type="text" id="login-identifier" placeholder="10-digit Mobile or Admin Email" required autocomplete="username" />
         </div>
         <div class="form-group" style="margin-bottom: 12px;">
           <label>Password</label>
@@ -690,9 +719,9 @@
     <!-- 2. STUDENTS & ADMISSIONS PORTAL (TAB 1) -->
     <div id="tab-students-content" style="display: none;">
       
-      <!-- Staff Profile Creation (Super Admin Only) -->
+      <!-- Staff Profile Creation (Super Admin Only: Assigns Entry Permissions) -->
       <div class="card" id="staff-creation-box">
-        <div class="card-header">Create Official / Faculty Profile</div>
+        <div class="card-header">Register Official / Faculty & Assign Entry Places</div>
         <form id="staff-form">
           <div class="form-grid">
             <div class="form-group">
@@ -701,7 +730,7 @@
             </div>
             <div class="form-group">
               <label>Mobile Number (For Login)</label>
-              <input type="tel" id="staff-phone" placeholder="10-digit Mobile" required />
+              <input type="tel" id="staff-phone" placeholder="10-digit Mobile Number" required />
             </div>
             <div class="form-group">
               <label>Date of Birth</label>
@@ -718,8 +747,19 @@
               <label>Generated Access Password (Super Admin Only)</label>
               <input type="text" id="staff-password" readonly style="background:#eee; font-weight:bold;" />
             </div>
+
+            <!-- Permission Selection Grid -->
+            <div class="form-group full-width">
+              <label>Assign Entry Places (Allowed Dashboard Sections for this User):</label>
+              <div class="permissions-container">
+                <label class="perm-item"><input type="checkbox" id="perm-admissions" checked /> Student Admissions</label>
+                <label class="perm-item"><input type="checkbox" id="perm-schedule" checked /> Weekly Routine & Tests</label>
+                <label class="perm-item"><input type="checkbox" id="perm-income" checked /> Income Ledger</label>
+                <label class="perm-item"><input type="checkbox" id="perm-expense" /> Expenditure Ledger</label>
+              </div>
+            </div>
           </div>
-          <button type="submit" class="btn-primary">Register Official</button>
+          <button type="submit" class="btn-primary">Save Profile & Set Access</button>
         </form>
       </div>
 
@@ -734,6 +774,7 @@
                 <th>Name</th>
                 <th>Login Mobile</th>
                 <th>Date of Birth</th>
+                <th>Assigned Entry Places</th>
                 <th id="th-staff-pw">Access Password</th>
                 <th>Status</th>
                 <th>Controls</th>
@@ -801,8 +842,7 @@
               <label>Educational Qualifications</label>
               <input type="text" id="std-qual" required />
             </div>
-            <div class="form-group">
-              <label>% of Last Passed Exam</label>
+            <div class="form-group">% of Last Passed Exam</label>
               <input type="number" step="0.01" id="std-marks" required />
             </div>
             <div class="form-group">
@@ -948,7 +988,7 @@
         <div class="card-header">
           <span>Weekly Academy Routine & Mock Test Schedule</span>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <button type="button" class="btn-copy" onclick="openCopyScheduleModal()">📋 Copy Routine to Other Days</button>
+            <button type="button" class="btn-copy" id="btn-copy-routine-modal" onclick="openCopyScheduleModal()">📋 Copy Routine to Other Days</button>
             <button type="button" class="btn-print" onclick="printRoutineSheet()">🖨️ Print / Save (PDF)</button>
           </div>
         </div>
@@ -976,7 +1016,7 @@
             <label>Scheduled Date (Week Range)</label>
             <select id="sch-day-select" onchange="loadRoutineForCurrentSelection()"></select>
           </div>
-          <div>
+          <div id="save-routine-action-wrap">
             <button type="button" class="btn-primary" onclick="saveRoutineForCurrentSelection()">💾 Save Routine</button>
           </div>
         </div>
@@ -985,7 +1025,7 @@
         <div class="schedule-grid-box">
           <div class="schedule-box-header">
             <span>📚 Daily Academic Classes (Min. 3-4 Sessions)</span>
-            <button type="button" class="btn-print" style="background:var(--navy-light);" onclick="addClassRow()">+ Add Class Row</button>
+            <button type="button" class="btn-print" id="btn-add-class-row" style="background:var(--navy-light);" onclick="addClassRow()">+ Add Class Row</button>
           </div>
           <div class="table-container">
             <table>
@@ -1009,7 +1049,7 @@
         <div class="schedule-grid-box test-box">
           <div class="schedule-box-header" style="color:var(--primary-red);">
             <span>🎯 Tests of the Day & Mock Assessments (Min. 3-4 Sessions)</span>
-            <button type="button" class="btn-print" style="background:var(--primary-red);" onclick="addTestRow()">+ Add Test Row</button>
+            <button type="button" class="btn-print" id="btn-add-test-row" style="background:var(--primary-red);" onclick="addTestRow()">+ Add Test Row</button>
           </div>
           <div class="table-container">
             <table>
@@ -1048,7 +1088,7 @@
       </div>
 
       <div class="finance-split-grid">
-        <div class="finance-column-box income-box">
+        <div class="finance-column-box income-box" id="sec-finance-income">
           <div class="finance-box-title income-title">+ Record Date-Wise Income</div>
           <form id="income-entry-form">
             <div class="form-group" style="margin-bottom: 12px;">
@@ -1078,7 +1118,7 @@
           </form>
         </div>
 
-        <div class="finance-column-box expense-box">
+        <div class="finance-column-box expense-box" id="sec-finance-expense">
           <div class="finance-box-title expense-title">- Record Date-Wise Expenditure</div>
           <form id="expense-entry-form">
             <div class="form-group" style="margin-bottom: 12px;">
@@ -1138,12 +1178,12 @@
       </div>
     </div>
 
-    <!-- 5. STUDENT / OFFICIAL PERSONAL DESK (NO PASSWORD VISIBLE) -->
+    <!-- 5. STUDENT PERSONAL DESK (FIXED FOR ALL ENROLLED STUDENTS) -->
     <div id="personal-desk-view" style="display: none;">
       <div class="card">
         <div class="card-header">
-          <span id="desk-title">My Personal Desk</span>
-          <button type="button" class="btn-print" onclick="window.print()">🖨️ Print Profile</button>
+          <span id="desk-title">Student Portal Desk</span>
+          <button type="button" class="btn-print" onclick="window.print()">🖨️ Print Profile Record</button>
         </div>
         <div id="personal-desk-content"></div>
       </div>
@@ -1466,7 +1506,7 @@
       if (document.getElementById("exp-date")) document.getElementById("exp-date").value = today;
     }
 
-    // PROFILE MANAGEMENT: ONLY PRINT & INACTIVE SWITCH
+    // PROFILE CONTROLS: ONLY PRINT & INACTIVE SWITCH
     function toggleStaffStatus(idx) {
       if (currentUser.role !== "SuperAdmin") return;
       const st = DB.staff[idx];
@@ -1487,12 +1527,18 @@
 
       DB.staff.forEach((st, idx) => {
         const isInactive = (st.status === "Inactive");
+        const permsList = Object.keys(st.permissions || {})
+          .filter(k => st.permissions[k])
+          .map(k => k.charAt(0).toUpperCase() + k.slice(1))
+          .join(", ") || "Full Access";
+
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td><strong>${st.role}</strong></td>
           <td>${st.name}</td>
           <td>${st.phone}</td>
           <td>${st.dob}</td>
+          <td style="font-size:0.75rem; color:#475569;">${permsList}</td>
           ${isSuperAdmin ? `<td><span class="password-pill">${st.password}</span></td>` : ''}
           <td><span class="status-badge ${isInactive ? 'inactive' : 'active'}">${st.status || 'Active'}</span></td>
           <td style="display:flex; gap:6px;">
@@ -1590,10 +1636,17 @@
       });
     }
 
-    // Staff Submit (Super Admin Only)
+    // Staff Submit (Super Admin Only: Assigns Selected Permissions)
     document.getElementById("staff-form").addEventListener("submit", (e) => {
       e.preventDefault();
       if (currentUser.role !== "SuperAdmin") return;
+
+      const perms = {
+        admissions: document.getElementById("perm-admissions").checked,
+        schedule: document.getElementById("perm-schedule").checked,
+        income: document.getElementById("perm-income").checked,
+        expense: document.getElementById("perm-expense").checked
+      };
 
       const newStaff = {
         id: "STAFF-" + Date.now(),
@@ -1602,23 +1655,24 @@
         dob: document.getElementById("staff-dob").value,
         role: document.getElementById("staff-role").value,
         password: document.getElementById("staff-password").value,
+        permissions: perms,
         status: "Active"
       };
 
       DB.staff.push(newStaff);
       safeSet("ff_staff", DB.staff);
       renderStaffDirectory();
-      alert(`Staff profile created for ${newStaff.name}. Access Password: ${newStaff.password}`);
+      alert(`Official registered! Login Mobile: ${newStaff.phone} | Password: ${newStaff.password}`);
       document.getElementById("staff-form").reset();
       initGenerators();
 
       cloudFetch("ff_staff", "POST", newStaff);
     });
 
-    // Student Admission Submit with Itemized Accounting
+    // Student Admission Submit with Itemized Financial Accounting
     document.getElementById("student-form").addEventListener("submit", (e) => {
       e.preventDefault();
-      if (currentUser.role !== "SuperAdmin") return;
+      if (currentUser.role !== "SuperAdmin" && !(currentUser.permissions && currentUser.permissions.admissions)) return;
 
       const admDate = document.getElementById("std-admission-date").value;
       const studentName = document.getElementById("std-name").value.trim();
@@ -1698,7 +1752,7 @@
       DB.students.push(newStudent);
       safeSet("ff_students", DB.students);
 
-      // Record itemized breakdowns in Income Ledger
+      // Save Itemized Records to Income Ledger
       const breakdowns = [
         { purpose: "Admission Fee", amt: pAdm },
         { purpose: "Advance Study Fee", amt: pStudy },
@@ -1726,7 +1780,7 @@
 
       renderRoster();
       renderFinanceDashboard();
-      alert(`Student enrolled! Registered Login Phone: ${newStudent.ph1} | Password: ${newStudent.password}`);
+      alert(`Student registered! Login Mobile: ${newStudent.ph1} | Password: ${newStudent.password}`);
       
       if (lastReceiptItem && confirm("Would you like to print an official Money Receipt for this collection?")) {
         printInvoice(lastReceiptItem);
@@ -1739,478 +1793,6 @@
 
       cloudFetch("ff_students", "POST", newStudent);
     });
-
-    // MONTHLY FEE MODAL
-    function openMonthModal(studentIdx) {
-      activeModalStudentIdx = studentIdx;
-      const student = DB.students[studentIdx];
-      document.getElementById("modal-student-title").innerText = `${student.name} (${student.batch}) - Monthly Clearances`;
-
-      const admOrder = getMonthOrder(student.date);
-      const container = document.getElementById("modal-months-container");
-      container.innerHTML = "";
-
-      const paidArr = Array.isArray(student.paid_months) ? student.paid_months : [];
-
-      ACADEMIC_MONTHS.forEach(m => {
-        const isInactive = (m.order < admOrder);
-        const isPaid = paidArr.includes(m.label);
-
-        const badge = document.createElement("div");
-        badge.className = `month-badge ${isInactive ? 'disabled-month' : (isPaid ? 'paid' : '')}`;
-        badge.innerText = m.label;
-
-        if (!isInactive) {
-          badge.onclick = () => toggleMonthPaidFromModal(m.label);
-        }
-        container.appendChild(badge);
-      });
-
-      document.getElementById("monthly-fee-modal").style.display = "flex";
-    }
-
-    function closeMonthModal() {
-      document.getElementById("monthly-fee-modal").style.display = "none";
-      activeModalStudentIdx = null;
-    }
-
-    function toggleMonthPaidFromModal(monthLabel) {
-      if (activeModalStudentIdx === null) return;
-      const student = DB.students[activeModalStudentIdx];
-      let monthsList = Array.isArray(student.paid_months) ? [...student.paid_months] : [];
-      const idx = monthsList.indexOf(monthLabel);
-      const monthlySum = (Number(student.tuition_fee) || 0) + (Number(student.hostel_fee) || 0);
-
-      let issuedReceiptItem = null;
-
-      if (idx > -1) {
-        monthsList.splice(idx, 1);
-      } else {
-        monthsList.push(monthLabel);
-        if (monthlySum > 0) {
-          issuedReceiptItem = {
-            id: "INC-" + Date.now(),
-            date: new Date().toISOString().split("T")[0],
-            purpose: `Monthly Study & Hostel Fee (${monthLabel})`,
-            person: student.name,
-            amount: monthlySum
-          };
-          DB.incomes.push(issuedReceiptItem);
-          safeSet("ff_incomes", DB.incomes);
-          cloudFetch("ff_incomes", "POST", issuedReceiptItem);
-        }
-      }
-
-      student.paid_months = monthsList;
-      safeSet("ff_students", DB.students);
-      renderRoster();
-      renderFinanceDashboard();
-      openMonthModal(activeModalStudentIdx);
-
-      cloudFetch(`ff_students?id=eq.${student.id}`, "PATCH", { paid_months: monthsList });
-
-      if (issuedReceiptItem && confirm(`Generate official receipt for ${student.name} (${monthLabel})?`)) {
-        printInvoice(issuedReceiptItem);
-      }
-    }
-
-    // SCHEDULE BOARD CONTROLLER
-    function initWeekRange() {
-      const today = new Date();
-      const curr = new Date(today);
-      const first = curr.getDate() - curr.getDay() + 1;
-      const last = first + 6;
-
-      const firstday = new Date(curr.setDate(first));
-      const lastday = new Date(curr.setDate(last));
-
-      document.getElementById("sch-from-date").value = firstday.toISOString().split("T")[0];
-      document.getElementById("sch-to-date").value = lastday.toISOString().split("T")[0];
-      generateWeekRangeDates();
-    }
-
-    function generateWeekRangeDates() {
-      const fromStr = document.getElementById("sch-from-date").value;
-      const toStr = document.getElementById("sch-to-date").value;
-      const daySelect = document.getElementById("sch-day-select");
-      daySelect.innerHTML = "";
-
-      if (!fromStr || !toStr) return;
-
-      let start = new Date(fromStr);
-      const end = new Date(toStr);
-
-      while (start <= end) {
-        const opt = document.createElement("option");
-        const dateVal = start.toISOString().split("T")[0];
-        const dayName = start.toLocaleDateString("en-US", { weekday: "short" });
-        opt.value = dateVal;
-        opt.innerText = `${dateVal} (${dayName})`;
-        daySelect.appendChild(opt);
-        start.setDate(start.getDate() + 1);
-      }
-
-      loadRoutineForCurrentSelection();
-    }
-
-    function loadRoutineForCurrentSelection() {
-      const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-day-select").value;
-      const key = `${batch}_${date}`;
-
-      const saved = DB.schedules.find(s => s.key === key);
-      const classTbody = document.getElementById("class-rows-body");
-      const testTbody = document.getElementById("test-rows-body");
-      classTbody.innerHTML = "";
-      testTbody.innerHTML = "";
-
-      const classes = (saved && saved.classes && saved.classes.length) ? saved.classes : [
-        { time: "09:30 AM - 11:00 AM", teacher: "Maths Faculty", subject: "Arithmetic", topic: "Number Systems & Algebra", note: "Bring Notebook" },
-        { time: "11:30 AM - 01:00 PM", teacher: "English Faculty", subject: "English", topic: "Tenses & Voice Change", note: "Grammar Practice Set" },
-        { time: "02:00 PM - 03:30 PM", teacher: "GS Faculty", subject: "General Science", topic: "Physics Units & Motion", note: "Handouts provided" },
-        { time: "04:00 PM - 05:30 PM", teacher: "Reasoning Faculty", subject: "Reasoning", topic: "Blood Relations & Coding", note: "Daily Drill" }
-      ];
-
-      const tests = (saved && saved.tests && saved.tests.length) ? saved.tests : [
-        { name: "Morning Rapid Test", time: "08:30 AM - 09:00 AM", marks: "25", syllabus: "English & Current Affairs" },
-        { name: "Subject Assessment", time: "01:00 PM - 01:45 PM", marks: "50", syllabus: "Maths Sectional Test" },
-        { name: "Mock Examination", time: "06:00 PM - 07:30 PM", marks: "100", syllabus: "Full Combined Model Paper" }
-      ];
-
-      classes.forEach((c, idx) => renderClassRow(c, idx));
-      tests.forEach((t, idx) => renderTestRow(t, idx));
-    }
-
-    function addClassRow(data = {}) {
-      const idx = document.querySelectorAll("#class-rows-body tr").length;
-      renderClassRow({
-        time: data.time || "",
-        teacher: data.teacher || "",
-        subject: data.subject || "",
-        topic: data.topic || "",
-        note: data.note || ""
-      }, idx);
-    }
-
-    function renderClassRow(c, idx) {
-      const tbody = document.getElementById("class-rows-body");
-      const tr = document.createElement("tr");
-      tr.className = "class-row-item";
-      tr.innerHTML = `
-        <td class="editable-cell"><input type="text" class="c-time" value="${c.time}" placeholder="Time" /></td>
-        <td class="editable-cell"><input type="text" class="c-teacher" value="${c.teacher}" placeholder="Teacher" /></td>
-        <td class="editable-cell"><input type="text" class="c-subject" value="${c.subject}" placeholder="Subject" /></td>
-        <td class="editable-cell"><input type="text" class="c-topic" value="${c.topic}" placeholder="Topic" /></td>
-        <td class="editable-cell"><input type="text" class="c-note" value="${c.note}" placeholder="Note" /></td>
-        <td style="text-align:center;">
-          <button type="button" class="btn-attendance" onclick="openAttendanceModal('Class', '${c.subject || 'Session'}', '${c.time}')">📋 Roll Call</button>
-        </td>
-        <td style="text-align:center;"><button type="button" style="color:red; cursor:pointer;" onclick="this.closest('tr').remove()">✕</button></td>
-      `;
-      tbody.appendChild(tr);
-    }
-
-    function addTestRow(data = {}) {
-      const idx = document.querySelectorAll("#test-rows-body tr").length;
-      renderTestRow({
-        name: data.name || "",
-        time: data.time || "",
-        marks: data.marks || "",
-        syllabus: data.syllabus || ""
-      }, idx);
-    }
-
-    function renderTestRow(t, idx) {
-      const tbody = document.getElementById("test-rows-body");
-      const tr = document.createElement("tr");
-      tr.className = "test-row-item";
-      tr.innerHTML = `
-        <td class="editable-cell"><input type="text" class="t-name" value="${t.name}" placeholder="Test Name" /></td>
-        <td class="editable-cell"><input type="text" class="t-time" value="${t.time}" placeholder="Timing" /></td>
-        <td class="editable-cell"><input type="text" class="t-marks" value="${t.marks}" placeholder="Total Marks" /></td>
-        <td class="editable-cell"><input type="text" class="t-syllabus" value="${t.syllabus}" placeholder="Syllabus" /></td>
-        <td style="text-align:center;">
-          <button type="button" class="btn-attendance" style="background:#E52521;" onclick="openAttendanceModal('Test', '${t.name || 'Exam'}', '${t.time}')">🎯 Exam Roll</button>
-        </td>
-        <td style="text-align:center;"><button type="button" style="color:red; cursor:pointer;" onclick="this.closest('tr').remove()">✕</button></td>
-      `;
-      tbody.appendChild(tr);
-    }
-
-    function saveRoutineForCurrentSelection() {
-      const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-day-select").value;
-      const key = `${batch}_${date}`;
-
-      const classRows = document.querySelectorAll(".class-row-item");
-      const classes = [];
-      classRows.forEach(r => {
-        classes.push({
-          time: r.querySelector(".c-time").value,
-          teacher: r.querySelector(".c-teacher").value,
-          subject: r.querySelector(".c-subject").value,
-          topic: r.querySelector(".c-topic").value,
-          note: r.querySelector(".c-note").value
-        });
-      });
-
-      const testRows = document.querySelectorAll(".test-row-item");
-      const tests = [];
-      testRows.forEach(r => {
-        tests.push({
-          name: r.querySelector(".t-name").value,
-          time: r.querySelector(".t-time").value,
-          marks: r.querySelector(".t-marks").value,
-          syllabus: r.querySelector(".t-syllabus").value
-        });
-      });
-
-      const idx = DB.schedules.findIndex(s => s.key === key);
-      const payload = { key, batch, date, classes, tests, updatedAt: new Date().toISOString() };
-
-      if (idx > -1) DB.schedules[idx] = payload;
-      else DB.schedules.push(payload);
-
-      safeSet("ff_schedules", DB.schedules);
-      alert(`Routine saved for [${batch}] on ${date}!`);
-    }
-
-    // COPY ROUTINE MODAL
-    function openCopyScheduleModal() {
-      const currentDate = document.getElementById("sch-day-select").value;
-      const daySelect = document.getElementById("sch-day-select");
-      const listContainer = document.getElementById("copy-target-dates-list");
-      listContainer.innerHTML = "";
-
-      let count = 0;
-      for (let i = 0; i < daySelect.options.length; i++) {
-        const d = daySelect.options[i].value;
-        const text = daySelect.options[i].innerText;
-        if (d !== currentDate) {
-          count++;
-          const label = document.createElement("label");
-          label.style = "display:flex; align-items:center; gap:8px; font-size:0.8rem; cursor:pointer;";
-          label.innerHTML = `<input type="checkbox" class="copy-target-date" value="${d}" checked /> <span>${text}</span>`;
-          listContainer.appendChild(label);
-        }
-      }
-
-      if (count === 0) {
-        alert("No other dates in this week range to copy to.");
-        return;
-      }
-
-      document.getElementById("copy-routine-modal").style.display = "flex";
-    }
-
-    function closeCopyScheduleModal() {
-      document.getElementById("copy-routine-modal").style.display = "none";
-    }
-
-    function toggleSelectAllCopyDates() {
-      const checkboxes = document.querySelectorAll(".copy-target-date");
-      const allChecked = Array.from(checkboxes).every(c => c.checked);
-      checkboxes.forEach(c => c.checked = !allChecked);
-    }
-
-    function executeCopySchedule() {
-      const batch = document.getElementById("sch-batch-select").value;
-      const sourceDate = document.getElementById("sch-day-select").value;
-
-      const classRows = document.querySelectorAll(".class-row-item");
-      const currentClasses = [];
-      classRows.forEach(r => {
-        currentClasses.push({
-          time: r.querySelector(".c-time").value,
-          teacher: r.querySelector(".c-teacher").value,
-          subject: r.querySelector(".c-subject").value,
-          topic: r.querySelector(".c-topic").value,
-          note: r.querySelector(".c-note").value
-        });
-      });
-
-      const testRows = document.querySelectorAll(".test-row-item");
-      const currentTests = [];
-      testRows.forEach(r => {
-        currentTests.push({
-          name: r.querySelector(".t-name").value,
-          time: r.querySelector(".t-time").value,
-          marks: r.querySelector(".t-marks").value,
-          syllabus: r.querySelector(".t-syllabus").value
-        });
-      });
-
-      const checkedDates = Array.from(document.querySelectorAll(".copy-target-date:checked")).map(c => c.value);
-      if (checkedDates.length === 0) {
-        alert("Please select at least one date.");
-        return;
-      }
-
-      checkedDates.forEach(targetDate => {
-        const targetKey = `${batch}_${targetDate}`;
-        const payload = {
-          key: targetKey,
-          batch,
-          date: targetDate,
-          classes: JSON.parse(JSON.stringify(currentClasses)),
-          tests: JSON.parse(JSON.stringify(currentTests)),
-          updatedAt: new Date().toISOString()
-        };
-
-        const idx = DB.schedules.findIndex(s => s.key === targetKey);
-        if (idx > -1) DB.schedules[idx] = payload;
-        else DB.schedules.push(payload);
-      });
-
-      safeSet("ff_schedules", DB.schedules);
-      alert(`Copied routine from ${sourceDate} to ${checkedDates.length} selected days!`);
-      closeCopyScheduleModal();
-    }
-
-    // DIRECT ATTENDANCE REGISTER
-    function openAttendanceModal(type, title, time) {
-      const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-day-select").value;
-
-      currentAttContext = {
-        type,
-        title,
-        time,
-        batch,
-        date,
-        key: `ATT_${batch}_${date}_${title}_${time}`
-      };
-
-      document.getElementById("att-modal-title").innerText = `${type} Attendance: ${title} (${time})`;
-      document.getElementById("att-modal-sub").innerText = `Batch: ${batch} | Date: ${date}`;
-
-      const students = (batch === "ALL") 
-        ? DB.students 
-        : DB.students.filter(s => s.batch === batch);
-
-      const tbody = document.getElementById("att-student-list-body");
-      tbody.innerHTML = "";
-
-      if (students.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6B7280;">No registered students found in batch [${batch}].</td></tr>`;
-        document.getElementById("att-summary-count").innerText = "";
-        document.getElementById("session-attendance-modal").style.display = "flex";
-        return;
-      }
-
-      const existingRecord = DB.attendance.find(a => a.key === currentAttContext.key);
-      const savedMap = existingRecord ? existingRecord.records : {};
-
-      students.forEach(student => {
-        const status = savedMap[student.id] || "Present";
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><strong>${student.name}</strong></td>
-          <td>${student.batch}</td>
-          <td>
-            <span class="att-badge ${status.toLowerCase()}" data-id="${student.id}" onclick="toggleAttBadge(this)">
-              ${status}
-            </span>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      updateAttSummary();
-      document.getElementById("session-attendance-modal").style.display = "flex";
-    }
-
-    function toggleAttBadge(badge) {
-      if (badge.innerText === "Present") {
-        badge.innerText = "Absent";
-        badge.className = "att-badge absent";
-      } else {
-        badge.innerText = "Present";
-        badge.className = "att-badge present";
-      }
-      updateAttSummary();
-    }
-
-    function updateAttSummary() {
-      const badges = document.querySelectorAll("#att-student-list-body .att-badge");
-      let presentCount = 0;
-      badges.forEach(b => {
-        if (b.innerText === "Present") presentCount++;
-      });
-      document.getElementById("att-summary-count").innerText = `Present: ${presentCount} / ${badges.length}`;
-    }
-
-    function closeAttendanceModal() {
-      document.getElementById("session-attendance-modal").style.display = "none";
-      currentAttContext = null;
-    }
-
-    function saveSessionAttendance() {
-      if (!currentAttContext) return;
-      const records = {};
-      const badges = document.querySelectorAll("#att-student-list-body .att-badge");
-      badges.forEach(b => {
-        records[b.getAttribute("data-id")] = b.innerText;
-      });
-
-      const payload = {
-        ...currentAttContext,
-        records,
-        recordedAt: new Date().toISOString()
-      };
-
-      const idx = DB.attendance.findIndex(a => a.key === currentAttContext.key);
-      if (idx > -1) DB.attendance[idx] = payload;
-      else DB.attendance.push(payload);
-
-      safeSet("ff_attendance", DB.attendance);
-      alert("Attendance register saved!");
-      closeAttendanceModal();
-    }
-
-    function printRoutineSheet() {
-      const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-day-select").value;
-      const key = `${batch}_${date}`;
-      const saved = DB.schedules.find(s => s.key === key);
-
-      document.getElementById("print-doc-subtitle").innerText = `DAILY ORDER & ACADEMIC ROUTINE (BATCH: ${batch})`;
-      const p = document.getElementById("printable-details");
-
-      const classes = saved ? saved.classes : [];
-      const tests = saved ? saved.tests : [];
-
-      let classTrs = classes.map(c => `
-        <tr><td><strong>${c.time}</strong></td><td>${c.teacher}</td><td>${c.subject}</td><td>${c.topic}</td><td>${c.note}</td></tr>
-      `).join("");
-
-      let testTrs = tests.map(t => `
-        <tr><td><strong>${t.name}</strong></td><td>${t.time}</td><td>${t.marks}</td><td>${t.syllabus}</td></tr>
-      `).join("");
-
-      p.innerHTML = `
-        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-          <div><p><strong>Scheduled Date:</strong> ${date}</p><p><strong>Formation / Batch:</strong> ${batch}</p></div>
-          <div style="text-align:right;"><p><strong>Campus:</strong> Headquarters</p><p><strong>Status:</strong> Approved Routine</p></div>
-        </div>
-        <h4 style="margin:8px 0 4px 0; color:#0A192F;">1. Academic Lectures & Routine Sessions</h4>
-        <table class="print-table">
-          <thead><tr><th>Time</th><th>Teacher</th><th>Subject</th><th>Topic</th><th>Note</th></tr></thead>
-          <tbody>${classTrs || '<tr><td colspan="5">No classes scheduled.</td></tr>'}</tbody>
-        </table>
-        <h4 style="margin:12px 0 4px 0; color:#E52521;">2. Evaluative Tests & Daily Benchmarks</h4>
-        <table class="print-table">
-          <thead><tr><th>Test Name</th><th>Timing</th><th>Marks</th><th>Syllabus</th></tr></thead>
-          <tbody>${testTrs || '<tr><td colspan="4">No tests scheduled.</td></tr>'}</tbody>
-        </table>
-        <div class="signature-row">
-          <div class="signature-line">Officer In-Charge</div>
-          <div class="signature-line">Super Admin / Director</div>
-        </div>
-      `;
-
-      window.print();
-    }
 
     // INVOICE PRINT ENGINE
     function printInvoiceByIndex(sortedIndex) {
@@ -2252,7 +1834,7 @@
         </table>
         <div style="margin-top: 14px; padding: 10px; background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 4px; font-size: 0.75rem; color: #4B5563;">
           <p>• Official financial acknowledgment issued by <strong>FAUJ-E-FACTORY</strong>.</p>
-          <p>• Subject to academy rules and regulations.</p>
+          <p>• Subject to academy training rules and regulations.</p>
         </div>
         <div class="signature-row" style="margin-top: 40px;">
           <div class="signature-line">Student / Depositor Signature</div>
@@ -2426,7 +2008,7 @@
       document.getElementById("btn-tab-finance").classList.toggle("active", tab === 'finance');
     }
 
-    // MULTI-ROLE LOGIN CONTROLLER (WITH WORKING REMEMBER ME)
+    // MULTI-ROLE LOGIN CONTROLLER
     document.getElementById("login-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const id = document.getElementById("login-identifier").value.trim().toLowerCase();
@@ -2439,29 +2021,29 @@
         { email: "ersadsir1986@gmail.com", name: "Super Admin (Ersad)" }
       ];
 
-      const matched = SUPER_ADMINS.find(a => a.email.toLowerCase() === id && pass === "Fauj-efactory2026");
+      const matchedAdmin = SUPER_ADMINS.find(a => a.email.toLowerCase() === id && pass === "Fauj-efactory2026");
 
-      if (matched) {
-        startSession({ role: "SuperAdmin", name: matched.name, email: matched.email }, remember);
+      if (matchedAdmin) {
+        startSession({ role: "SuperAdmin", name: matchedAdmin.name, email: matchedAdmin.email }, remember);
         return;
       }
 
-      // 2. Staff / Official Check (By Registered Mobile & Assigned Password)
+      // 2. Staff / Official Check (Registered Mobile + Assigned Password)
       const staff = DB.staff.find(s => s.phone === id && s.password === pass);
       if (staff) {
         if (staff.status === "Inactive") {
-          alert("Your official account is currently INACTIVE. Contact Super Admin.");
+          alert("Account is marked INACTIVE. Contact Super Admin.");
           return;
         }
         startSession({ ...staff, role: staff.role || "Official" }, remember);
         return;
       }
 
-      // 3. Student Check (By Registered Mobile & Assigned Password)
+      // 3. Student Check (Registered Mobile + Assigned Password)
       const student = DB.students.find(s => s.ph1 === id && s.password === pass);
       if (student) {
         if (student.status === "Inactive") {
-          alert("Your Student Portal access is marked INACTIVE. Contact Administrator.");
+          alert("Your Student profile is marked INACTIVE. Contact Administrator.");
           return;
         }
         startSession({ ...student, role: "Student" }, remember);
@@ -2486,48 +2068,94 @@
       const isSuperAdmin = (currentUser.role === "SuperAdmin");
 
       if (isSuperAdmin) {
+        // Super Admin Gets Complete Unrestricted Master Control
         document.getElementById("admin-nav-tabs").style.display = "flex";
+        document.getElementById("btn-tab-students").style.display = "inline-block";
+        document.getElementById("btn-tab-schedule").style.display = "inline-block";
+        document.getElementById("btn-tab-finance").style.display = "inline-block";
+
         document.getElementById("staff-creation-box").style.display = "block";
         document.getElementById("student-admission-box").style.display = "block";
         document.getElementById("staff-directory-box").style.display = "block";
         document.getElementById("personal-desk-view").style.display = "none";
+
+        document.getElementById("btn-copy-routine-modal").style.display = "inline-block";
+        document.getElementById("save-routine-action-wrap").style.display = "block";
+        document.getElementById("btn-add-class-row").style.display = "inline-block";
+        document.getElementById("btn-add-test-row").style.display = "inline-block";
+        document.getElementById("sec-finance-income").style.display = "block";
+        document.getElementById("sec-finance-expense").style.display = "block";
+
         switchTab("students");
         renderStaffDirectory();
         renderRoster();
         renderFinanceDashboard();
         initWeekRange();
       } else if (currentUser.role === "Official" || currentUser.role === "Faculty") {
+        // Official / Faculty: Show Tabs Strictly As Assigned By Super Admin
+        const perms = currentUser.permissions || {};
         document.getElementById("admin-nav-tabs").style.display = "flex";
         document.getElementById("staff-creation-box").style.display = "none";
-        document.getElementById("student-admission-box").style.display = "none";
         document.getElementById("staff-directory-box").style.display = "none";
         document.getElementById("personal-desk-view").style.display = "none";
-        switchTab("schedule");
+
+        // Tab Visibility Based on Assigned Entry Permissions
+        document.getElementById("btn-tab-students").style.display = perms.admissions ? "inline-block" : "none";
+        document.getElementById("btn-tab-schedule").style.display = perms.schedule ? "inline-block" : "none";
+        document.getElementById("btn-tab-finance").style.display = (perms.income || perms.expense) ? "inline-block" : "none";
+
+        document.getElementById("student-admission-box").style.display = perms.admissions ? "block" : "none";
+        document.getElementById("btn-copy-routine-modal").style.display = perms.schedule ? "inline-block" : "none";
+        document.getElementById("save-routine-action-wrap").style.display = perms.schedule ? "block" : "none";
+        document.getElementById("btn-add-class-row").style.display = perms.schedule ? "inline-block" : "none";
+        document.getElementById("btn-add-test-row").style.display = perms.schedule ? "inline-block" : "none";
+        
+        document.getElementById("sec-finance-income").style.display = perms.income ? "block" : "none";
+        document.getElementById("sec-finance-expense").style.display = perms.expense ? "block" : "none";
+
+        // Route to first allowed tab
+        if (perms.admissions) switchTab("students");
+        else if (perms.schedule) switchTab("schedule");
+        else if (perms.income || perms.expense) switchTab("finance");
+
         renderRoster();
         initWeekRange();
       } else {
-        // Individual Student Personal Desk
+        // Student: Fixed single view for all students (Personal Desk + Batch Routine)
         document.getElementById("admin-nav-tabs").style.display = "none";
         document.getElementById("tab-students-content").style.display = "none";
         document.getElementById("tab-schedule-content").style.display = "none";
         document.getElementById("tab-finance-content").style.display = "none";
         document.getElementById("personal-desk-view").style.display = "block";
         
-        document.getElementById("desk-title").innerText = `Student Desk: ${currentUser.name}`;
+        document.getElementById("desk-title").innerText = `Student Portal: ${currentUser.name}`;
         document.getElementById("personal-desk-content").innerHTML = `
           <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:16px; margin-bottom:14px; font-size:0.9rem; line-height:1.6;">
-            <p><strong>Full Name:</strong> ${currentUser.name}</p>
-            <p><strong>Batch / Section:</strong> ${currentUser.batch}</p>
+            <p><strong>Student Name:</strong> ${currentUser.name}</p>
+            <p><strong>Enrolled Batch:</strong> <span style="color:var(--primary-red); font-weight:800;">${currentUser.batch}</span></p>
             <p><strong>Guardian's Name:</strong> ${currentUser.guardian}</p>
-            <p><strong>Registered Phone:</strong> ${currentUser.ph1}</p>
+            <p><strong>Registered Login Mobile:</strong> ${currentUser.ph1}</p>
             <p><strong>Admission Date:</strong> ${currentUser.date}</p>
             <p><strong>Admission Fee Remaining Due:</strong> ₹${currentUser.remaining}</p>
             <p><strong>Total Amount Cleared:</strong> ₹${currentUser.paid}</p>
             <p><strong>Months Cleared:</strong> ${(currentUser.paid_months && currentUser.paid_months.length) ? currentUser.paid_months.join(', ') : 'None'}</p>
           </div>
-          <p style="font-size:0.8rem; color:var(--text-muted);">• Check with academy office for schedule and examination routines.</p>
+          <div style="margin-top:14px;">
+            <button type="button" class="btn-print" onclick="viewMyBatchRoutine('${currentUser.batch}')">📅 View My Batch (${currentUser.batch}) Daily Routine</button>
+          </div>
         `;
       }
+    }
+
+    function viewMyBatchRoutine(batch) {
+      document.getElementById("personal-desk-view").style.display = "none";
+      document.getElementById("tab-schedule-content").style.display = "block";
+      document.getElementById("sch-batch-select").value = batch;
+      document.getElementById("btn-copy-routine-modal").style.display = "none";
+      document.getElementById("save-routine-action-wrap").style.display = "none";
+      document.getElementById("btn-add-class-row").style.display = "none";
+      document.getElementById("btn-add-test-row").style.display = "none";
+      initWeekRange();
     }
 
     function logout() {
@@ -2563,4 +2191,4 @@
     });
   </script>
 </body>
-          </html>
+  </html>
