@@ -655,7 +655,7 @@
       border-radius: 3px;
     }
 
-    /* ATTENDANCE DESK */
+    /* ATTENDANCE DESK CARDS */
     .att-session-card {
       background: white;
       border: 1px solid #E2E8F0;
@@ -916,7 +916,7 @@
         </div>
       </div>
 
-      <!-- Complete Student Admission Form -->
+      <!-- Student Admission Form -->
       <div class="card" id="student-admission-box">
         <div class="card-header">Student Admission & Multi-Tier Fee Form</div>
         <form id="student-form">
@@ -1390,7 +1390,7 @@
         <div id="personal-desk-content"></div>
       </div>
 
-      <!-- STUDENT LIVE CODE ATTENDANCE SUBMISSION BOX (STUDENT CANNOT SEE CODE) -->
+      <!-- STUDENT LIVE CODE ATTENDANCE SUBMISSION BOX (CODE IS STRICTLY HIDDEN) -->
       <div class="card" id="student-live-att-box" style="border-top:3px solid var(--success-green); display:none;">
         <div class="card-header" style="color:var(--success-green);">
           <span>Live Session Self-Attendance</span>
@@ -2508,7 +2508,7 @@
         const remainingMins = Math.ceil((attRecord.expiresAt - now) / 60000);
         codeHtml = `
           <div style="margin-top:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-            <span>Live Passcode:</span>
+            <span>Live Passcode (Announce to Class):</span>
             <span class="live-code-box">${attRecord.code}</span>
             <span class="timer-badge">⏳ Active for ${remainingMins} min(s)</span>
           </div>
@@ -2662,16 +2662,16 @@
             </div>
           `;
         } else {
-          // CODE IS COMPLETELY HIDDEN - Student inputs code given by teacher manually
+          // CODE IS COMPLETELY HIDDEN - Student inputs code given by teacher verbally or written on board
           div.innerHTML = `
             <div>
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <strong>${sess.title} (${sess.type})</strong>
-                <span class="timer-badge">⏳ Session Open: ${remainingMins} min(s) remaining</span>
+                <span class="timer-badge">⏳ Window Open: ${remainingMins} min(s) remaining</span>
               </div>
               <p style="font-size:0.75rem; color:var(--text-muted); margin:2px 0 6px 0;">Class Time: ${sess.time} | Batch: ${sess.batch}</p>
               <div style="background:#F1F5F9; border-left:3px solid var(--navy-blue); padding:6px 10px; border-radius:4px; margin-bottom:8px; font-size:0.75rem; color:#334155;">
-                📢 শিক্ষক ক্লাসে মুখে যে ৫ ডিজিটের কোডটি বলেছেন বা বোর্ডে লিখেছেন, সেটি দেখে নিচে বসাও।
+                📢 শিক্ষক ক্লাসে মুখে যে ৫ ডিজিটের কোডটি বলেছেন বা বোর্ডে লিখেছেন, সেটি এখানে টাইপ করে সাবমিট করো।
               </div>
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px;">
                 <input type="text" value="${currentUser.reg_id || 'FF0001'}" readonly style="background:#e2e8f0; font-weight:bold;" title="My Registration ID" />
