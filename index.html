@@ -23,7 +23,7 @@
       --text-muted: #64748B;
       --success-green: #059669;
       --warning-amber: #D97706;
-      --bottom-bar-h: 60px;
+      --bottom-bar-h: 56px;
     }
 
     * {
@@ -117,7 +117,7 @@
       padding: 5px 10px;
       border-radius: 6px;
       border: 1px solid rgba(255,255,255,0.2);
-      max-width: 140px;
+      max-width: 150px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -157,9 +157,9 @@
       background: none;
       border: none;
       color: #94A3B8;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 600;
-      gap: 3px;
+      gap: 2px;
       flex: 1;
       height: 100%;
       cursor: pointer;
@@ -190,25 +190,25 @@
       max-width: 1200px;
       width: 100%;
       margin: 12px auto;
-      padding: 0 12px;
+      padding: 0 10px;
       flex: 1;
     }
 
     .card {
       background: var(--pure-white);
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-      padding: 16px;
-      margin-bottom: 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      padding: 14px;
+      margin-bottom: 14px;
       border-top: 3px solid var(--navy-blue);
     }
 
     .card-header {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
       color: var(--navy-blue);
-      margin-bottom: 14px;
-      padding-bottom: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
       border-bottom: 1px solid var(--border-gray);
       display: flex;
       flex-wrap: wrap;
@@ -218,11 +218,11 @@
     }
 
     .section-subtitle {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 700;
       color: var(--primary-red);
       grid-column: 1 / -1;
-      margin: 12px 0 6px 0;
+      margin: 10px 0 6px 0;
       padding-bottom: 4px;
       border-bottom: 1px dashed var(--border-gray);
     }
@@ -232,8 +232,8 @@
       border: 1px solid #E2E8F0;
       border-left: 4px solid var(--navy-blue);
       border-radius: 6px;
-      padding: 14px;
-      margin-bottom: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
       grid-column: 1 / -1;
     }
 
@@ -242,17 +242,17 @@
     }
 
     .step-title {
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 700;
       color: var(--navy-blue);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 12px;
-      margin-bottom: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
     }
 
     .form-group {
@@ -266,52 +266,51 @@
     }
 
     label {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
       color: var(--navy-blue);
     }
 
     input, select, textarea {
-      padding: 12px 10px;
+      padding: 9px 10px;
       border: 1px solid var(--border-gray);
-      border-radius: 6px;
-      font-size: 0.92rem;
+      border-radius: 5px;
+      font-size: 0.88rem;
       width: 100%;
       outline: none;
       background: #FFFFFF;
-      min-height: 44px;
+      min-height: 40px;
     }
 
     input:focus, select:focus, textarea:focus {
       border-color: var(--primary-red);
-      box-shadow: 0 0 0 2px rgba(229, 37, 33, 0.12);
+      box-shadow: 0 0 0 2px rgba(229, 37, 33, 0.1);
     }
 
     .permissions-container {
       background: #FFFFFF;
       border: 1px solid var(--border-gray);
       border-radius: 6px;
-      padding: 12px;
+      padding: 10px;
       margin-top: 4px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 10px;
+      gap: 8px;
     }
 
     .perm-item {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 0.82rem;
+      gap: 6px;
+      font-size: 0.8rem;
       font-weight: 600;
       color: var(--navy-blue);
       cursor: pointer;
-      min-height: 36px;
     }
 
     .perm-item input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       accent-color: var(--primary-red);
       cursor: pointer;
     }
@@ -324,7 +323,7 @@
     }
 
     .password-wrapper input {
-      padding-right: 48px;
+      padding-right: 44px;
     }
 
     .toggle-password-btn {
@@ -333,8 +332,8 @@
       background: none;
       border: none;
       cursor: pointer;
-      font-size: 1.2rem;
-      padding: 10px;
+      font-size: 1.15rem;
+      padding: 8px;
       color: var(--text-muted);
     }
 
@@ -342,14 +341,14 @@
       background: var(--primary-red);
       color: var(--pure-white);
       font-weight: 700;
-      padding: 12px 18px;
+      padding: 10px 16px;
       border: none;
-      border-radius: 6px;
+      border-radius: 5px;
       cursor: pointer;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
       width: 100%;
-      max-width: 280px;
-      min-height: 46px;
+      max-width: 260px;
+      min-height: 42px;
     }
 
     .btn-primary:active {
@@ -360,34 +359,35 @@
       background: var(--navy-blue);
       color: var(--pure-white);
       border: none;
-      padding: 7px 12px;
+      padding: 5px 9px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.78rem;
-      min-height: 34px;
+      font-size: 0.75rem;
+      white-space: nowrap;
     }
 
     .btn-receipt {
       background: #047857;
       color: white;
       border: none;
-      padding: 6px 10px;
+      padding: 4px 8px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
+      white-space: nowrap;
     }
 
     .btn-readmit {
       background: var(--success-green);
       color: var(--pure-white);
       border: none;
-      padding: 6px 10px;
+      padding: 5px 8px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       white-space: nowrap;
     }
 
@@ -398,11 +398,11 @@
 
     .btn-status-toggle {
       border: none;
-      padding: 6px 10px;
+      padding: 5px 8px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: white;
       white-space: nowrap;
     }
@@ -413,26 +413,27 @@
       background: var(--navy-blue);
       color: white;
       border: none;
-      padding: 6px 10px;
+      padding: 5px 8px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      white-space: nowrap;
     }
 
     .btn-add-entry {
       background: var(--navy-light);
       color: white;
       border: 1px dashed #CBD5E1;
-      padding: 10px 14px;
-      border-radius: 6px;
+      padding: 8px 12px;
+      border-radius: 5px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.82rem;
-      margin-top: 8px;
+      font-size: 0.8rem;
+      margin-top: 6px;
       width: 100%;
       text-align: center;
     }
@@ -441,42 +442,42 @@
       background: #4B5563;
       color: white;
       border: none;
-      padding: 7px 12px;
+      padding: 6px 10px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
     }
 
     .btn-attendance {
       background: #0D9488;
       color: white;
       border: none;
-      padding: 6px 8px;
+      padding: 4px 7px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       white-space: nowrap;
     }
 
     .dynamic-pay-row {
       display: grid;
       grid-template-columns: 1.2fr 1fr 1fr 1fr auto;
-      gap: 8px;
+      gap: 6px;
       align-items: center;
       background: white;
-      padding: 10px;
+      padding: 8px;
       border: 1px solid #E2E8F0;
-      border-radius: 6px;
-      margin-bottom: 8px;
+      border-radius: 5px;
+      margin-bottom: 6px;
     }
 
     .btn-del-row {
       background: #FEE2E2;
       color: #991B1B;
       border: none;
-      padding: 8px 10px;
+      padding: 6px 8px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: bold;
@@ -484,9 +485,9 @@
 
     .status-badge {
       display: inline-block;
-      padding: 3px 8px;
+      padding: 2px 6px;
       border-radius: 4px;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
     }
     .status-badge.active { background: #DEF7EC; color: #03543F; }
@@ -494,19 +495,19 @@
 
     .password-pill {
       background: #E2E8F0;
-      padding: 3px 6px;
+      padding: 2px 5px;
       border-radius: 4px;
       font-family: monospace;
       font-weight: 700;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: #0F172A;
     }
 
     .finance-split-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 20px;
+      gap: 14px;
+      margin-bottom: 16px;
     }
 
     @media (max-width: 850px) {
@@ -517,40 +518,40 @@
     .finance-column-box {
       background: white;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      padding: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      padding: 14px;
       border-top: 4px solid var(--navy-blue);
     }
     .finance-column-box.income-box { border-top-color: var(--success-green); }
     .finance-column-box.expense-box { border-top-color: var(--primary-red); }
 
     .finance-box-title {
-      font-size: 1.05rem;
+      font-size: 0.98rem;
       font-weight: 800;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .finance-box-title.income-title { color: #065F46; }
     .finance-box-title.expense-title { color: #991B1B; }
 
     .metric-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .metric-box {
       background: white;
-      padding: 14px 16px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-      border-left: 5px solid var(--navy-blue);
+      padding: 12px 14px;
+      border-radius: 7px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      border-left: 4px solid var(--navy-blue);
     }
     .metric-box.inflow { border-left-color: var(--success-green); }
     .metric-box.outflow { border-left-color: var(--primary-red); }
 
     .metric-label {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
@@ -558,97 +559,69 @@
     }
 
     .metric-value {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 800;
-      margin-top: 4px;
+      margin-top: 3px;
       color: var(--navy-blue);
     }
 
+    /* COMPACT, SLIM, NON-EXPANDING DIRECTORY TABLE */
     .table-container {
       overflow-x: auto;
       border: 1px solid var(--border-gray);
       border-radius: 6px;
-      margin-top: 8px;
+      margin-top: 6px;
       -webkit-overflow-scrolling: touch;
+      background: white;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
+      font-size: 0.78rem;
+      white-space: nowrap;
     }
 
     th, td {
-      padding: 8px 10px;
-      border-bottom: 1px solid var(--border-gray);
-      font-size: 0.8rem;
+      padding: 6px 8px;
+      border-bottom: 1px solid #E2E8F0;
+      vertical-align: middle;
     }
 
     th {
       background-color: var(--navy-blue);
       color: var(--pure-white);
-      white-space: nowrap;
+      font-weight: 700;
+      font-size: 0.75rem;
     }
 
     tr:nth-child(even) {
       background-color: #F8FAFC;
     }
 
-    @media (max-width: 768px) {
-      .responsive-table thead {
-        display: none;
-      }
-      .responsive-table, .responsive-table tbody, .responsive-table tr, .responsive-table td {
-        display: block;
-        width: 100%;
-      }
-      .responsive-table tr {
-        background: white;
-        border: 1px solid var(--border-gray);
-        border-radius: 8px;
-        margin-bottom: 10px;
-        padding: 12px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-      }
-      .responsive-table td {
-        padding: 6px 0;
-        border-bottom: 1px dashed #E2E8F0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .responsive-table td:last-child {
-        border-bottom: none;
-        padding-top: 8px;
-        justify-content: flex-start;
-        gap: 6px;
-      }
-      .responsive-table td::before {
-        content: attr(data-label);
-        font-weight: 700;
-        color: var(--navy-blue);
-        font-size: 0.75rem;
-      }
+    tr:hover {
+      background-color: #F1F5F9;
     }
 
     .schedule-control-bar {
       background: #EDF2F7;
       border: 1px solid #CBD5E0;
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 14px;
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 12px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
       align-items: flex-end;
     }
 
     .schedule-grid-box {
       background: white;
-      border-radius: 8px;
+      border-radius: 6px;
       border: 1px solid #E2E8F0;
-      padding: 14px;
-      margin-bottom: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
       border-left: 4px solid var(--navy-blue);
     }
     .schedule-grid-box.test-box {
@@ -656,10 +629,10 @@
     }
 
     .schedule-box-header {
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 700;
       color: var(--navy-blue);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -667,8 +640,8 @@
 
     .editable-cell input {
       width: 100%;
-      padding: 6px 8px;
-      font-size: 0.82rem;
+      padding: 5px 6px;
+      font-size: 0.78rem;
       border: 1px solid #CBD5E0;
       border-radius: 4px;
     }
@@ -681,14 +654,14 @@
       z-index: 1000;
       align-items: center;
       justify-content: center;
-      padding: 12px;
+      padding: 10px;
     }
 
     .modal-card {
       background: white;
       border-radius: 8px;
       padding: 16px;
-      max-width: 550px;
+      max-width: 520px;
       width: 100%;
       max-height: 85vh;
       overflow-y: auto;
@@ -698,17 +671,17 @@
 
     .months-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
-      gap: 6px;
-      margin: 12px 0;
+      grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
+      gap: 5px;
+      margin: 10px 0;
     }
 
     .month-badge {
       text-align: center;
-      padding: 8px 4px;
+      padding: 6px 3px;
       border: 1px solid var(--navy-blue);
       border-radius: 4px;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       cursor: pointer;
       user-select: none;
@@ -728,9 +701,9 @@
     }
 
     .att-badge {
-      padding: 5px 10px;
+      padding: 4px 8px;
       border-radius: 4px;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       cursor: pointer;
       user-select: none;
@@ -739,6 +712,7 @@
     .att-badge.present { background: #DEF7EC; color: #03543F; border-color: #03543F; }
     .att-badge.absent { background: #FDE8E8; color: #9B1C1C; border-color: #9B1C1C; }
 
+    /* Print Template */
     #print-section { display: none; }
 
     @media print {
@@ -773,6 +747,7 @@
       <div class="brand-title">FAUJ-E-<span>FACTORY</span></div>
     </div>
     <div id="nav-controls" style="display: none; align-items: center; gap: 8px;">
+      <!-- Desktop Navigation Tabs -->
       <div class="desktop-nav-tabs" id="admin-nav-tabs" style="display: none;">
         <button type="button" class="tab-btn" id="btn-tab-students" onclick="switchTab('students')">Students & Admissions</button>
         <button type="button" class="tab-btn" id="btn-tab-schedule" onclick="switchTab('schedule')">Weekly Routine & Tests</button>
@@ -833,7 +808,7 @@
     <!-- 2. STUDENTS & ADMISSIONS PORTAL (TAB 1) -->
     <div id="tab-students-content" style="display: none;">
       
-      <!-- Staff Profile Creation (Super Admin Only: Assigns Entry Permissions) -->
+      <!-- Staff Profile Creation (Super Admin Only) -->
       <div class="card" id="staff-creation-box">
         <div class="card-header">Register Official / Faculty & Assign Entry Places</div>
         <form id="staff-form">
@@ -881,7 +856,7 @@
       <div class="card" id="staff-directory-box">
         <div class="card-header">Official & Faculty Directory</div>
         <div class="table-container">
-          <table class="responsive-table">
+          <table>
             <thead>
               <tr>
                 <th>Designation</th>
@@ -1072,13 +1047,13 @@
         </form>
       </div>
 
-      <!-- Student Directory (Print & Active/Inactive Switches Only) -->
+      <!-- Student Directory (Compact, Non-Bulky Table) -->
       <div class="card">
         <div class="card-header">
           <span>Registered Students Directory (Session Apr 2026 – Mar 2027)</span>
         </div>
         <div class="table-container">
-          <table class="responsive-table">
+          <table>
             <thead>
               <tr>
                 <th>Student Details</th>
@@ -1291,11 +1266,11 @@
       </div>
     </div>
 
-    <!-- 5. STUDENT PERSONAL DESK (FIXED FOR ALL ENROLLED STUDENTS) -->
+    <!-- 5. PERSONAL DESK VIEW (STUDENT / OFFICIAL) -->
     <div id="personal-desk-view" style="display: none;">
       <div class="card">
         <div class="card-header">
-          <span id="desk-title">Student Portal Desk</span>
+          <span id="desk-title">Portal Desk</span>
           <button type="button" class="btn-print" onclick="window.print()">🖨️ Print Profile</button>
         </div>
         <div id="personal-desk-content"></div>
@@ -1418,7 +1393,6 @@
     const SUPABASE_REST_URL = "https://dyldejdkgfnyvunkrddh.supabase.co/rest/v1";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5bGRlamRrZ2ZueXZ1bmtyZGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2MDE4OTYsImV4cCI6MjEwNjE3Nzg5Nn0._JUB9WjiB3aJAdEZZyADueL9i6iyf7us6dD8L3S1o0E";
 
-    // Clean Phone Sanitizer: Extract only 10 digits
     function sanitizePhone(val) {
       if (!val) return "";
       const cleaned = String(val).replace(/\D/g, "");
@@ -1488,7 +1462,6 @@
       }
     }
 
-    // Merge Cloud into Local without wiping unsynced records
     async function syncFromCloud() {
       const [staffData, studentData, incomeData, expenseData] = await Promise.all([
         cloudFetch("ff_staff?select=*"),
@@ -1540,7 +1513,7 @@
         btn.innerText = "🙈";
       } else {
         passInput.type = "password";
-        btn.innerText = "👁️️";
+        btn.innerText = "👁";
       }
     }
 
@@ -1574,7 +1547,6 @@
       calculateTotalFixedAndDue();
     }
 
-    // Fee Fixation & Dynamic Due Calculations
     function calculateTotalFixedAndDue() {
       const adm = parseFloat(document.getElementById("fix-admission").value) || 0;
       const tuition = parseFloat(document.getElementById("fix-tuition").value) || 0;
@@ -1674,7 +1646,6 @@
       if (document.getElementById("exp-date")) document.getElementById("exp-date").value = today;
     }
 
-    // PROFILE MANAGEMENT: ONLY PRINT & INACTIVE SWITCH
     function toggleStaffStatus(idx) {
       if (currentUser.role !== "SuperAdmin") return;
       const st = DB.staff[idx];
@@ -1702,14 +1673,14 @@
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td data-label="Designation"><strong>${st.role}</strong></td>
-          <td data-label="Name">${st.name}</td>
-          <td data-label="Login Mobile">${st.phone}</td>
-          <td data-label="Date of Birth">${st.dob}</td>
-          <td data-label="Assigned Modules" style="font-size:0.75rem; color:#475569;">${permsList}</td>
-          ${isSuperAdmin ? `<td data-label="Access Password"><span class="password-pill">${st.password}</span></td>` : ''}
-          <td data-label="Status"><span class="status-badge ${isInactive ? 'inactive' : 'active'}">${st.status || 'Active'}</span></td>
-          <td data-label="Controls">
+          <td><strong>${st.role}</strong></td>
+          <td>${st.name}</td>
+          <td>${st.phone}</td>
+          <td>${st.dob}</td>
+          <td style="font-size:0.75rem; color:#475569;">${permsList}</td>
+          ${isSuperAdmin ? `<td><span class="password-pill">${st.password}</span></td>` : ''}
+          <td><span class="status-badge ${isInactive ? 'inactive' : 'active'}">${st.status || 'Active'}</span></td>
+          <td style="display:flex; gap:4px;">
             <button type="button" class="btn-print" onclick="printStaffProfile(${idx})">🖨️ PDF</button>
             ${isSuperAdmin ? `
               <button type="button" class="btn-status-toggle ${isInactive ? 'is-inactive' : 'is-active'}" onclick="toggleStaffStatus(${idx})">
@@ -1749,24 +1720,24 @@
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td data-label="Student Details">
+          <td>
             <strong>${s.name}</strong> (${s.gender || 'N/A'})<br/>
             <span style="font-size:0.75rem; color:var(--text-muted);">Batch: ${s.batch} | Ph: ${s.ph1}</span>
           </td>
-          <td data-label="Admission Dues">
+          <td>
             Adm Fee: ₹${s.admission_fee}<br/>
             Paid: ₹${s.paid}<br/>
             <strong style="color:${s.remaining > 0 ? 'var(--primary-red)' : 'var(--success-green)'};">Due: ₹${s.remaining}</strong>
           </td>
-          <td data-label="Installments" style="font-size:0.75rem;">
+          <td style="font-size:0.75rem;">
             ${(s.additional_payments && s.additional_payments.length) ? s.additional_payments.map(p => `${p.head}: ₹${p.amount}`).join('<br/>') : 'No extra dues'}
           </td>
-          <td data-label="Monthly Status">
+          <td>
             <button type="button" class="btn-sub-action" onclick="openMonthModal(${idx})">📅 Status (${paidArr.length} Paid)</button>
           </td>
-          ${isSuperAdmin ? `<td data-label="Access Password"><span class="password-pill">${s.password}</span></td>` : ''}
-          <td data-label="Status"><span class="status-badge ${isInactive ? 'inactive' : 'active'}">${s.status || 'Active'}</span></td>
-          <td data-label="Controls">
+          ${isSuperAdmin ? `<td><span class="password-pill">${s.password}</span></td>` : ''}
+          <td><span class="status-badge ${isInactive ? 'inactive' : 'active'}">${s.status || 'Active'}</span></td>
+          <td style="display:flex; flex-direction:column; gap:4px;">
             <button type="button" class="btn-print" onclick="printStudentVerification(${idx})">🖨️ PDF</button>
             ${isSuperAdmin ? `
               <button type="button" class="btn-readmit" ${isEligibleForReadmission ? '' : 'disabled'} onclick="executeReAdmission(${idx})">Re-Admit</button>
@@ -1804,7 +1775,6 @@
       });
     }
 
-    // Staff Submit (Super Admin Only: Assigns Selected Permissions)
     document.getElementById("staff-form").addEventListener("submit", (e) => {
       e.preventDefault();
       if (currentUser.role !== "SuperAdmin") return;
@@ -1837,7 +1807,6 @@
       cloudFetch("ff_staff", "POST", newStaff);
     });
 
-    // Student Admission Submit with Itemized Accounting
     document.getElementById("student-form").addEventListener("submit", (e) => {
       e.preventDefault();
       if (currentUser.role !== "SuperAdmin" && !(currentUser.permissions && currentUser.permissions.admissions)) return;
@@ -1917,11 +1886,9 @@
         status: "Active"
       };
 
-      // Guaranteed Instant Local Persistence
       DB.students.push(newStudent);
       safeSet("ff_students", DB.students);
 
-      // Save Itemized Records to Income Ledger
       const breakdowns = [
         { purpose: "Admission Fee", amt: pAdm },
         { purpose: "Advance Study Fee", amt: pStudy },
@@ -1960,11 +1927,9 @@
       initGenerators();
       calculateTotalFixedAndDue();
 
-      // Safe Background Cloud Sync
       cloudFetch("ff_students", "POST", newStudent);
     });
 
-    // INVOICE PRINT ENGINE
     function printInvoiceByIndex(sortedIndex) {
       const sortedIncomes = [...DB.incomes].sort((a, b) => new Date(b.date) - new Date(a.date));
       const entry = sortedIncomes[sortedIndex];
@@ -2069,7 +2034,6 @@
       window.print();
     }
 
-    // FINANCE FORMS
     document.getElementById("income-entry-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const newIncome = {
@@ -2172,6 +2136,7 @@
       document.getElementById("tab-students-content").style.display = (tab === 'students') ? 'block' : 'none';
       document.getElementById("tab-schedule-content").style.display = (tab === 'schedule') ? 'block' : 'none';
       document.getElementById("tab-finance-content").style.display = (tab === 'finance') ? 'block' : 'none';
+      document.getElementById("personal-desk-view").style.display = 'none';
 
       document.getElementById("btn-tab-students").classList.toggle("active", tab === 'students');
       document.getElementById("btn-tab-schedule").classList.toggle("active", tab === 'schedule');
@@ -2187,7 +2152,7 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    // MULTI-ROLE LOGIN CONTROLLER (WITH WORKING PHONE SANITIZATION)
+    // MULTI-ROLE LOGIN CONTROLLER (SUPER ADMIN, STAFF & STUDENT)
     document.getElementById("login-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const rawId = document.getElementById("login-identifier").value.trim().toLowerCase();
@@ -2195,7 +2160,7 @@
       const remember = document.getElementById("remember-me-checkbox").checked;
       const phoneClean = sanitizePhone(rawId);
 
-      // 1. Super Admin Check
+      // 1. Super Admin Validation
       const SUPER_ADMINS = [
         { email: "supriyaskkundu@gmail.com", name: "Super Admin (Supriya)" },
         { email: "ersadsir1986@gmail.com", name: "Super Admin (Ersad)" }
@@ -2208,7 +2173,7 @@
         return;
       }
 
-      // 2. Staff / Official Check (By Sanitized Phone Number & Password)
+      // 2. Staff / Official Validation
       const staff = DB.staff.find(s => (sanitizePhone(s.phone) === phoneClean || s.phone.toLowerCase() === rawId) && s.password.trim() === pass);
       if (staff) {
         if (staff.status === "Inactive") {
@@ -2219,7 +2184,7 @@
         return;
       }
 
-      // 3. Student Check (By Sanitized Primary Phone & Password)
+      // 3. Student Validation
       const student = DB.students.find(s => (sanitizePhone(s.ph1) === phoneClean || s.ph1.toLowerCase() === rawId) && s.password.trim() === pass);
       if (student) {
         if (student.status === "Inactive") {
@@ -2248,6 +2213,7 @@
       const isSuperAdmin = (currentUser.role === "SuperAdmin");
 
       if (isSuperAdmin) {
+        // Super Admin Gets Full Unrestricted Access
         document.getElementById("admin-nav-tabs").style.display = "flex";
         document.getElementById("mobile-nav-bar").style.display = "flex";
         document.getElementById("btn-tab-students").style.display = "inline-block";
@@ -2276,12 +2242,14 @@
         renderFinanceDashboard();
         initWeekRange();
       } else if (currentUser.role === "Official" || currentUser.role === "Faculty") {
-        const perms = currentUser.permissions || {};
+        // OFFICIAL / FACULTY LOGIN - NEVER BLANK!
+        const perms = currentUser.permissions || { admissions: true, schedule: true, income: true, expense: false };
+        currentUser.permissions = perms;
+
         document.getElementById("admin-nav-tabs").style.display = "flex";
         document.getElementById("mobile-nav-bar").style.display = "flex";
         document.getElementById("staff-creation-box").style.display = "none";
         document.getElementById("staff-directory-box").style.display = "none";
-        document.getElementById("personal-desk-view").style.display = "none";
 
         const hasAdm = !!perms.admissions;
         const hasSch = !!perms.schedule;
@@ -2304,14 +2272,36 @@
         document.getElementById("sec-finance-income").style.display = perms.income ? "block" : "none";
         document.getElementById("sec-finance-expense").style.display = perms.expense ? "block" : "none";
 
-        if (hasAdm) switchTab("students");
-        else if (hasSch) switchTab("schedule");
-        else if (hasFin) switchTab("finance");
+        // Show Official Desk with direct access buttons
+        document.getElementById("tab-students-content").style.display = "none";
+        document.getElementById("tab-schedule-content").style.display = "none";
+        document.getElementById("tab-finance-content").style.display = "none";
+        document.getElementById("personal-desk-view").style.display = "block";
+        document.getElementById("student-routine-display").style.display = "none";
+
+        document.getElementById("desk-title").innerText = `${currentUser.role} Desk: ${currentUser.name}`;
+        
+        let actionButtonsHtml = '<div style="display:flex; flex-direction:column; gap:8px; margin-top:14px;">';
+        if (hasSch) actionButtonsHtml += `<button type="button" class="btn-primary" onclick="switchTab('schedule')">📅 Open Routine & Class Register</button>`;
+        if (hasAdm) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:var(--navy-blue);" onclick="switchTab('students')">👥 Open Student Admissions & Directory</button>`;
+        if (hasFin) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:#047857;" onclick="switchTab('finance')">💰 Open Accounts & Ledgers</button>`;
+        actionButtonsHtml += '</div>';
+
+        document.getElementById("personal-desk-content").innerHTML = `
+          <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:16px; font-size:0.9rem; line-height:1.6;">
+            <p><strong>Official Name:</strong> ${currentUser.name}</p>
+            <p><strong>Designation:</strong> <span style="color:var(--primary-red); font-weight:800;">${currentUser.role}</span></p>
+            <p><strong>Registered Mobile:</strong> ${currentUser.phone}</p>
+            <p><strong>Date of Birth:</strong> ${currentUser.dob}</p>
+            <p><strong>Status:</strong> <span class="status-badge active">${currentUser.status || 'Active'}</span></p>
+          </div>
+          ${actionButtonsHtml}
+        `;
 
         renderRoster();
         initWeekRange();
       } else {
-        // Student: Fixed single view for all students
+        // STUDENT LOGIN - Fixed Single View
         document.getElementById("admin-nav-tabs").style.display = "none";
         document.getElementById("mobile-nav-bar").style.display = "none";
         document.getElementById("tab-students-content").style.display = "none";
@@ -2409,7 +2399,6 @@
       }
     }
 
-    // MONTHLY FEE MODAL
     function openMonthModal(studentIdx) {
       activeModalStudentIdx = studentIdx;
       const student = DB.students[studentIdx];
@@ -2483,7 +2472,6 @@
       }
     }
 
-    // SCHEDULE BOARD CONTROLLER
     function initWeekRange() {
       const today = new Date();
       const curr = new Date(today);
@@ -2644,7 +2632,6 @@
       alert(`Routine saved for [${batch}] on ${date}!`);
     }
 
-    // COPY ROUTINE MODAL
     function openCopyScheduleModal() {
       const currentDate = document.getElementById("sch-day-select").value;
       const daySelect = document.getElementById("sch-day-select");
@@ -2736,7 +2723,6 @@
       closeCopyScheduleModal();
     }
 
-    // DIRECT ATTENDANCE REGISTER
     function openAttendanceModal(type, title, time) {
       const batch = document.getElementById("sch-batch-select").value;
       const date = document.getElementById("sch-day-select").value;
@@ -2896,7 +2882,6 @@
       document.getElementById("login-password").value = "";
     }
 
-    // Auto-login from Remembered Device Session
     window.addEventListener("DOMContentLoaded", () => {
       initGenerators();
       calculateTotalFixedAndDue();
@@ -2915,4 +2900,4 @@
     });
   </script>
 </body>
-</html>
+  </html>
