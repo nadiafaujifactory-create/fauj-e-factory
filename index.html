@@ -897,8 +897,8 @@
           </div>
         </div>
         <label style="display:flex; align-items:center; gap:8px; margin:10px 0 16px 0; font-size:0.8rem; cursor:pointer;">
-          <input type="checkbox" id="remember-me-checkbox" />
-          <span>Remember me on this device</span>
+          <input type="checkbox" id="remember-me-checkbox" checked />
+          <span>Remember me on this device (Stay Logged In)</span>
         </label>
         <button type="submit" class="btn-primary">Sign In to Dashboard</button>
       </form>
@@ -976,7 +976,7 @@
         </div>
       </div>
 
-      <!-- Student Admission Form (ONLY IDENTITY & FEE FIXATION - MONEY COLLECTION IN ACCOUNTS) -->
+      <!-- Student Admission Form -->
       <div class="card" id="student-admission-box">
         <div class="card-header">Student Admission & Fee Structure Setup</div>
         <form id="student-form">
@@ -1464,7 +1464,7 @@
       </div>
     </div>
 
-    <!-- 8. FINANCE PORTAL (TAB 7 - INTEGRATED STUDENT DUES & COLLECTIONS) -->
+    <!-- 8. FINANCE PORTAL (TAB 7) -->
     <div id="tab-finance-content" style="display: none;">
       <div class="metric-grid">
         <div class="metric-box inflow">
@@ -1773,33 +1773,6 @@
     </div>
   </div>
 
-  <!-- SESSION ATTENDEES VIEW MODAL -->
-  <div id="view-attendees-modal" class="modal-overlay">
-    <div class="modal-card">
-      <div class="card-header" style="border:none; padding:0 0 8px 0;">
-        <span id="att-view-title">Attended Students Register</span>
-        <button type="button" onclick="closeAttendeesModal()" style="border:none; background:none; font-size:1.3rem; cursor:pointer;">&times;</button>
-      </div>
-      <p id="att-view-sub" style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;"></p>
-      <div class="table-container" style="max-height: 50vh;">
-        <table>
-          <thead>
-            <tr>
-              <th>Reg ID</th>
-              <th>Student Name</th>
-              <th>Recorded Time</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="att-view-list-body"></tbody>
-        </table>
-      </div>
-      <div style="text-align: right; margin-top: 14px;">
-        <button type="button" class="btn-print" onclick="closeAttendeesModal()">Close</button>
-      </div>
-    </div>
-  </div>
-
   <!-- PRINT ENGINE -->
   <div id="print-section">
     <div class="print-box">
@@ -1842,7 +1815,6 @@
       }
     }
 
-    // DUAL-LOCK STORAGE & SNAPSHOT BACKUP
     function safeSet(key, val) {
       try {
         localStorage.setItem(key, JSON.stringify(val));
@@ -1898,7 +1870,6 @@
       }
     }
 
-    // NON-DESTRUCTIVE SAFE MERGE (PREVENTS DATA LOSS ON EMPTY CLOUD RESPONSE)
     async function syncFromCloud() {
       const [staffData, studentData, incomeData, expenseData] = await Promise.all([
         cloudFetch("ff_staff?select=*"),
@@ -1944,7 +1915,6 @@
       }
     }
 
-    // JSON BACKUP ENGINE
     function downloadJSONBackup() {
       const backupData = {
         timestamp: new Date().toISOString(),
@@ -2171,7 +2141,6 @@
       });
     }
 
-    // STUDENT PERSONAL & PHYSICAL DETAILS EDITING
     function openEditStudentModal(regId) {
       const student = DB.students.find(s => s.reg_id === regId);
       if (!student) return;
@@ -2299,7 +2268,6 @@
       cloudFetch("ff_staff", "POST", newStaff);
     });
 
-    // STUDENT REGISTRATION (NO MONEY COLLECTION HERE - ALL IN ACCOUNTS)
     document.getElementById("student-form").addEventListener("submit", (e) => {
       e.preventDefault();
       if (currentUser.role !== "SuperAdmin" && !(currentUser.permissions && currentUser.permissions.admissions)) return;
@@ -2353,7 +2321,7 @@
       renderRoster();
       populate360StudentDropdown();
       populateIncomeStudentDropdown();
-      alert(`Student registered successfully!\nReg ID: ${newStudent.reg_id}\nLogin Mobile: ${newStudent.ph1}\nPassword: ${newStudent.password}\nNote: Collect fee payments under Accounts -> Income.`);
+      alert(`Student registered successfully!\nReg ID: ${newStudent.reg_id}\nLogin Mobile: ${newStudent.ph1}\nPassword: ${newStudent.password}`);
 
       document.getElementById("student-form").reset();
       initGenerators();
@@ -2466,9 +2434,7 @@
       window.print();
     }
 
-    // -------------------------------------------------------------
-    // FINANCE INCOME & LIVE STUDENT DUES COLLECTION ENGINE
-    // -------------------------------------------------------------
+    // FINANCE INCOME & LIVE STUDENT DUES COLLECTION
     function populateIncomeStudentDropdown() {
       const sel = document.getElementById("inc-student-select");
       if (!sel) return;
@@ -2682,7 +2648,9 @@
       if (mProg) mProg.classList.toggle("active", tab === 'progress');
       if (mFin) mFin.classList.toggle("active", tab === 'finance');
 
-      if (tab === 'attendance') {
+      if (tab === 'schedule') {
+        initWeekRange();
+      } else if (tab === 'attendance') {
         renderAttendanceDeskSessions();
       } else if (tab === 'progress') {
         renderProgressBoard();
@@ -2697,6 +2665,298 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    // -------------------------------------------------------------
+    // DATE-WISE ROUTINE ENGINE (FIXED & FULLY SYNCED)
+    // -------------------------------------------------------------
+    function initWeekRange() {
+      const fromInp = document.getElementById("sch-from-date");
+      const toInp = document.getElementById("sch-to-date");
+
+      if (!fromInp.value || !toInp.value) {
+        const today = new Date();
+        const curr = new Date(today);
+        const dayOfWeek = curr.getDay(); // 0 is Sun
+        const distanceToMonday = (dayOfWeek + 6) % 7;
+        const monday = new Date(curr.setDate(curr.getDate() - distanceToMonday));
+        const sunday = new Date(curr.setDate(monday.getDate() + 6));
+
+        fromInp.value = monday.toISOString().split("T")[0];
+        toInp.value = sunday.toISOString().split("T")[0];
+      }
+
+      generateWeekRangeDates();
+    }
+
+    function generateWeekRangeDates() {
+      const fromStr = document.getElementById("sch-from-date").value;
+      const toStr = document.getElementById("sch-to-date").value;
+      const daySelect = document.getElementById("sch-day-select");
+      const currentSelectedDate = daySelect.value;
+      daySelect.innerHTML = "";
+
+      if (!fromStr || !toStr) return;
+
+      let start = new Date(fromStr + "T00:00:00");
+      const end = new Date(toStr + "T00:00:00");
+
+      while (start <= end) {
+        const opt = document.createElement("option");
+        const dateVal = start.toISOString().split("T")[0];
+        const dayName = start.toLocaleDateString("en-US", { weekday: "short" });
+        opt.value = dateVal;
+        opt.innerText = `${dateVal} (${dayName})`;
+        daySelect.appendChild(opt);
+        start.setDate(start.getDate() + 1);
+      }
+
+      if (currentSelectedDate && Array.from(daySelect.options).some(o => o.value === currentSelectedDate)) {
+        daySelect.value = currentSelectedDate;
+      }
+
+      loadRoutineForCurrentSelection();
+    }
+
+    function loadRoutineForCurrentSelection() {
+      const batch = document.getElementById("sch-batch-select").value;
+      const date = document.getElementById("sch-day-select").value;
+      if (!date) return;
+
+      const key = `${batch}_${date}`;
+      const saved = DB.schedules.find(s => s.key === key);
+      const classTbody = document.getElementById("class-rows-body");
+      const testTbody = document.getElementById("test-rows-body");
+      classTbody.innerHTML = "";
+      testTbody.innerHTML = "";
+
+      const classes = (saved && saved.classes) ? saved.classes : [];
+      const tests = (saved && saved.tests) ? saved.tests : [];
+
+      if (classes.length === 0) {
+        // default template if brand new
+        addClassRow({ time: "09:30 AM - 11:00 AM", teacher: "Maths Faculty", subject: "Arithmetic", topic: "Number Systems", note: "" });
+        addClassRow({ time: "11:30 AM - 01:00 PM", teacher: "English Faculty", subject: "English", topic: "Tenses & Voice", note: "" });
+      } else {
+        classes.forEach(c => addClassRow(c));
+      }
+
+      if (tests.length === 0) {
+        addTestRow({ name: "Daily Benchmark Test", time: "05:00 PM - 06:00 PM", marks: "50", syllabus: "Day Curriculum" });
+      } else {
+        tests.forEach(t => addTestRow(t));
+      }
+    }
+
+    function addClassRow(data = {}) {
+      const tbody = document.getElementById("class-rows-body");
+      const tr = document.createElement("tr");
+      tr.className = "class-row-item";
+      tr.innerHTML = `
+        <td class="editable-cell"><input type="text" class="c-time" value="${data.time || ''}" placeholder="Time (e.g. 09:30 AM)" /></td>
+        <td class="editable-cell"><input type="text" class="c-teacher" value="${data.teacher || ''}" placeholder="Teacher Name" /></td>
+        <td class="editable-cell"><input type="text" class="c-subject" value="${data.subject || ''}" placeholder="Subject" /></td>
+        <td class="editable-cell"><input type="text" class="c-topic" value="${data.topic || ''}" placeholder="Lesson / Topic" /></td>
+        <td class="editable-cell"><input type="text" class="c-note" value="${data.note || ''}" placeholder="Notes / Instruction" /></td>
+        <td style="text-align:center;"><button type="button" style="color:red; cursor:pointer;" onclick="this.closest('tr').remove()">✕</button></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function addTestRow(data = {}) {
+      const tbody = document.getElementById("test-rows-body");
+      const tr = document.createElement("tr");
+      tr.className = "test-row-item";
+      tr.innerHTML = `
+        <td class="editable-cell"><input type="text" class="t-name" value="${data.name || ''}" placeholder="Exam Title" /></td>
+        <td class="editable-cell"><input type="text" class="t-time" value="${data.time || ''}" placeholder="Timing" /></td>
+        <td class="editable-cell"><input type="text" class="t-marks" value="${data.marks || '50'}" placeholder="Marks" /></td>
+        <td class="editable-cell"><input type="text" class="t-syllabus" value="${data.syllabus || ''}" placeholder="Syllabus" /></td>
+        <td style="text-align:center;"><button type="button" style="color:red; cursor:pointer;" onclick="this.closest('tr').remove()">✕</button></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function saveRoutineForCurrentSelection() {
+      const batch = document.getElementById("sch-batch-select").value;
+      const date = document.getElementById("sch-day-select").value;
+      if (!date) {
+        alert("Please select a date from the dropdown first!");
+        return;
+      }
+      const key = `${batch}_${date}`;
+
+      const classRows = document.querySelectorAll(".class-row-item");
+      const classes = [];
+      classRows.forEach(r => {
+        const time = r.querySelector(".c-time").value.trim();
+        const teacher = r.querySelector(".c-teacher").value.trim();
+        const subject = r.querySelector(".c-subject").value.trim();
+        const topic = r.querySelector(".c-topic").value.trim();
+        const note = r.querySelector(".c-note").value.trim();
+        if (subject || time) {
+          classes.push({ time, teacher, subject, topic, note });
+        }
+      });
+
+      const testRows = document.querySelectorAll(".test-row-item");
+      const tests = [];
+      testRows.forEach(r => {
+        const name = r.querySelector(".t-name").value.trim();
+        const time = r.querySelector(".t-time").value.trim();
+        const marks = r.querySelector(".t-marks").value.trim();
+        const syllabus = r.querySelector(".t-syllabus").value.trim();
+        if (name) {
+          tests.push({ name, time, marks, syllabus });
+        }
+      });
+
+      const idx = DB.schedules.findIndex(s => s.key === key);
+      const payload = { key, batch, date, classes, tests, updatedAt: new Date().toISOString() };
+
+      if (idx > -1) DB.schedules[idx] = payload;
+      else DB.schedules.push(payload);
+
+      safeSet("ff_schedules", DB.schedules);
+      alert(`Routine successfully saved and locked for Batch [${batch}] on Date [${date}]!\nThis date-wise schedule is now live on Student, Attendance & Exam Desks.`);
+    }
+
+    function openCopyScheduleModal() {
+      const currentDate = document.getElementById("sch-day-select").value;
+      const daySelect = document.getElementById("sch-day-select");
+      const listContainer = document.getElementById("copy-target-dates-list");
+      listContainer.innerHTML = "";
+
+      let count = 0;
+      for (let i = 0; i < daySelect.options.length; i++) {
+        const d = daySelect.options[i].value;
+        const text = daySelect.options[i].innerText;
+        if (d !== currentDate) {
+          count++;
+          const label = document.createElement("label");
+          label.style = "display:flex; align-items:center; gap:8px; font-size:0.8rem; cursor:pointer;";
+          label.innerHTML = `<input type="checkbox" class="copy-target-date" value="${d}" checked /> <span>${text}</span>`;
+          listContainer.appendChild(label);
+        }
+      }
+
+      if (count === 0) {
+        alert("No other dates in this range to copy to.");
+        return;
+      }
+
+      document.getElementById("copy-routine-modal").style.display = "flex";
+    }
+
+    function closeCopyScheduleModal() {
+      document.getElementById("copy-routine-modal").style.display = "none";
+    }
+
+    function toggleSelectAllCopyDates() {
+      const checkboxes = document.querySelectorAll(".copy-target-date");
+      const allChecked = Array.from(checkboxes).every(c => c.checked);
+      checkboxes.forEach(c => c.checked = !allChecked);
+    }
+
+    function executeCopySchedule() {
+      const batch = document.getElementById("sch-batch-select").value;
+      const sourceDate = document.getElementById("sch-day-select").value;
+
+      const classRows = document.querySelectorAll(".class-row-item");
+      const currentClasses = [];
+      classRows.forEach(r => {
+        currentClasses.push({
+          time: r.querySelector(".c-time").value,
+          teacher: r.querySelector(".c-teacher").value,
+          subject: r.querySelector(".c-subject").value,
+          topic: r.querySelector(".c-topic").value,
+          note: r.querySelector(".c-note").value
+        });
+      });
+
+      const testRows = document.querySelectorAll(".test-row-item");
+      const currentTests = [];
+      testRows.forEach(r => {
+        currentTests.push({
+          name: r.querySelector(".t-name").value,
+          time: r.querySelector(".t-time").value,
+          marks: r.querySelector(".t-marks").value,
+          syllabus: r.querySelector(".t-syllabus").value
+        });
+      });
+
+      const checkedDates = Array.from(document.querySelectorAll(".copy-target-date:checked")).map(c => c.value);
+      if (checkedDates.length === 0) {
+        alert("Please select at least one date.");
+        return;
+      }
+
+      checkedDates.forEach(targetDate => {
+        const targetKey = `${batch}_${targetDate}`;
+        const payload = {
+          key: targetKey,
+          batch,
+          date: targetDate,
+          classes: JSON.parse(JSON.stringify(currentClasses)),
+          tests: JSON.parse(JSON.stringify(currentTests)),
+          updatedAt: new Date().toISOString()
+        };
+
+        const idx = DB.schedules.findIndex(s => s.key === targetKey);
+        if (idx > -1) DB.schedules[idx] = payload;
+        else DB.schedules.push(payload);
+      });
+
+      safeSet("ff_schedules", DB.schedules);
+      alert(`Copied routine from ${sourceDate} to ${checkedDates.length} selected days!`);
+      closeCopyScheduleModal();
+    }
+
+    function printRoutineSheet() {
+      const batch = document.getElementById("sch-batch-select").value;
+      const date = document.getElementById("sch-day-select").value;
+      const key = `${batch}_${date}`;
+      const saved = DB.schedules.find(s => s.key === key);
+
+      document.getElementById("print-doc-subtitle").innerText = `DAILY ORDER & ACADEMIC ROUTINE (BATCH: ${batch})`;
+      const p = document.getElementById("printable-details");
+
+      const classes = saved ? saved.classes : [];
+      const tests = saved ? saved.tests : [];
+
+      let classTrs = classes.map(c => `
+        <tr><td><strong>${c.time}</strong></td><td>${c.teacher}</td><td>${c.subject}</td><td>${c.topic}</td><td>${c.note}</td></tr>
+      `).join("");
+
+      let testTrs = tests.map(t => `
+        <tr><td><strong>${t.name}</strong></td><td>${t.time}</td><td>${t.marks}</td><td>${t.syllabus}</td></tr>
+      `).join("");
+
+      p.innerHTML = `
+        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+          <div><p><strong>Scheduled Date:</strong> ${date}</p><p><strong>Formation / Batch:</strong> ${batch}</p></div>
+          <div style="text-align:right;"><p><strong>Campus:</strong> Headquarters</p><p><strong>Status:</strong> Approved Routine</p></div>
+        </div>
+        <h4 style="margin:8px 0 4px 0; color:#0A192F;">1. Academic Lectures & Routine Sessions</h4>
+        <table class="print-table">
+          <thead><tr><th>Time</th><th>Teacher</th><th>Subject</th><th>Topic</th><th>Note</th></tr></thead>
+          <tbody>${classTrs || '<tr><td colspan="5">No classes scheduled.</td></tr>'}</tbody>
+        </table>
+        <h4 style="margin:12px 0 4px 0; color:#E52521;">2. Evaluative Tests & Daily Benchmarks</h4>
+        <table class="print-table">
+          <thead><tr><th>Test Name</th><th>Timing</th><th>Marks</th><th>Syllabus</th></tr></thead>
+          <tbody>${testTrs || '<tr><td colspan="4">No tests scheduled.</td></tr>'}</tbody>
+        </table>
+        <div class="signature-row" style="margin-top:40px;">
+          <div class="signature-line">Officer In-Charge</div>
+          <div class="signature-line">Super Admin / Director</div>
+        </div>
+      `;
+
+      window.print();
+    }
+
+    // -------------------------------------------------------------
+    // EXAM DESK ENGINE (SYNCED WITH DATE-WISE TESTS & ATTENDANCE)
+    // -------------------------------------------------------------
     function populateScheduledExamsDropdown() {
       const sel = document.getElementById("exam-scheduled-selector");
       sel.innerHTML = '<option value="">-- Choose Exam from Scheduled Routine --</option>';
@@ -2722,7 +2982,7 @@
       if (count === 0) {
         const opt = document.createElement("option");
         opt.value = "";
-        opt.innerText = "No tests found in routine. Please add tests in Routine Tab first.";
+        opt.innerText = "No tests found in routine. Please save tests in Routine Tab first.";
         sel.appendChild(opt);
       }
     }
@@ -2759,7 +3019,7 @@
       tbody.innerHTML = "";
 
       if (presentList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:18px; color:#B91C1C; font-weight:600;">No students have submitted the attendance passcode for this exam yet. Once students enter the 5-digit code in class, they will appear here automatically.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:18px; color:#B91C1C; font-weight:600;">No students have verified attendance for this exam yet. Once students enter the 5-digit code in class, they will appear here automatically.</td></tr>`;
         return;
       }
 
@@ -2859,11 +3119,11 @@
 
       safeSet("ff_exam_scores", DB.examScores);
       safeSet("ff_students", DB.students);
-      alert("Exam marks saved successfully! Student 360° profile database updated.");
+      alert("Exam marks saved successfully! Cross-synced with Student 360° and Student Portal.");
     }
 
     // -------------------------------------------------------------
-    // STUDENT 360° PORTAL ENGINE (MONTHLY & COMPREHENSIVE DOSSIER)
+    // STUDENT 360° PORTAL ENGINE
     // -------------------------------------------------------------
     function populate360StudentDropdown() {
       const sel = document.getElementById("s360-student-select");
@@ -3105,7 +3365,7 @@
       document.getElementById("student-exam-scores-display").style.display = "none";
     }
 
-    // STUDY PROGRESS SEGMENT LOGIC
+    // STUDY PROGRESS LOGIC
     function renderProgressBoard() {
       const feed = document.getElementById("progress-subjects-feed");
       const batch = document.getElementById("prog-batch-select").value || "B1";
@@ -3237,7 +3497,7 @@
       document.getElementById("student-progress-display").style.display = "none";
     }
 
-    // ATTENDANCE DESK: 5-DIGIT CODE & 15-MINUTE EXPIRY
+    // ATTENDANCE DESK (5-DIGIT PASSCODE + 15M EXPIRY)
     function renderAttendanceDeskSessions() {
       const feed = document.getElementById("att-sessions-feed");
       const date = document.getElementById("att-desk-date").value || new Date().toISOString().split("T")[0];
@@ -3355,7 +3615,7 @@
       }
 
       safeSet("ff_att_sessions", DB.attendanceSessions);
-      alert(`5-Digit Code [${code}] is now LIVE for 15 minutes! Please announce or write on board for students.`);
+      alert(`5-Digit Code [${code}] is now LIVE for 15 minutes! Announce or write on board for students.`);
       renderAttendanceDeskSessions();
     }
 
@@ -3392,7 +3652,7 @@
       document.getElementById("view-attendees-modal").style.display = "none";
     }
 
-    // STUDENT ATTENDANCE (CODE HIDDEN FROM SCREEN - STUDENT ENTERS TEACHER'S CODE)
+    // STUDENT SELF-ATTENDANCE
     function renderStudentLiveAttendanceBox() {
       const box = document.getElementById("student-live-att-box");
       const container = document.getElementById("student-live-sessions-container");
@@ -3440,7 +3700,7 @@
                 <strong>${sess.title} (${sess.type})</strong>
                 <span class="timer-badge">⏳ Window Open: ${remainingMins} min(s) remaining</span>
               </div>
-              <p style="font-size:0.75rem; color:var(--text-muted); margin:2px 0 6px 0;">Time: ${sess.time} | Batch: ${sess.batch}</p>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin:2px 0 6px 0;">Class Time: ${sess.time} | Batch: ${sess.batch}</p>
               <div style="background:#F1F5F9; border-left:3px solid var(--navy-blue); padding:6px 10px; border-radius:4px; margin-bottom:8px; font-size:0.75rem; color:#334155;">
                 Enter the 5-digit passcode announced by your teacher or written on the classroom board.
               </div>
@@ -3499,7 +3759,7 @@
       renderStudentLiveAttendanceBox();
     }
 
-    // MULTI-ROLE LOGIN CONTROLLER
+    // MULTI-ROLE LOGIN CONTROLLER (WITH WORKING REMEMBER ME)
     document.getElementById("login-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const rawId = document.getElementById("login-identifier").value.trim().toLowerCase();
@@ -3544,6 +3804,8 @@
 
     function startSession(user, remember) {
       currentUser = user;
+      
+      // PERSISTENT LOCAL STORAGE ON REMEMBER ME
       if (remember) {
         localStorage.setItem("ff_remembered_session", JSON.stringify(user));
       } else {
@@ -3675,7 +3937,7 @@
         populate360StudentDropdown();
         populateIncomeStudentDropdown();
       } else {
-        // STUDENT LOGIN - Fixed View
+        // STUDENT LOGIN - Fixed Single View
         document.getElementById("admin-nav-tabs").style.display = "none";
         document.getElementById("mobile-nav-bar").style.display = "none";
         document.getElementById("tab-students-content").style.display = "none";
@@ -3713,6 +3975,151 @@
       }
     }
 
+    function showStudentRoutineView(batch) {
+      const routineCard = document.getElementById("student-routine-display");
+      routineCard.style.display = "block";
+      document.getElementById("student-routine-batch-title").innerText = `Batch [${batch}] Daily Routine & Evaluation Schedule`;
+
+      const select = document.getElementById("std-read-date-select");
+      select.innerHTML = "";
+
+      const today = new Date();
+      const curr = new Date(today);
+      const first = curr.getDate() - curr.getDay() + 1;
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(curr.setDate(first + i));
+        const dateVal = d.toISOString().split("T")[0];
+        const dayName = d.toLocaleDateString("en-US", { weekday: "short" });
+        const opt = document.createElement("option");
+        opt.value = dateVal;
+        opt.innerText = `${dateVal} (${dayName})`;
+        select.appendChild(opt);
+      }
+      renderStudentReadRoutine();
+      routineCard.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function hideStudentRoutine() {
+      document.getElementById("student-routine-display").style.display = "none";
+    }
+
+    function renderStudentReadRoutine() {
+      const date = document.getElementById("std-read-date-select").value;
+      const batch = currentUser.batch;
+      const key = `${batch}_${date}`;
+      const saved = DB.schedules.find(s => s.key === key);
+
+      const classesTbody = document.getElementById("std-read-classes-body");
+      const testsTbody = document.getElementById("std-read-tests-body");
+      classesTbody.innerHTML = "";
+      testsTbody.innerHTML = "";
+
+      const classes = (saved && saved.classes) ? saved.classes : [];
+      const tests = (saved && saved.tests) ? saved.tests : [];
+
+      if (classes.length === 0) {
+        classesTbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6B7280;">No academic classes scheduled for this date.</td></tr>`;
+      } else {
+        classes.forEach(c => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><strong>${c.time}</strong></td>
+            <td><strong>${c.subject}</strong> (${c.teacher || 'Faculty'})</td>
+            <td><strong>Topic:</strong> ${c.topic || '—'}<br/><span style="font-size:0.75rem; color:#4B5563;">${c.note || ''}</span></td>
+          `;
+          classesTbody.appendChild(tr);
+        });
+      }
+
+      if (tests.length === 0) {
+        testsTbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6B7280;">No mock tests scheduled for this date.</td></tr>`;
+      } else {
+        tests.forEach(t => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td style="color:var(--primary-red); font-weight:700;">${t.name}</td>
+            <td>${t.time}</td>
+            <td>Marks: <strong>${t.marks}</strong><br/><span style="font-size:0.75rem;">Syllabus: ${t.syllabus}</span></td>
+          `;
+          testsTbody.appendChild(tr);
+        });
+      }
+    }
+
+    function openMonthModal(studentIdx) {
+      activeModalStudentIdx = studentIdx;
+      const student = DB.students[studentIdx];
+      document.getElementById("modal-student-title").innerText = `${student.name} (${student.batch}) - Monthly Clearances`;
+
+      const admOrder = getMonthOrder(student.date);
+      const container = document.getElementById("modal-months-container");
+      container.innerHTML = "";
+
+      const paidArr = Array.isArray(student.paid_months) ? student.paid_months : [];
+
+      ACADEMIC_MONTHS.forEach(m => {
+        const isInactive = (m.order < admOrder);
+        const isPaid = paidArr.includes(m.label);
+
+        const badge = document.createElement("div");
+        badge.className = `month-badge ${isInactive ? 'disabled-month' : (isPaid ? 'paid' : '')}`;
+        badge.innerText = m.label;
+
+        if (!isInactive) {
+          badge.onclick = () => toggleMonthPaidFromModal(m.label);
+        }
+        container.appendChild(badge);
+      });
+
+      document.getElementById("monthly-fee-modal").style.display = "flex";
+    }
+
+    function closeMonthModal() {
+      document.getElementById("monthly-fee-modal").style.display = "none";
+      activeModalStudentIdx = null;
+    }
+
+    function toggleMonthPaidFromModal(monthLabel) {
+      if (activeModalStudentIdx === null) return;
+      const student = DB.students[activeModalStudentIdx];
+      let monthsList = Array.isArray(student.paid_months) ? [...student.paid_months] : [];
+      const idx = monthsList.indexOf(monthLabel);
+      const monthlySum = (Number(student.tuition_fee) || 0) + (Number(student.hostel_fee) || 0);
+
+      let issuedReceiptItem = null;
+
+      if (idx > -1) {
+        monthsList.splice(idx, 1);
+      } else {
+        monthsList.push(monthLabel);
+        if (monthlySum > 0) {
+          issuedReceiptItem = {
+            id: "INC-" + Date.now(),
+            date: new Date().toISOString().split("T")[0],
+            purpose: `Monthly Study & Hostel Fee (${monthLabel})`,
+            person: student.name + ` (${student.reg_id})`,
+            reg_id: student.reg_id,
+            amount: monthlySum
+          };
+          DB.incomes.push(issuedReceiptItem);
+          safeSet("ff_incomes", DB.incomes);
+          cloudFetch("ff_incomes", "POST", issuedReceiptItem);
+        }
+      }
+
+      student.paid_months = monthsList;
+      safeSet("ff_students", DB.students);
+      renderRoster();
+      renderFinanceDashboard();
+      openMonthModal(activeModalStudentIdx);
+
+      cloudFetch(`ff_students?id=eq.${student.id}`, "PATCH", { paid_months: monthsList });
+
+      if (issuedReceiptItem && confirm(`Generate official receipt for ${student.name} (${monthLabel})?`)) {
+        printInvoice(issuedReceiptItem);
+      }
+    }
+
     function logout() {
       localStorage.removeItem("ff_remembered_session");
       sessionStorage.removeItem("ff_session");
@@ -3732,14 +4139,24 @@
       document.getElementById("login-password").value = "";
     }
 
+    // AUTO-LOGIN FROM REMEMBERED DEVICE SESSION
     window.addEventListener("DOMContentLoaded", () => {
       initGenerators();
       calculateTotalFixedAndDue();
 
-      const saved = localStorage.getItem("ff_remembered_session") || sessionStorage.getItem("ff_session");
-      if (saved) {
+      const remembered = localStorage.getItem("ff_remembered_session");
+      const session = sessionStorage.getItem("ff_session");
+
+      if (remembered) {
         try {
-          const user = JSON.parse(saved);
+          const user = JSON.parse(remembered);
+          startSession(user, true);
+        } catch (e) {
+          logout();
+        }
+      } else if (session) {
+        try {
+          const user = JSON.parse(session);
           startSession(user, false);
         } catch (e) {
           logout();
