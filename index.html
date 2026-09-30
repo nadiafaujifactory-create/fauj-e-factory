@@ -976,7 +976,7 @@
         </div>
       </div>
 
-      <!-- Student Admission Form (ONLY IDENTITY & FEE FIXATION - MONEY COLLECTION MOVED TO ACCOUNTS) -->
+      <!-- Student Admission Form (ONLY IDENTITY & FEE FIXATION - MONEY COLLECTION IN ACCOUNTS) -->
       <div class="card" id="student-admission-box">
         <div class="card-header">Student Admission & Fee Structure Setup</div>
         <form id="student-form">
@@ -1037,8 +1037,7 @@
               <label>Educational Qualifications</label>
               <input type="text" id="std-qual" placeholder="e.g. 10th, 12th, Graduate" required />
             </div>
-            <div class="form-group">
-              <label>% of Last Passed Exam</label>
+            <div class="form-group">% of Last Passed Exam</label>
               <input type="number" step="0.01" id="std-marks" inputmode="decimal" placeholder="Percentage" required />
             </div>
             <div class="form-group">
@@ -1502,7 +1501,6 @@
               </select>
             </div>
             
-            <!-- SMART STUDENT SELECTOR WITH LIVE DUE BALANCE -->
             <div class="form-group" style="margin-bottom: 12px;">
               <label>Received From (Select Enrolled Student or Enter External Payer):</label>
               <select id="inc-student-select" onchange="onIncomeStudentSelectChange()">
@@ -1511,7 +1509,6 @@
               <input type="text" id="inc-person-manual" placeholder="Or enter external depositor/donor name" style="margin-top:6px; display:none;" />
             </div>
 
-            <!-- LIVE DUE COUNTER -->
             <div id="inc-student-due-display" style="display:none; background:#FEF2F2; border-left:4px solid var(--primary-red); padding:8px 10px; border-radius:4px; margin-bottom:12px;">
               <span style="font-size:0.78rem; color:#991B1B; font-weight:bold;">Student Outstanding Due Balance: </span>
               <span id="inc-live-due-amount" style="font-size:0.95rem; font-weight:900; color:var(--primary-red);">₹0</span>
@@ -1776,6 +1773,33 @@
     </div>
   </div>
 
+  <!-- SESSION ATTENDEES VIEW MODAL -->
+  <div id="view-attendees-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="card-header" style="border:none; padding:0 0 8px 0;">
+        <span id="att-view-title">Attended Students Register</span>
+        <button type="button" onclick="closeAttendeesModal()" style="border:none; background:none; font-size:1.3rem; cursor:pointer;">&times;</button>
+      </div>
+      <p id="att-view-sub" style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;"></p>
+      <div class="table-container" style="max-height: 50vh;">
+        <table>
+          <thead>
+            <tr>
+              <th>Reg ID</th>
+              <th>Student Name</th>
+              <th>Recorded Time</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="att-view-list-body"></tbody>
+        </table>
+      </div>
+      <div style="text-align: right; margin-top: 14px;">
+        <button type="button" class="btn-print" onclick="closeAttendeesModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- PRINT ENGINE -->
   <div id="print-section">
     <div class="print-box">
@@ -1818,11 +1842,10 @@
       }
     }
 
-    // LOCKED STORAGE WITH AUTOMATIC SNAPSHOT BACKUP
+    // DUAL-LOCK STORAGE & SNAPSHOT BACKUP
     function safeSet(key, val) {
       try {
         localStorage.setItem(key, JSON.stringify(val));
-        // Save emergency snapshot in secondary lock
         localStorage.setItem(key + "_snapshot", JSON.stringify(val));
       } catch (e) {
         console.warn("Storage full/disabled");
@@ -1875,7 +1898,7 @@
       }
     }
 
-    // NON-DESTRUCTIVE SAFE CLOUD MERGE
+    // NON-DESTRUCTIVE SAFE MERGE (PREVENTS DATA LOSS ON EMPTY CLOUD RESPONSE)
     async function syncFromCloud() {
       const [staffData, studentData, incomeData, expenseData] = await Promise.all([
         cloudFetch("ff_staff?select=*"),
@@ -1921,7 +1944,7 @@
       }
     }
 
-    // BACKUP DOWNLOAD & RESTORE ENGINE
+    // JSON BACKUP ENGINE
     function downloadJSONBackup() {
       const backupData = {
         timestamp: new Date().toISOString(),
@@ -2276,7 +2299,7 @@
       cloudFetch("ff_staff", "POST", newStaff);
     });
 
-    // STUDENT REGISTRATION (NO MONEY COLLECTION HERE - ALL TRANSFERRED TO ACCOUNTS)
+    // STUDENT REGISTRATION (NO MONEY COLLECTION HERE - ALL IN ACCOUNTS)
     document.getElementById("student-form").addEventListener("submit", (e) => {
       e.preventDefault();
       if (currentUser.role !== "SuperAdmin" && !(currentUser.permissions && currentUser.permissions.admissions)) return;
@@ -2521,7 +2544,6 @@
       DB.incomes.push(newIncome);
       safeSet("ff_incomes", DB.incomes);
 
-      // Auto-update student paid and remaining due balance
       if (regId) {
         const student = DB.students.find(s => s.reg_id === regId);
         if (student) {
@@ -2841,7 +2863,7 @@
     }
 
     // -------------------------------------------------------------
-    // STUDENT 360° PORTAL ENGINE
+    // STUDENT 360° PORTAL ENGINE (MONTHLY & COMPREHENSIVE DOSSIER)
     // -------------------------------------------------------------
     function populate360StudentDropdown() {
       const sel = document.getElementById("s360-student-select");
@@ -3418,7 +3440,7 @@
                 <strong>${sess.title} (${sess.type})</strong>
                 <span class="timer-badge">⏳ Window Open: ${remainingMins} min(s) remaining</span>
               </div>
-              <p style="font-size:0.75rem; color:var(--text-muted); margin:2px 0 6px 0;">Class Time: ${sess.time} | Batch: ${sess.batch}</p>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin:2px 0 6px 0;">Time: ${sess.time} | Batch: ${sess.batch}</p>
               <div style="background:#F1F5F9; border-left:3px solid var(--navy-blue); padding:6px 10px; border-radius:4px; margin-bottom:8px; font-size:0.75rem; color:#334155;">
                 Enter the 5-digit passcode announced by your teacher or written on the classroom board.
               </div>
@@ -3689,440 +3711,6 @@
 
         renderStudentLiveAttendanceBox();
       }
-    }
-
-    function showStudentRoutineView(batch) {
-      const routineCard = document.getElementById("student-routine-display");
-      routineCard.style.display = "block";
-      document.getElementById("student-routine-batch-title").innerText = `Batch [${batch}] Daily Routine & Evaluation Schedule`;
-
-      const select = document.getElementById("std-read-date-select");
-      select.innerHTML = "";
-
-      const today = new Date();
-      const curr = new Date(today);
-      const first = curr.getDate() - curr.getDay() + 1;
-      for (let i = 0; i < 7; i++) {
-        const d = new Date(curr.setDate(first + i));
-        const dateVal = d.toISOString().split("T")[0];
-        const dayName = d.toLocaleDateString("en-US", { weekday: "short" });
-        const opt = document.createElement("option");
-        opt.value = dateVal;
-        opt.innerText = `${dateVal} (${dayName})`;
-        select.appendChild(opt);
-      }
-      renderStudentReadRoutine();
-      routineCard.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function hideStudentRoutine() {
-      document.getElementById("student-routine-display").style.display = "none";
-    }
-
-    function renderStudentReadRoutine() {
-      const date = document.getElementById("std-read-date-select").value;
-      const batch = currentUser.batch;
-      const key = `${batch}_${date}`;
-      const saved = DB.schedules.find(s => s.key === key);
-
-      const classesTbody = document.getElementById("std-read-classes-body");
-      const testsTbody = document.getElementById("std-read-tests-body");
-      classesTbody.innerHTML = "";
-      testsTbody.innerHTML = "";
-
-      const classes = (saved && saved.classes) ? saved.classes : [];
-      const tests = (saved && saved.tests) ? saved.tests : [];
-
-      if (classes.length === 0) {
-        classesTbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6B7280;">No academic classes scheduled for this date.</td></tr>`;
-      } else {
-        classes.forEach(c => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td><strong>${c.time}</strong></td>
-            <td><strong>${c.subject}</strong> (${c.teacher || 'Faculty'})</td>
-            <td><strong>Topic:</strong> ${c.topic || '—'}<br/><span style="font-size:0.75rem; color:#4B5563;">${c.note || ''}</span></td>
-          `;
-          classesTbody.appendChild(tr);
-        });
-      }
-
-      if (tests.length === 0) {
-        testsTbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6B7280;">No mock tests scheduled for this date.</td></tr>`;
-      } else {
-        tests.forEach(t => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td style="color:var(--primary-red); font-weight:700;">${t.name}</td>
-            <td>${t.time}</td>
-            <td>Marks: <strong>${t.marks}</strong><br/><span style="font-size:0.75rem;">Syllabus: ${t.syllabus}</span></td>
-          `;
-          testsTbody.appendChild(tr);
-        });
-      }
-    }
-
-    function openMonthModal(studentIdx) {
-      activeModalStudentIdx = studentIdx;
-      const student = DB.students[studentIdx];
-      document.getElementById("modal-student-title").innerText = `${student.name} (${student.batch}) - Monthly Clearances`;
-
-      const admOrder = getMonthOrder(student.date);
-      const container = document.getElementById("modal-months-container");
-      container.innerHTML = "";
-
-      const paidArr = Array.isArray(student.paid_months) ? student.paid_months : [];
-
-      ACADEMIC_MONTHS.forEach(m => {
-        const isInactive = (m.order < admOrder);
-        const isPaid = paidArr.includes(m.label);
-
-        const badge = document.createElement("div");
-        badge.className = `month-badge ${isInactive ? 'disabled-month' : (isPaid ? 'paid' : '')}`;
-        badge.innerText = m.label;
-
-        if (!isInactive) {
-          badge.onclick = () => toggleMonthPaidFromModal(m.label);
-        }
-        container.appendChild(badge);
-      });
-
-      document.getElementById("monthly-fee-modal").style.display = "flex";
-    }
-
-    function closeMonthModal() {
-      document.getElementById("monthly-fee-modal").style.display = "none";
-      activeModalStudentIdx = null;
-    }
-
-    function toggleMonthPaidFromModal(monthLabel) {
-      if (activeModalStudentIdx === null) return;
-      const student = DB.students[activeModalStudentIdx];
-      let monthsList = Array.isArray(student.paid_months) ? [...student.paid_months] : [];
-      const idx = monthsList.indexOf(monthLabel);
-      const monthlySum = (Number(student.tuition_fee) || 0) + (Number(student.hostel_fee) || 0);
-
-      let issuedReceiptItem = null;
-
-      if (idx > -1) {
-        monthsList.splice(idx, 1);
-      } else {
-        monthsList.push(monthLabel);
-        if (monthlySum > 0) {
-          issuedReceiptItem = {
-            id: "INC-" + Date.now(),
-            date: new Date().toISOString().split("T")[0],
-            purpose: `Monthly Study & Hostel Fee (${monthLabel})`,
-            person: student.name + ` (${student.reg_id})`,
-            reg_id: student.reg_id,
-            amount: monthlySum
-          };
-          DB.incomes.push(issuedReceiptItem);
-          safeSet("ff_incomes", DB.incomes);
-          cloudFetch("ff_incomes", "POST", issuedReceiptItem);
-        }
-      }
-
-      student.paid_months = monthsList;
-      safeSet("ff_students", DB.students);
-      renderRoster();
-      renderFinanceDashboard();
-      openMonthModal(activeModalStudentIdx);
-
-      cloudFetch(`ff_students?id=eq.${student.id}`, "PATCH", { paid_months: monthsList });
-
-      if (issuedReceiptItem && confirm(`Generate official receipt for ${student.name} (${monthLabel})?`)) {
-        printInvoice(issuedReceiptItem);
-      }
-    }
-
-    function initWeekRange() {
-      const today = new Date();
-      const curr = new Date(today);
-      const first = curr.getDate() - curr.getDay() + 1;
-      const last = first + 6;
-
-      const firstday = new Date(curr.setDate(first));
-      const lastday = new Date(curr.setDate(last));
-
-      document.getElementById("sch-from-date").value = firstday.toISOString().split("T")[0];
-      document.getElementById("sch-to-date").value = lastday.toISOString().split("T")[0];
-      generateWeekRangeDates();
-    }
-
-    function generateWeekRangeDates() {
-      const fromStr = document.getElementById("sch-from-date").value;
-      const toStr = document.getElementById("sch-to-date").value;
-      const daySelect = document.getElementById("sch-day-select");
-      daySelect.innerHTML = "";
-
-      if (!fromStr || !toStr) return;
-
-      let start = new Date(fromStr);
-      const end = new Date(toStr);
-
-      while (start <= end) {
-        const opt = document.createElement("option");
-        const dateVal = start.toISOString().split("T")[0];
-        const dayName = start.toLocaleDateString("en-US", { weekday: "short" });
-        opt.value = dateVal;
-        opt.innerText = `${dateVal} (${dayName})`;
-        daySelect.appendChild(opt);
-        start.setDate(start.getDate() + 1);
-      }
-
-      loadRoutineForCurrentSelection();
-    }
-
-    function loadRoutineForCurrentSelection() {
-      const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-day-select").value;
-      const key = `${batch}_${date}`;
-
-      const saved = DB.schedules.find(s => s.key === key);
-      const classTbody = document.getElementById("class-rows-body");
-      const testTbody = document.getElementById("test-rows-body");
-      classTbody.innerHTML = "";
-      testTbody.innerHTML = "";
-
-      const classes = (saved && saved.classes && saved.classes.length) ? saved.classes : [
-        { time: "09:30 AM - 11:00 AM", teacher: "Maths Faculty", subject: "Arithmetic", topic: "Number Systems & Algebra", note: "Bring Notebook" },
-        { time: "11:30 AM - 01:00 PM", teacher: "English Faculty", subject: "English", topic: "Tenses & Voice Change", note: "Grammar Practice Set" },
-        { time: "02:00 PM - 03:30 PM", teacher: "GS Faculty", subject: "General Science", topic: "Physics Units & Motion", note: "Handouts provided" },
-        { time: "04:00 PM - 05:30 PM", teacher: "Reasoning Faculty", subject: "Reasoning", topic: "Blood Relations & Coding", note: "Daily Drill" }
-      ];
-
-      const tests = (saved && saved.tests && saved.tests.length) ? saved.tests : [
-        { name: "Morning Rapid Test", time: "08:30 AM - 09:00 AM", marks: "25", syllabus: "English & Current Affairs" },
-        { name: "Subject Assessment", time: "01:00 PM - 01:45 PM", marks: "50", syllabus: "Maths Sectional Test" },
-        { name: "Mock Examination", time: "06:00 PM - 07:30 PM", marks: "100", syllabus: "Full Combined Model Paper" }
-      ];
-
-      classes.forEach((c, idx) => renderClassRow(c, idx));
-      tests.forEach((t, idx) => renderTestRow(t, idx));
-    }
-
-    function addClassRow(data = {}) {
-      const idx = document.querySelectorAll("#class-rows-body tr").length;
-      renderClassRow({
-        time: data.time || "",
-        teacher: data.teacher || "",
-        subject: data.subject || "",
-        topic: data.topic || "",
-        note: data.note || ""
-      }, idx);
-    }
-
-    function renderClassRow(c, idx) {
-      const tbody = document.getElementById("class-rows-body");
-      const tr = document.createElement("tr");
-      tr.className = "class-row-item";
-      tr.innerHTML = `
-        <td class="editable-cell"><input type="text" class="c-time" value="${c.time}" placeholder="Time" /></td>
-        <td class="editable-cell"><input type="text" class="c-teacher" value="${c.teacher}" placeholder="Teacher" /></td>
-        <td class="editable-cell"><input type="text" class="c-subject" value="${c.subject}" placeholder="Subject" /></td>
-        <td class="editable-cell"><input type="text" class="c-topic" value="${c.topic}" placeholder="Topic" /></td>
-        <td class="editable-cell"><input type="text" class="c-note" value="${c.note}" placeholder="Note" /></td>
-        <td style="text-align:center;"><button type="button" style="color:red; cursor:pointer;" onclick="this.closest('tr').remove()">✕</button></td>
-      `;
-      tbody.appendChild(tr);
-    }
-
-    function addTestRow(data = {}) {
-      const idx = document.querySelectorAll("#test-rows-body tr").length;
-      renderTestRow({
-        name: data.name || "",
-        time: data.time || "",
-        marks: data.marks || "",
-        syllabus: data.syllabus || ""
-      }, idx);
-    }
-
-    function renderTestRow(t, idx) {
-      const tbody = document.getElementById("test-rows-body");
-      const tr = document.createElement("tr");
-      tr.className = "test-row-item";
-      tr.innerHTML = `
-        <td class="editable-cell"><input type="text" class="t-name" value="${t.name}" placeholder="Test Name" /></td>
-        <td class="editable-cell"><input type="text" class="t-time" value="${t.time}" placeholder="Timing" /></td>
-        <td class="editable-cell"><input type="text" class="t-marks" value="${t.marks}" placeholder="Total Marks" /></td>
-        <td class="editable-cell"><input type="text" class="t-syllabus" value="${t.syllabus}" placeholder="Syllabus" /></td>
-        <td style="text-align:center;"><button type="button" style="color:red; cursor:pointer;" onclick="this.closest('tr').remove()">✕</button></td>
-      `;
-      tbody.appendChild(tr);
-    }
-
-    function saveRoutineForCurrentSelection() {
-      const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-day-select").value;
-      const key = `${batch}_${date}`;
-
-      const classRows = document.querySelectorAll(".class-row-item");
-      const classes = [];
-      classRows.forEach(r => {
-        classes.push({
-          time: r.querySelector(".c-time").value,
-          teacher: r.querySelector(".c-teacher").value,
-          subject: r.querySelector(".c-subject").value,
-          topic: r.querySelector(".c-topic").value,
-          note: r.querySelector(".c-note").value
-        });
-      });
-
-      const testRows = document.querySelectorAll(".test-row-item");
-      const tests = [];
-      testRows.forEach(r => {
-        tests.push({
-          name: r.querySelector(".t-name").value,
-          time: r.querySelector(".t-time").value,
-          marks: r.querySelector(".t-marks").value,
-          syllabus: r.querySelector(".t-syllabus").value
-        });
-      });
-
-      const idx = DB.schedules.findIndex(s => s.key === key);
-      const payload = { key, batch, date, classes, tests, updatedAt: new Date().toISOString() };
-
-      if (idx > -1) DB.schedules[idx] = payload;
-      else DB.schedules.push(payload);
-
-      safeSet("ff_schedules", DB.schedules);
-      alert(`Routine saved for [${batch}] on ${date}!`);
-    }
-
-    function openCopyScheduleModal() {
-      const currentDate = document.getElementById("sch-day-select").value;
-      const daySelect = document.getElementById("sch-day-select");
-      const listContainer = document.getElementById("copy-target-dates-list");
-      listContainer.innerHTML = "";
-
-      let count = 0;
-      for (let i = 0; i < daySelect.options.length; i++) {
-        const d = daySelect.options[i].value;
-        const text = daySelect.options[i].innerText;
-        if (d !== currentDate) {
-          count++;
-          const label = document.createElement("label");
-          label.style = "display:flex; align-items:center; gap:8px; font-size:0.8rem; cursor:pointer;";
-          label.innerHTML = `<input type="checkbox" class="copy-target-date" value="${d}" checked /> <span>${text}</span>`;
-          listContainer.appendChild(label);
-        }
-      }
-
-      if (count === 0) {
-        alert("No other dates in this week range to copy to.");
-        return;
-      }
-
-      document.getElementById("copy-routine-modal").style.display = "flex";
-    }
-
-    function closeCopyScheduleModal() {
-      document.getElementById("copy-routine-modal").style.display = "none";
-    }
-
-    function toggleSelectAllCopyDates() {
-      const checkboxes = document.querySelectorAll(".copy-target-date");
-      const allChecked = Array.from(checkboxes).every(c => c.checked);
-      checkboxes.forEach(c => c.checked = !allChecked);
-    }
-
-    function executeCopySchedule() {
-      const batch = document.getElementById("sch-batch-select").value;
-      const sourceDate = document.getElementById("sch-day-select").value;
-
-      const classRows = document.querySelectorAll(".class-row-item");
-      const currentClasses = [];
-      classRows.forEach(r => {
-        currentClasses.push({
-          time: r.querySelector(".c-time").value,
-          teacher: r.querySelector(".c-teacher").value,
-          subject: r.querySelector(".c-subject").value,
-          topic: r.querySelector(".c-topic").value,
-          note: r.querySelector(".c-note").value
-        });
-      });
-
-      const testRows = document.querySelectorAll(".test-row-item");
-      const currentTests = [];
-      testRows.forEach(r => {
-        currentTests.push({
-          name: r.querySelector(".t-name").value,
-          time: r.querySelector(".t-time").value,
-          marks: r.querySelector(".t-marks").value,
-          syllabus: r.querySelector(".t-syllabus").value
-        });
-      });
-
-      const checkedDates = Array.from(document.querySelectorAll(".copy-target-date:checked")).map(c => c.value);
-      if (checkedDates.length === 0) {
-        alert("Please select at least one date.");
-        return;
-      }
-
-      checkedDates.forEach(targetDate => {
-        const targetKey = `${batch}_${targetDate}`;
-        const payload = {
-          key: targetKey,
-          batch,
-          date: targetDate,
-          classes: JSON.parse(JSON.stringify(currentClasses)),
-          tests: JSON.parse(JSON.stringify(currentTests)),
-          updatedAt: new Date().toISOString()
-        };
-
-        const idx = DB.schedules.findIndex(s => s.key === targetKey);
-        if (idx > -1) DB.schedules[idx] = payload;
-        else DB.schedules.push(payload);
-      });
-
-      safeSet("ff_schedules", DB.schedules);
-      alert(`Copied routine from ${sourceDate} to ${checkedDates.length} selected days!`);
-      closeCopyScheduleModal();
-    }
-
-    function printRoutineSheet() {
-      const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-day-select").value;
-      const key = `${batch}_${date}`;
-      const saved = DB.schedules.find(s => s.key === key);
-
-      document.getElementById("print-doc-subtitle").innerText = `DAILY ORDER & ACADEMIC ROUTINE (BATCH: ${batch})`;
-      const p = document.getElementById("printable-details");
-
-      const classes = saved ? saved.classes : [];
-      const tests = saved ? saved.tests : [];
-
-      let classTrs = classes.map(c => `
-        <tr><td><strong>${c.time}</strong></td><td>${c.teacher}</td><td>${c.subject}</td><td>${c.topic}</td><td>${c.note}</td></tr>
-      `).join("");
-
-      let testTrs = tests.map(t => `
-        <tr><td><strong>${t.name}</strong></td><td>${t.time}</td><td>${t.marks}</td><td>${t.syllabus}</td></tr>
-      `).join("");
-
-      p.innerHTML = `
-        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-          <div><p><strong>Scheduled Date:</strong> ${date}</p><p><strong>Formation / Batch:</strong> ${batch}</p></div>
-          <div style="text-align:right;"><p><strong>Campus:</strong> Headquarters</p><p><strong>Status:</strong> Approved Routine</p></div>
-        </div>
-        <h4 style="margin:8px 0 4px 0; color:#0A192F;">1. Academic Lectures & Routine Sessions</h4>
-        <table class="print-table">
-          <thead><tr><th>Time</th><th>Teacher</th><th>Subject</th><th>Topic</th><th>Note</th></tr></thead>
-          <tbody>${classTrs || '<tr><td colspan="5">No classes scheduled.</td></tr>'}</tbody>
-        </table>
-        <h4 style="margin:12px 0 4px 0; color:#E52521;">2. Evaluative Tests & Daily Benchmarks</h4>
-        <table class="print-table">
-          <thead><tr><th>Test Name</th><th>Timing</th><th>Marks</th><th>Syllabus</th></tr></thead>
-          <tbody>${testTrs || '<tr><td colspan="4">No tests scheduled.</td></tr>'}</tbody>
-        </table>
-        <div class="signature-row" style="margin-top:40px;">
-          <div class="signature-line">Officer In-Charge</div>
-          <div class="signature-line">Super Admin / Director</div>
-        </div>
-      `;
-
-      window.print();
     }
 
     function logout() {
