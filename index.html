@@ -25,6 +25,7 @@
       --warning-amber: #D97706;
       --progress-blue: #2563EB;
       --unit-black: #1E293B;
+      --purple-accent: #7C3AED;
       --bottom-bar-h: 56px;
     }
 
@@ -87,6 +88,7 @@
     .desktop-nav-tabs {
       display: flex;
       gap: 6px;
+      flex-wrap: wrap;
     }
 
     .tab-btn {
@@ -159,7 +161,7 @@
       background: none;
       border: none;
       color: #94A3B8;
-      font-size: 0.65rem;
+      font-size: 0.58rem;
       font-weight: 600;
       gap: 2px;
       flex: 1;
@@ -168,7 +170,7 @@
     }
 
     .bottom-nav-item span.icon {
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
 
     .bottom-nav-item.active {
@@ -361,7 +363,7 @@
       background: var(--navy-blue);
       color: var(--pure-white);
       border: none;
-      padding: 5px 9px;
+      padding: 6px 12px;
       border-radius: 4px;
       cursor: pointer;
       font-weight: 600;
@@ -689,6 +691,45 @@
       border-radius: 4px;
     }
 
+    /* STUDENT 360 STYLING */
+    .dossier-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .dossier-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-gray);
+      border-radius: 8px;
+      padding: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .dossier-card.highlight {
+      border-left: 4px solid var(--purple-accent);
+    }
+
+    .dossier-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--navy-blue);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #F1F5F9;
+      padding-bottom: 4px;
+    }
+
+    .rate-counter {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--navy-blue);
+      margin: 4px 0;
+    }
+
     .modal-overlay {
       display: none;
       position: fixed;
@@ -782,6 +823,8 @@
         <button type="button" class="tab-btn" id="btn-tab-students" onclick="switchTab('students')">Students</button>
         <button type="button" class="tab-btn" id="btn-tab-schedule" onclick="switchTab('schedule')">Routine</button>
         <button type="button" class="tab-btn" id="btn-tab-attendance" onclick="switchTab('attendance')">Attendance</button>
+        <button type="button" class="tab-btn" id="btn-tab-exams" onclick="switchTab('exams')">Exam Desk</button>
+        <button type="button" class="tab-btn" id="btn-tab-360" onclick="switchTab('360')">Student 360°</button>
         <button type="button" class="tab-btn" id="btn-tab-progress" onclick="switchTab('progress')">Study Progress</button>
         <button type="button" class="tab-btn" id="btn-tab-finance" onclick="switchTab('finance')">Accounts</button>
       </div>
@@ -804,15 +847,23 @@
     </button>
     <button type="button" class="bottom-nav-item" id="m-btn-attendance" onclick="switchTab('attendance')">
       <span class="icon">📋</span>
-      <span>Attendance</span>
+      <span>Att.</span>
+    </button>
+    <button type="button" class="bottom-nav-item" id="m-btn-exams" onclick="switchTab('exams')">
+      <span class="icon">🎯</span>
+      <span>Exams</span>
+    </button>
+    <button type="button" class="bottom-nav-item" id="m-btn-360" onclick="switchTab('360')">
+      <span class="icon">🌐</span>
+      <span>360°</span>
     </button>
     <button type="button" class="bottom-nav-item" id="m-btn-progress" onclick="switchTab('progress')">
       <span class="icon">📊</span>
-      <span>Progress</span>
+      <span>Study</span>
     </button>
     <button type="button" class="bottom-nav-item" id="m-btn-finance" onclick="switchTab('finance')">
       <span class="icon">💰</span>
-      <span>Accounts</span>
+      <span>Ledger</span>
     </button>
   </nav>
 
@@ -884,6 +935,8 @@
                 <label class="perm-item"><input type="checkbox" id="perm-admissions" checked /> Student Admissions</label>
                 <label class="perm-item"><input type="checkbox" id="perm-schedule" checked /> Weekly Routine & Tests</label>
                 <label class="perm-item"><input type="checkbox" id="perm-attendance" checked /> Attendance Desk</label>
+                <label class="perm-item"><input type="checkbox" id="perm-exams" checked /> Exam Marks Desk</label>
+                <label class="perm-item"><input type="checkbox" id="perm-360" checked /> Student 360° Portal</label>
                 <label class="perm-item"><input type="checkbox" id="perm-progress" checked /> Study Progress Tracker</label>
                 <label class="perm-item"><input type="checkbox" id="perm-income" checked /> Income Ledger</label>
                 <label class="perm-item"><input type="checkbox" id="perm-expense" /> Expenditure Ledger</label>
@@ -1228,7 +1281,193 @@
       </div>
     </div>
 
-    <!-- 5. STUDY PROGRESS SEGMENT (TAB 4) -->
+    <!-- 5. EXAM DESK (TAB 4) -->
+    <div id="tab-exams-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <span>🎯 Official Exam Desk - Scheduled Tests & Marks Recording</span>
+          <button type="button" class="btn-primary" style="max-width:200px;" onclick="saveExamMarks()">💾 Save Exam Marks</button>
+        </div>
+
+        <div class="schedule-control-bar">
+          <div class="form-group full-width">
+            <label>Select Scheduled Exam (রুটিনের পরীক্ষা নির্বাচন করুন):</label>
+            <select id="exam-scheduled-selector" onchange="loadExamSessionMarksDesk()">
+              <option value="">-- Choose Exam from Scheduled Routine --</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Exam Session Info Overview Card -->
+        <div id="exam-meta-box" style="display:none; background:#F8FAFC; border:1px solid #CBD5E1; border-left:4px solid var(--primary-red); border-radius:6px; padding:12px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <div>
+              <h4 id="meta-exam-name" style="color:var(--navy-blue);"></h4>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;" id="meta-exam-details"></p>
+            </div>
+            <div style="text-align:right;">
+              <span class="status-badge" style="background:#FEE2E2; color:#991B1B; font-size:0.8rem;" id="meta-exam-total-marks"></span>
+              <p style="font-size:0.75rem; font-weight:bold; color:var(--success-green); margin-top:4px;" id="meta-exam-verified-count"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Present Students Marks Table -->
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 14%;">Reg ID</th>
+                <th style="width: 30%;">Student Name</th>
+                <th style="width: 16%;">Attendance Verification</th>
+                <th style="width: 20%;">Obtained Marks</th>
+                <th style="width: 20%;">Remarks / Evaluation</th>
+              </tr>
+            </thead>
+            <tbody id="exam-students-marks-body">
+              <tr>
+                <td colspan="5" style="text-align:center; padding:20px; color:var(--text-muted);">Please select a scheduled exam from the dropdown above to input student marks.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. NEW: STUDENT 360° PORTAL (TAB 5) -->
+    <div id="tab-360-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <span>🌐 Student 360° Profile & Monthly Analytics Dossier</span>
+          <button type="button" class="btn-print" onclick="printStudent360Dossier()">🖨️ Print 360° Dossier (PDF)</button>
+        </div>
+
+        <div class="schedule-control-bar">
+          <div class="form-group">
+            <label>Select Student:</label>
+            <select id="s360-student-select" onchange="renderStudent360Dossier()">
+              <option value="">-- Choose Registered Student --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Select Analytics Month:</label>
+            <select id="s360-month-select" onchange="renderStudent360Dossier()">
+              <option value="ALL">All Session Summary (Apr 2026 – Mar 2027)</option>
+              <option value="2026-04">April 2026</option>
+              <option value="2026-05">May 2026</option>
+              <option value="2026-06">June 2026</option>
+              <option value="2026-07">July 2026</option>
+              <option value="2026-08">August 2026</option>
+              <option value="2026-09" selected>September 2026</option>
+              <option value="2026-10">October 2026</option>
+              <option value="2026-11">November 2026</option>
+              <option value="2026-12">December 2026</option>
+              <option value="2027-01">January 2027</option>
+              <option value="2027-02">February 2027</option>
+              <option value="2027-03">March 2027</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="s360-dossier-output" style="display:none;">
+          <!-- Auto-Populated 360 Information -->
+          <div class="dossier-grid">
+            <div class="dossier-card highlight">
+              <div class="dossier-title">
+                <span>Personal & Academic Identity</span>
+                <span class="reg-pill" id="s360-regid"></span>
+              </div>
+              <div style="font-size:0.82rem; line-height:1.6;">
+                <p><strong>Full Name:</strong> <span id="s360-name"></span></p>
+                <p><strong>Batch / Group:</strong> <span id="s360-batch" style="color:var(--primary-red); font-weight:800;"></span></p>
+                <p><strong>Guardian:</strong> <span id="s360-guardian"></span></p>
+                <p><strong>Primary Mobile:</strong> <span id="s360-phone"></span></p>
+                <p><strong>Admission Date:</strong> <span id="s360-adm-date"></span></p>
+              </div>
+            </div>
+
+            <div class="dossier-card highlight">
+              <div class="dossier-title">
+                <span>Class Attendance Analytics</span>
+                <span class="status-badge active" id="s360-att-badge">Attendance Rate</span>
+              </div>
+              <div class="rate-counter" id="s360-att-percentage">0%</div>
+              <p style="font-size:0.75rem; color:var(--text-muted);" id="s360-att-ratio">Attended 0 out of 0 class sessions</p>
+            </div>
+
+            <div class="dossier-card highlight">
+              <div class="dossier-title">
+                <span>Evaluations & Exam Analytics</span>
+                <span class="status-badge" style="background:#FEE2E2; color:#991B1B;">Overall Score</span>
+              </div>
+              <div class="rate-counter" id="s360-exam-avg" style="color:var(--primary-red);">0%</div>
+              <p style="font-size:0.75rem; color:var(--text-muted);" id="s360-exam-ratio">Average score in verified tests</p>
+            </div>
+
+            <div class="dossier-card highlight">
+              <div class="dossier-title">
+                <span>Monthly Fee Clearance</span>
+                <span class="status-badge" id="s360-fee-status-badge">Fee Clear</span>
+              </div>
+              <div style="font-size:0.82rem; line-height:1.6;">
+                <p><strong>Admission Fee Remaining Due:</strong> <span id="s360-fee-due" style="font-weight:bold; color:var(--primary-red);">₹0</span></p>
+                <p><strong>Total Paid to Date:</strong> <span id="s360-fee-paid" style="font-weight:bold; color:var(--success-green);">₹0</span></p>
+                <p><strong>Selected Month Status:</strong> <span id="s360-month-status" style="font-weight:bold;"></span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exam Results Detailed Table for Selected Month -->
+          <div class="card" style="border-top:3px solid var(--primary-red); margin-bottom:12px;">
+            <div class="card-header" style="color:var(--primary-red);">
+              <span>Exam & Assessment Records (পরীক্ষার বিস্তারিত ফলাফল)</span>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Exam Name</th>
+                    <th>Full Marks</th>
+                    <th>Obtained Score</th>
+                    <th>Score %</th>
+                    <th>Remarks</th>
+                  </tr>
+                </thead>
+                <tbody id="s360-exams-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Attendance Sessions Log for Selected Month -->
+          <div class="card" style="border-top:3px solid var(--navy-blue);">
+            <div class="card-header" style="color:var(--navy-blue);">
+              <span>Verified Attendance Log (উপস্থিতির বিস্তারিত রেকর্ড)</span>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Session Type</th>
+                    <th>Subject / Class</th>
+                    <th>Passcode Submittal Time</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="s360-attendance-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+        <div id="s360-empty-prompt" style="text-align:center; padding:30px; color:var(--text-muted);">
+          Please select a student and target month from above to view the 360° analytics dossier.
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. STUDY PROGRESS SEGMENT (TAB 6) -->
     <div id="tab-progress-content" style="display: none;">
       <div class="card">
         <div class="card-header">
@@ -1272,7 +1511,7 @@
       </div>
     </div>
 
-    <!-- 6. FINANCE PORTAL (TAB 5) -->
+    <!-- 8. FINANCE PORTAL (TAB 7) -->
     <div id="tab-finance-content" style="display: none;">
       <div class="metric-grid">
         <div class="metric-box inflow">
@@ -1380,7 +1619,7 @@
       </div>
     </div>
 
-    <!-- 7. PERSONAL DESK VIEW (STUDENT / OFFICIAL) -->
+    <!-- 9. PERSONAL DESK VIEW (STUDENT / OFFICIAL) -->
     <div id="personal-desk-view" style="display: none;">
       <div class="card">
         <div class="card-header">
@@ -1390,7 +1629,7 @@
         <div id="personal-desk-content"></div>
       </div>
 
-      <!-- STUDENT LIVE CODE ATTENDANCE SUBMISSION BOX (CODE IS STRICTLY HIDDEN) -->
+      <!-- STUDENT LIVE CODE ATTENDANCE SUBMISSION BOX -->
       <div class="card" id="student-live-att-box" style="border-top:3px solid var(--success-green); display:none;">
         <div class="card-header" style="color:var(--success-green);">
           <span>Live Session Self-Attendance</span>
@@ -1432,6 +1671,28 @@
               </tr>
             </thead>
             <tbody id="std-read-tests-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- STUDENT EXAM SCORES CONTAINER -->
+      <div class="card" id="student-exam-scores-display" style="display:none; border-top: 3px solid var(--primary-red);">
+        <div class="card-header" style="color:var(--primary-red);">
+          <span>My Exam Scores & Evaluation Log</span>
+          <button type="button" class="btn-print" onclick="hideStudentScores()">✕ Close Scores</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Exam Date</th>
+                <th>Exam Name</th>
+                <th>Marks Obtained</th>
+                <th>Total Marks</th>
+                <th>Remarks</th>
+              </tr>
+            </thead>
+            <tbody id="student-scores-tbody"></tbody>
           </table>
         </div>
       </div>
@@ -1585,7 +1846,8 @@
       expenses: safeGet("ff_expenses"),
       schedules: safeGet("ff_schedules"),
       attendanceSessions: safeGet("ff_att_sessions") || [],
-      studyProgress: safeGet("ff_study_progress") || {}
+      studyProgress: safeGet("ff_study_progress") || {},
+      examScores: safeGet("ff_exam_scores") || {}
     };
 
     let currentUser = null;
@@ -1648,6 +1910,7 @@
         renderStaffDirectory();
         renderRoster();
         renderFinanceDashboard();
+        populate360StudentDropdown();
       }
     }
 
@@ -1944,6 +2207,8 @@
         admissions: document.getElementById("perm-admissions").checked,
         schedule: document.getElementById("perm-schedule").checked,
         attendance: document.getElementById("perm-attendance").checked,
+        exams: document.getElementById("perm-exams").checked,
+        s360: document.getElementById("perm-360").checked,
         progress: document.getElementById("perm-progress").checked,
         income: document.getElementById("perm-income").checked,
         expense: document.getElementById("perm-expense").checked
@@ -2048,6 +2313,7 @@
         password: document.getElementById("std-generated-pw").value.trim(),
         notes: document.getElementById("std-notes").value.trim(),
         paid_months: [],
+        exam_results: [],
         status: "Active"
       };
 
@@ -2081,6 +2347,7 @@
 
       renderRoster();
       renderFinanceDashboard();
+      populate360StudentDropdown();
       alert(`Student registered successfully!\nReg ID: ${newStudent.reg_id}\nLogin Mobile: ${newStudent.ph1}\nPassword: ${newStudent.password}`);
       
       if (lastReceiptItem && confirm("Would you like to print an official Money Receipt for this collection?")) {
@@ -2301,6 +2568,8 @@
       document.getElementById("tab-students-content").style.display = (tab === 'students') ? 'block' : 'none';
       document.getElementById("tab-schedule-content").style.display = (tab === 'schedule') ? 'block' : 'none';
       document.getElementById("tab-attendance-content").style.display = (tab === 'attendance') ? 'block' : 'none';
+      document.getElementById("tab-exams-content").style.display = (tab === 'exams') ? 'block' : 'none';
+      document.getElementById("tab-360-content").style.display = (tab === '360') ? 'block' : 'none';
       document.getElementById("tab-progress-content").style.display = (tab === 'progress') ? 'block' : 'none';
       document.getElementById("tab-finance-content").style.display = (tab === 'finance') ? 'block' : 'none';
       document.getElementById("personal-desk-view").style.display = 'none';
@@ -2308,17 +2577,23 @@
       document.getElementById("btn-tab-students").classList.toggle("active", tab === 'students');
       document.getElementById("btn-tab-schedule").classList.toggle("active", tab === 'schedule');
       document.getElementById("btn-tab-attendance").classList.toggle("active", tab === 'attendance');
+      document.getElementById("btn-tab-exams").classList.toggle("active", tab === 'exams');
+      document.getElementById("btn-tab-360").classList.toggle("active", tab === '360');
       document.getElementById("btn-tab-progress").classList.toggle("active", tab === 'progress');
       document.getElementById("btn-tab-finance").classList.toggle("active", tab === 'finance');
 
       const mStud = document.getElementById("m-btn-students");
       const mSch = document.getElementById("m-btn-schedule");
       const mAtt = document.getElementById("m-btn-attendance");
+      const mExm = document.getElementById("m-btn-exams");
+      const m360 = document.getElementById("m-btn-360");
       const mProg = document.getElementById("m-btn-progress");
       const mFin = document.getElementById("m-btn-finance");
       if (mStud) mStud.classList.toggle("active", tab === 'students');
       if (mSch) mSch.classList.toggle("active", tab === 'schedule');
       if (mAtt) mAtt.classList.toggle("active", tab === 'attendance');
+      if (mExm) mExm.classList.toggle("active", tab === 'exams');
+      if (m360) m360.classList.toggle("active", tab === '360');
       if (mProg) mProg.classList.toggle("active", tab === 'progress');
       if (mFin) mFin.classList.toggle("active", tab === 'finance');
 
@@ -2326,9 +2601,430 @@
         renderAttendanceDeskSessions();
       } else if (tab === 'progress') {
         renderProgressBoard();
+      } else if (tab === 'exams') {
+        populateScheduledExamsDropdown();
+      } else if (tab === '360') {
+        populate360StudentDropdown();
       }
 
       window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // -------------------------------------------------------------
+    // EXAM DESK ENGINE
+    // -------------------------------------------------------------
+    function populateScheduledExamsDropdown() {
+      const sel = document.getElementById("exam-scheduled-selector");
+      sel.innerHTML = '<option value="">-- Choose Exam from Scheduled Routine --</option>';
+
+      let count = 0;
+      DB.schedules.forEach(sch => {
+        (sch.tests || []).forEach((t, idx) => {
+          count++;
+          const sessId = `TST_${sch.batch}_${sch.date}_${idx}`;
+          const opt = document.createElement("option");
+          opt.value = sessId;
+          opt.setAttribute("data-title", t.name);
+          opt.setAttribute("data-time", t.time);
+          opt.setAttribute("data-marks", t.marks || "100");
+          opt.setAttribute("data-batch", sch.batch);
+          opt.setAttribute("data-date", sch.date);
+          opt.setAttribute("data-syllabus", t.syllabus || "General");
+          opt.innerText = `[${sch.date}] Batch: ${sch.batch} | Exam: ${t.name} (${t.time}) - Total: ${t.marks || 100} M`;
+          sel.appendChild(opt);
+        });
+      });
+
+      if (count === 0) {
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.innerText = "No tests found in routine. Please add tests in Routine Tab first.";
+        sel.appendChild(opt);
+      }
+    }
+
+    function loadExamSessionMarksDesk() {
+      const sel = document.getElementById("exam-scheduled-selector");
+      const sessId = sel.value;
+      const metaBox = document.getElementById("exam-meta-box");
+      const tbody = document.getElementById("exam-students-marks-body");
+
+      if (!sessId) {
+        metaBox.style.display = "none";
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--text-muted);">Please select a scheduled exam from the dropdown above to input student marks.</td></tr>`;
+        return;
+      }
+
+      const opt = sel.options[sel.selectedIndex];
+      const title = opt.getAttribute("data-title");
+      const time = opt.getAttribute("data-time");
+      const totalMarks = opt.getAttribute("data-marks");
+      const batch = opt.getAttribute("data-batch");
+      const date = opt.getAttribute("data-date");
+      const syllabus = opt.getAttribute("data-syllabus");
+
+      metaBox.style.display = "block";
+      document.getElementById("meta-exam-name").innerText = `${title} (Batch: ${batch})`;
+      document.getElementById("meta-exam-details").innerText = `Scheduled Date: ${date} | Time: ${time} | Syllabus: ${syllabus}`;
+      document.getElementById("meta-exam-total-marks").innerText = `Full Marks: ${totalMarks}`;
+
+      const attSession = DB.attendanceSessions.find(s => s.sessId === sessId);
+      const presentList = (attSession && attSession.presentStudents) ? attSession.presentStudents : [];
+      document.getElementById("meta-exam-verified-count").innerText = `✓ Verified Attendees: ${presentList.length} Student(s)`;
+
+      tbody.innerHTML = "";
+
+      if (presentList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:18px; color:#B91C1C; font-weight:600;">No students have submitted the attendance passcode for this exam yet. Once students enter the 5-digit code in class, they will appear here automatically.</td></tr>`;
+        return;
+      }
+
+      const currentExamSavedScores = DB.examScores[sessId] || {};
+
+      presentList.forEach(st => {
+        const savedData = currentExamSavedScores[st.regId] || {};
+        const marksVal = savedData.obtained !== undefined ? savedData.obtained : "";
+        const remarksVal = savedData.remarks || "";
+
+        const tr = document.createElement("tr");
+        tr.className = "exam-mark-row";
+        tr.setAttribute("data-regid", st.regId);
+        tr.setAttribute("data-name", st.name);
+        tr.setAttribute("data-batch", batch);
+        tr.setAttribute("data-date", date);
+        tr.setAttribute("data-examname", title);
+        tr.setAttribute("data-totalmarks", totalMarks);
+
+        tr.innerHTML = `
+          <td><span class="reg-pill">${st.regId}</span></td>
+          <td><strong>${st.name}</strong><br/><span style="font-size:0.72rem; color:var(--text-muted);">${st.phone || ''}</span></td>
+          <td><span class="status-badge active">Verified Present</span><br/><span style="font-size:0.7rem; color:var(--text-muted);">${st.recordedAt}</span></td>
+          <td>
+            <div style="display:flex; align-items:center; gap:4px;">
+              <input type="number" step="0.5" class="std-obtained-mark" value="${marksVal}" placeholder="Score" style="width:85px; font-weight:800; text-align:center; min-height:34px; padding:4px;" />
+              <span style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">/ ${totalMarks}</span>
+            </div>
+          </td>
+          <td>
+            <input type="text" class="std-exam-remarks" value="${remarksVal}" placeholder="Remarks (Good, Average, Excellent)" style="font-size:0.8rem; min-height:34px; padding:4px 8px;" />
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function saveExamMarks() {
+      const sel = document.getElementById("exam-scheduled-selector");
+      const sessId = sel.value;
+      if (!sessId) {
+        alert("Please select a scheduled exam first!");
+        return;
+      }
+
+      const rows = document.querySelectorAll(".exam-mark-row");
+      if (rows.length === 0) {
+        alert("No attended students to save marks for!");
+        return;
+      }
+
+      if (!DB.examScores[sessId]) DB.examScores[sessId] = {};
+
+      rows.forEach(r => {
+        const regId = r.getAttribute("data-regid");
+        const name = r.getAttribute("data-name");
+        const batch = r.getAttribute("data-batch");
+        const date = r.getAttribute("data-date");
+        const examName = r.getAttribute("data-examname");
+        const totalMarks = r.getAttribute("data-totalmarks");
+
+        const markInput = r.querySelector(".std-obtained-mark");
+        const remarksInput = r.querySelector(".std-exam-remarks");
+
+        const obtained = markInput ? markInput.value.trim() : "";
+        const remarks = remarksInput ? remarksInput.value.trim() : "";
+
+        DB.examScores[sessId][regId] = {
+          regId,
+          name,
+          batch,
+          date,
+          examName,
+          totalMarks,
+          obtained: obtained !== "" ? Number(obtained) : "N/A",
+          remarks: remarks || "Recorded",
+          updatedAt: new Date().toISOString()
+        };
+
+        const std = DB.students.find(s => s.reg_id === regId);
+        if (std) {
+          if (!std.exam_results) std.exam_results = [];
+          const existIdx = std.exam_results.findIndex(er => er.sessId === sessId);
+          const scoreRecord = {
+            sessId,
+            examName,
+            date,
+            batch,
+            obtained: obtained !== "" ? Number(obtained) : "N/A",
+            totalMarks,
+            remarks
+          };
+          if (existIdx > -1) std.exam_results[existIdx] = scoreRecord;
+          else std.exam_results.push(scoreRecord);
+        }
+      });
+
+      safeSet("ff_exam_scores", DB.examScores);
+      safeSet("ff_students", DB.students);
+      alert("Exam marks saved successfully! Student 360° profile database updated.");
+    }
+
+    // -------------------------------------------------------------
+    // STUDENT 360° PORTAL ENGINE (MONTHLY & COMPREHENSIVE DOSSIER)
+    // -------------------------------------------------------------
+    function populate360StudentDropdown() {
+      const sel = document.getElementById("s360-student-select");
+      if (!sel) return;
+      sel.innerHTML = '<option value="">-- Choose Registered Student --</option>';
+
+      DB.students.forEach(s => {
+        const opt = document.createElement("option");
+        opt.value = s.reg_id;
+        opt.innerText = `[${s.reg_id}] ${s.name} (${s.batch}) - Ph: ${s.ph1}`;
+        sel.appendChild(opt);
+      });
+    }
+
+    function renderStudent360Dossier() {
+      const regId = document.getElementById("s360-student-select").value;
+      const monthFilter = document.getElementById("s360-month-select").value;
+      const output = document.getElementById("s360-dossier-output");
+      const emptyPrompt = document.getElementById("s360-empty-prompt");
+
+      if (!regId) {
+        output.style.display = "none";
+        emptyPrompt.style.display = "block";
+        return;
+      }
+
+      const student = DB.students.find(s => s.reg_id === regId);
+      if (!student) return;
+
+      emptyPrompt.style.display = "none";
+      output.style.display = "block";
+
+      // 1. Identity
+      document.getElementById("s360-regid").innerText = student.reg_id;
+      document.getElementById("s360-name").innerText = student.name;
+      document.getElementById("s360-batch").innerText = student.batch;
+      document.getElementById("s360-guardian").innerText = student.guardian || "—";
+      document.getElementById("s360-phone").innerText = student.ph1;
+      document.getElementById("s360-adm-date").innerText = student.date;
+
+      // 2. Class Attendance Analytics
+      // Count total classes scheduled for this student's batch in selected month
+      let totalAssignedClasses = 0;
+      let totalAttendedClasses = 0;
+
+      const attTbody = document.getElementById("s360-attendance-tbody");
+      attTbody.innerHTML = "";
+
+      DB.attendanceSessions.forEach(sess => {
+        const isTargetMonth = (monthFilter === "ALL" || (sess.date && sess.date.startsWith(monthFilter)));
+        const isTargetBatch = (sess.batch === "ALL" || sess.batch === student.batch);
+
+        if (isTargetMonth && isTargetBatch) {
+          totalAssignedClasses++;
+          const attendedRecord = (sess.presentStudents || []).find(st => st.regId === student.reg_id || st.phone === student.ph1);
+          if (attendedRecord) {
+            totalAttendedClasses++;
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${sess.date}</td>
+              <td><span class="status-badge" style="background:#E0E7FF; color:#3730A3;">${sess.type}</span></td>
+              <td><strong>${sess.title}</strong> (${sess.time})</td>
+              <td>${attendedRecord.recordedAt}</td>
+              <td><span class="status-badge active">Verified Present</span></td>
+            `;
+            attTbody.appendChild(tr);
+          }
+        }
+      });
+
+      if (totalAttendedClasses === 0) {
+        attTbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:12px; color:var(--text-muted);">No verified presence records logged for this month.</td></tr>`;
+      }
+
+      const attRate = totalAssignedClasses > 0 ? Math.round((totalAttendedClasses / totalAssignedClasses) * 100) : 0;
+      document.getElementById("s360-att-percentage").innerText = `${attRate}%`;
+      document.getElementById("s360-att-ratio").innerText = `Attended ${totalAttendedClasses} of ${totalAssignedClasses} available sessions`;
+
+      // 3. Exam Evaluations Analytics
+      const examsTbody = document.getElementById("s360-exams-tbody");
+      examsTbody.innerHTML = "";
+
+      const studentResults = (student.exam_results || []).filter(er => {
+        return (monthFilter === "ALL" || (er.date && er.date.startsWith(monthFilter)));
+      });
+
+      let totalExamMarks = 0;
+      let totalObtainedMarks = 0;
+      let gradedCount = 0;
+
+      studentResults.forEach(er => {
+        const fullM = Number(er.totalMarks) || 100;
+        const obtM = Number(er.obtained);
+        const hasValidScore = !isNaN(obtM);
+
+        if (hasValidScore) {
+          totalObtainedMarks += obtM;
+          totalExamMarks += fullM;
+          gradedCount++;
+        }
+
+        const scorePct = hasValidScore ? Math.round((obtM / fullM) * 100) + "%" : "Grading";
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${er.date}</td>
+          <td><strong>${er.examName}</strong></td>
+          <td>${fullM}</td>
+          <td style="font-weight:bold; color:var(--primary-red);">${hasValidScore ? obtM : 'Pending'}</td>
+          <td><strong>${scorePct}</strong></td>
+          <td>${er.remarks || '—'}</td>
+        `;
+        examsTbody.appendChild(tr);
+      });
+
+      if (studentResults.length === 0) {
+        examsTbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:12px; color:var(--text-muted);">No exam evaluations recorded for this period.</td></tr>`;
+      }
+
+      const avgScore = totalExamMarks > 0 ? Math.round((totalObtainedMarks / totalExamMarks) * 100) : 0;
+      document.getElementById("s360-exam-avg").innerText = `${avgScore}%`;
+      document.getElementById("s360-exam-ratio").innerText = `Cumulative Score: ${totalObtainedMarks} / ${totalExamMarks} (${gradedCount} Exams)`;
+
+      // 4. Monthly Fee & Financial Snapshot
+      document.getElementById("s360-fee-due").innerText = `₹${student.remaining || 0}`;
+      document.getElementById("s360-fee-paid").innerText = `₹${student.paid || 0}`;
+
+      const matchedMonth = ACADEMIC_MONTHS.find(m => m.key === monthFilter);
+      const isClearedMonth = matchedMonth && (student.paid_months || []).includes(matchedMonth.label);
+
+      if (monthFilter === "ALL") {
+        document.getElementById("s360-month-status").innerText = `${(student.paid_months || []).length} Month(s) Cleared`;
+        document.getElementById("s360-fee-status-badge").innerText = "Session Overview";
+        document.getElementById("s360-fee-status-badge").className = "status-badge active";
+      } else if (isClearedMonth) {
+        document.getElementById("s360-month-status").innerText = `Cleared & Paid (${matchedMonth.label})`;
+        document.getElementById("s360-fee-status-badge").innerText = "Cleared";
+        document.getElementById("s360-fee-status-badge").className = "status-badge active";
+      } else {
+        document.getElementById("s360-month-status").innerText = `Payment Due (${matchedMonth ? matchedMonth.label : monthFilter})`;
+        document.getElementById("s360-fee-status-badge").innerText = "Unpaid";
+        document.getElementById("s360-fee-status-badge").className = "status-badge inactive";
+      }
+    }
+
+    function printStudent360Dossier() {
+      const regId = document.getElementById("s360-student-select").value;
+      if (!regId) {
+        alert("Please select a student first!");
+        return;
+      }
+      const student = DB.students.find(s => s.reg_id === regId);
+      const monthFilter = document.getElementById("s360-month-select").value;
+      const matchedMonth = ACADEMIC_MONTHS.find(m => m.key === monthFilter);
+      const periodLabel = matchedMonth ? matchedMonth.label : (monthFilter === "ALL" ? "Annual Session 2026-27" : monthFilter);
+
+      document.getElementById("print-doc-subtitle").innerText = `STUDENT 360° MONTHLY ANALYTICS DOSSIER (${periodLabel})`;
+      const p = document.getElementById("printable-details");
+
+      const attPct = document.getElementById("s360-att-percentage").innerText;
+      const examAvg = document.getElementById("s360-exam-avg").innerText;
+
+      p.innerHTML = `
+        <div style="display:flex; justify-content:space-between; margin-bottom:14px; border-bottom:1px solid #CBD5E0; padding-bottom:8px;">
+          <div>
+            <h3>${student.name} (Reg ID: ${student.reg_id})</h3>
+            <p style="font-size:0.85rem;">Batch: <strong>${student.batch}</strong> | Phone: ${student.ph1}</p>
+            <p style="font-size:0.85rem;">Guardian: ${student.guardian} | Admission: ${student.date}</p>
+          </div>
+          <div style="text-align:right;">
+            <p style="font-size:0.85rem;"><strong>Report Period:</strong> ${periodLabel}</p>
+            <p style="font-size:0.85rem;"><strong>Attendance Rate:</strong> <span style="font-weight:bold; color:#059669;">${attPct}</span></p>
+            <p style="font-size:0.85rem;"><strong>Exam Average:</strong> <span style="font-weight:bold; color:#E52521;">${examAvg}</span></p>
+          </div>
+        </div>
+
+        <h4 style="margin:12px 0 6px 0; color:#E52521;">1. Evaluative Examinations & Performance Scorecard</h4>
+        <table class="print-table">
+          <thead>
+            <tr><th>Date</th><th>Exam Name</th><th>Full Marks</th><th>Obtained</th><th>Percentage</th><th>Remarks</th></tr>
+          </thead>
+          <tbody>
+            ${document.getElementById("s360-exams-tbody").innerHTML}
+          </tbody>
+        </table>
+
+        <h4 style="margin:14px 0 6px 0; color:#0A192F;">2. Classroom Verified Presence Record</h4>
+        <table class="print-table">
+          <thead>
+            <tr><th>Date</th><th>Session Type</th><th>Subject / Class</th><th>Log Time</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            ${document.getElementById("s360-attendance-tbody").innerHTML}
+          </tbody>
+        </table>
+
+        <div style="margin-top:16px; padding:10px; background:#F8FAFC; border:1px dashed #CBD5E0; border-radius:4px; font-size:0.8rem;">
+          <p>• Verified automated institutional assessment generated by <strong>FAUJ-E-FACTORY Management Cloud</strong>.</p>
+        </div>
+
+        <div class="signature-row" style="margin-top:40px;">
+          <div class="signature-line">Faculty In-Charge</div>
+          <div class="signature-line">Director / Super Admin</div>
+        </div>
+      `;
+
+      window.print();
+    }
+
+    // Student Self 360 Viewer
+    function showStudentSelf360View() {
+      switchTab('360');
+      document.getElementById("s360-student-select").value = currentUser.reg_id;
+      renderStudent360Dossier();
+    }
+
+    function showStudentScoresView() {
+      const box = document.getElementById("student-exam-scores-display");
+      const tbody = document.getElementById("student-scores-tbody");
+      tbody.innerHTML = "";
+
+      const student = DB.students.find(s => s.reg_id === currentUser.reg_id || s.ph1 === currentUser.ph1);
+      const results = (student && student.exam_results) ? student.exam_results : [];
+
+      if (results.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:16px; color:var(--text-muted);">No evaluation marks recorded yet. Marks will appear here once your examiners grade the tests.</td></tr>`;
+      } else {
+        results.forEach(res => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${res.date}</td>
+            <td><strong>${res.examName}</strong></td>
+            <td style="font-weight:800; color:var(--primary-red); font-size:0.95rem;">${res.obtained}</td>
+            <td>${res.totalMarks}</td>
+            <td>${res.remarks || '—'}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      box.style.display = "block";
+      box.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function hideStudentScores() {
+      document.getElementById("student-exam-scores-display").style.display = "none";
     }
 
     // STUDY PROGRESS SEGMENT LOGIC
@@ -2508,7 +3204,7 @@
         const remainingMins = Math.ceil((attRecord.expiresAt - now) / 60000);
         codeHtml = `
           <div style="margin-top:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-            <span>Live Passcode (Announce to Class):</span>
+            <span>Live Passcode (Announce in Class):</span>
             <span class="live-code-box">${attRecord.code}</span>
             <span class="timer-badge">⏳ Active for ${remainingMins} min(s)</span>
           </div>
@@ -2557,7 +3253,7 @@
       }
 
       const now = Date.now();
-      const expiresAt = now + (15 * 60 * 1000); // 15 minutes
+      const expiresAt = now + (15 * 60 * 1000);
 
       let session = DB.attendanceSessions.find(s => s.sessId === sessId);
       if (session) {
@@ -2618,9 +3314,7 @@
       document.getElementById("view-attendees-modal").style.display = "none";
     }
 
-    // -------------------------------------------------------------------------
-    // STUDENT ATTENDANCE: CODE HIDDEN FROM SCREEN - STUDENT ENTERS TEACHER'S CODE
-    // -------------------------------------------------------------------------
+    // STUDENT ATTENDANCE (CODE HIDDEN FROM SCREEN)
     function renderStudentLiveAttendanceBox() {
       const box = document.getElementById("student-live-att-box");
       const container = document.getElementById("student-live-sessions-container");
@@ -2662,14 +3356,13 @@
             </div>
           `;
         } else {
-          // CODE IS COMPLETELY HIDDEN - Student inputs code given by teacher verbally or written on board
           div.innerHTML = `
             <div>
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <strong>${sess.title} (${sess.type})</strong>
                 <span class="timer-badge">⏳ Window Open: ${remainingMins} min(s) remaining</span>
               </div>
-              <p style="font-size:0.75rem; color:var(--text-muted); margin:2px 0 6px 0;">Class Time: ${sess.time} | Batch: ${sess.batch}</p>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin:2px 0 6px 0;">Time: ${sess.time} | Batch: ${sess.batch}</p>
               <div style="background:#F1F5F9; border-left:3px solid var(--navy-blue); padding:6px 10px; border-radius:4px; margin-bottom:8px; font-size:0.75rem; color:#334155;">
                 📢 শিক্ষক ক্লাসে মুখে যে ৫ ডিজিটের কোডটি বলেছেন বা বোর্ডে লিখেছেন, সেটি এখানে টাইপ করে সাবমিট করো।
               </div>
@@ -2794,12 +3487,16 @@
         document.getElementById("btn-tab-students").style.display = "inline-block";
         document.getElementById("btn-tab-schedule").style.display = "inline-block";
         document.getElementById("btn-tab-attendance").style.display = "inline-block";
+        document.getElementById("btn-tab-exams").style.display = "inline-block";
+        document.getElementById("btn-tab-360").style.display = "inline-block";
         document.getElementById("btn-tab-progress").style.display = "inline-block";
         document.getElementById("btn-tab-finance").style.display = "inline-block";
 
         document.getElementById("m-btn-students").style.display = "flex";
         document.getElementById("m-btn-schedule").style.display = "flex";
         document.getElementById("m-btn-attendance").style.display = "flex";
+        document.getElementById("m-btn-exams").style.display = "flex";
+        document.getElementById("m-btn-360").style.display = "flex";
         document.getElementById("m-btn-progress").style.display = "flex";
         document.getElementById("m-btn-finance").style.display = "flex";
 
@@ -2820,8 +3517,9 @@
         renderRoster();
         renderFinanceDashboard();
         initWeekRange();
+        populate360StudentDropdown();
       } else if (currentUser.role === "Official" || currentUser.role === "Faculty") {
-        const perms = currentUser.permissions || { admissions: true, schedule: true, attendance: true, progress: true, income: true, expense: false };
+        const perms = currentUser.permissions || { admissions: true, schedule: true, attendance: true, exams: true, s360: true, progress: true, income: true, expense: false };
         currentUser.permissions = perms;
 
         document.getElementById("admin-nav-tabs").style.display = "flex";
@@ -2832,18 +3530,24 @@
         const hasAdm = !!perms.admissions;
         const hasSch = !!perms.schedule;
         const hasAtt = !!perms.attendance;
+        const hasExm = !!perms.exams;
+        const has360 = !!perms.s360;
         const hasProg = !!perms.progress;
         const hasFin = !!(perms.income || perms.expense);
 
         document.getElementById("btn-tab-students").style.display = hasAdm ? "inline-block" : "none";
         document.getElementById("btn-tab-schedule").style.display = hasSch ? "inline-block" : "none";
         document.getElementById("btn-tab-attendance").style.display = hasAtt ? "inline-block" : "none";
+        document.getElementById("btn-tab-exams").style.display = hasExm ? "inline-block" : "none";
+        document.getElementById("btn-tab-360").style.display = has360 ? "inline-block" : "none";
         document.getElementById("btn-tab-progress").style.display = hasProg ? "inline-block" : "none";
         document.getElementById("btn-tab-finance").style.display = hasFin ? "inline-block" : "none";
 
         document.getElementById("m-btn-students").style.display = hasAdm ? "flex" : "none";
         document.getElementById("m-btn-schedule").style.display = hasSch ? "flex" : "none";
         document.getElementById("m-btn-attendance").style.display = hasAtt ? "flex" : "none";
+        document.getElementById("m-btn-exams").style.display = hasExm ? "flex" : "none";
+        document.getElementById("m-btn-360").style.display = has360 ? "flex" : "none";
         document.getElementById("m-btn-progress").style.display = hasProg ? "flex" : "none";
         document.getElementById("m-btn-finance").style.display = hasFin ? "flex" : "none";
 
@@ -2859,6 +3563,8 @@
         document.getElementById("tab-students-content").style.display = "none";
         document.getElementById("tab-schedule-content").style.display = "none";
         document.getElementById("tab-attendance-content").style.display = "none";
+        document.getElementById("tab-exams-content").style.display = "none";
+        document.getElementById("tab-360-content").style.display = "none";
         document.getElementById("tab-progress-content").style.display = "none";
         document.getElementById("tab-finance-content").style.display = "none";
         document.getElementById("personal-desk-view").style.display = "block";
@@ -2868,6 +3574,8 @@
         document.getElementById("desk-title").innerText = `${currentUser.role} Desk: ${currentUser.name}`;
         
         let actionButtonsHtml = '<div style="display:flex; flex-direction:column; gap:8px; margin-top:14px;">';
+        if (has360) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:var(--purple-accent);" onclick="switchTab('360')">🌐 Open Student 360° Monthly Dossier</button>`;
+        if (hasExm) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:var(--primary-red);" onclick="switchTab('exams')">🎯 Open Exam Desk & Marks Entry</button>`;
         if (hasProg) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:var(--progress-blue);" onclick="switchTab('progress')">📊 Open Syllabus & Study Progress</button>`;
         if (hasAtt) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:#0D9488;" onclick="switchTab('attendance')">📋 Open Attendance Desk & Generate Code</button>`;
         if (hasSch) actionButtonsHtml += `<button type="button" class="btn-primary" onclick="switchTab('schedule')">📅 Open Routine & Class Schedules</button>`;
@@ -2888,13 +3596,16 @@
 
         renderRoster();
         initWeekRange();
+        populate360StudentDropdown();
       } else {
-        // STUDENT LOGIN - Fixed Single View
+        // STUDENT LOGIN - Fixed View
         document.getElementById("admin-nav-tabs").style.display = "none";
         document.getElementById("mobile-nav-bar").style.display = "none";
         document.getElementById("tab-students-content").style.display = "none";
         document.getElementById("tab-schedule-content").style.display = "none";
         document.getElementById("tab-attendance-content").style.display = "none";
+        document.getElementById("tab-exams-content").style.display = "none";
+        document.getElementById("tab-360-content").style.display = "none";
         document.getElementById("tab-progress-content").style.display = "none";
         document.getElementById("tab-finance-content").style.display = "none";
         document.getElementById("personal-desk-view").style.display = "block";
@@ -2914,445 +3625,14 @@
           </div>
           <div style="display:flex; flex-direction:column; gap:8px; margin-top:14px;">
             <button type="button" class="btn-primary" onclick="showStudentRoutineView('${currentUser.batch}')">📅 View My Batch (${currentUser.batch}) Routine & Tests</button>
+            <button type="button" class="btn-primary" style="background:var(--purple-accent);" onclick="showStudentSelf360View()">🌐 View My Complete 360° Monthly Dossier</button>
+            <button type="button" class="btn-primary" style="background:var(--primary-red);" onclick="showStudentScoresView()">🎯 View My Exam Marks & Scores</button>
             <button type="button" class="btn-primary" style="background:var(--progress-blue);" onclick="showStudentProgressView('${currentUser.batch}')">📊 View My Batch (${currentUser.batch}) Study Progress</button>
           </div>
         `;
 
         renderStudentLiveAttendanceBox();
       }
-    }
-
-    function showStudentRoutineView(batch) {
-      const routineCard = document.getElementById("student-routine-display");
-      routineCard.style.display = "block";
-      document.getElementById("student-routine-batch-title").innerText = `Batch [${batch}] Daily Routine & Evaluation Schedule`;
-
-      const select = document.getElementById("std-read-date-select");
-      select.innerHTML = "";
-
-      const today = new Date();
-      const curr = new Date(today);
-      const first = curr.getDate() - curr.getDay() + 1;
-      for (let i = 0; i < 7; i++) {
-        const d = new Date(curr.setDate(first + i));
-        const dateVal = d.toISOString().split("T")[0];
-        const dayName = d.toLocaleDateString("en-US", { weekday: "short" });
-        const opt = document.createElement("option");
-        opt.value = dateVal;
-        opt.innerText = `${dateVal} (${dayName})`;
-        select.appendChild(opt);
-      }
-      renderStudentReadRoutine();
-      routineCard.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function hideStudentRoutine() {
-      document.getElementById("student-routine-display").style.display = "none";
-    }
-
-    function renderStudentReadRoutine() {
-      const date = document.getElementById("std-read-date-select").value;
-      const batch = currentUser.batch;
-      const key = `${batch}_${date}`;
-      const saved = DB.schedules.find(s => s.key === key);
-
-      const classesTbody = document.getElementById("std-read-classes-body");
-      const testsTbody = document.getElementById("std-read-tests-body");
-      classesTbody.innerHTML = "";
-      testsTbody.innerHTML = "";
-
-      const classes = (saved && saved.classes) ? saved.classes : [];
-      const tests = (saved && saved.tests) ? saved.tests : [];
-
-      if (classes.length === 0) {
-        classesTbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6B7280;">No academic classes scheduled for this date.</td></tr>`;
-      } else {
-        classes.forEach(c => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td><strong>${c.time}</strong></td>
-            <td><strong>${c.subject}</strong> (${c.teacher || 'Faculty'})</td>
-            <td><strong>Topic:</strong> ${c.topic || '—'}<br/><span style="font-size:0.75rem; color:#4B5563;">${c.note || ''}</span></td>
-          `;
-          classesTbody.appendChild(tr);
-        });
-      }
-
-      if (tests.length === 0) {
-        testsTbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6B7280;">No mock tests scheduled for this date.</td></tr>`;
-      } else {
-        tests.forEach(t => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td style="color:var(--primary-red); font-weight:700;">${t.name}</td>
-            <td>${t.time}</td>
-            <td>Marks: <strong>${t.marks}</strong><br/><span style="font-size:0.75rem;">Syllabus: ${t.syllabus}</span></td>
-          `;
-          testsTbody.appendChild(tr);
-        });
-      }
-    }
-
-    function openMonthModal(studentIdx) {
-      activeModalStudentIdx = studentIdx;
-      const student = DB.students[studentIdx];
-      document.getElementById("modal-student-title").innerText = `${student.name} (${student.batch}) - Monthly Clearances`;
-
-      const admOrder = getMonthOrder(student.date);
-      const container = document.getElementById("modal-months-container");
-      container.innerHTML = "";
-
-      const paidArr = Array.isArray(student.paid_months) ? student.paid_months : [];
-
-      ACADEMIC_MONTHS.forEach(m => {
-        const isInactive = (m.order < admOrder);
-        const isPaid = paidArr.includes(m.label);
-
-        const badge = document.createElement("div");
-        badge.className = `month-badge ${isInactive ? 'disabled-month' : (isPaid ? 'paid' : '')}`;
-        badge.innerText = m.label;
-
-        if (!isInactive) {
-          badge.onclick = () => toggleMonthPaidFromModal(m.label);
-        }
-        container.appendChild(badge);
-      });
-
-      document.getElementById("monthly-fee-modal").style.display = "flex";
-    }
-
-    function closeMonthModal() {
-      document.getElementById("monthly-fee-modal").style.display = "none";
-      activeModalStudentIdx = null;
-    }
-
-    function toggleMonthPaidFromModal(monthLabel) {
-      if (activeModalStudentIdx === null) return;
-      const student = DB.students[activeModalStudentIdx];
-      let monthsList = Array.isArray(student.paid_months) ? [...student.paid_months] : [];
-      const idx = monthsList.indexOf(monthLabel);
-      const monthlySum = (Number(student.tuition_fee) || 0) + (Number(student.hostel_fee) || 0);
-
-      let issuedReceiptItem = null;
-
-      if (idx > -1) {
-        monthsList.splice(idx, 1);
-      } else {
-        monthsList.push(monthLabel);
-        if (monthlySum > 0) {
-          issuedReceiptItem = {
-            id: "INC-" + Date.now(),
-            date: new Date().toISOString().split("T")[0],
-            purpose: `Monthly Study & Hostel Fee (${monthLabel})`,
-            person: student.name,
-            amount: monthlySum
-          };
-          DB.incomes.push(issuedReceiptItem);
-          safeSet("ff_incomes", DB.incomes);
-          cloudFetch("ff_incomes", "POST", issuedReceiptItem);
-        }
-      }
-
-      student.paid_months = monthsList;
-      safeSet("ff_students", DB.students);
-      renderRoster();
-      renderFinanceDashboard();
-      openMonthModal(activeModalStudentIdx);
-
-      cloudFetch(`ff_students?id=eq.${student.id}`, "PATCH", { paid_months: monthsList });
-
-      if (issuedReceiptItem && confirm(`Generate official receipt for ${student.name} (${monthLabel})?`)) {
-        printInvoice(issuedReceiptItem);
-      }
-    }
-
-    function initWeekRange() {
-      const today = new Date();
-      const curr = new Date(today);
-      const first = curr.getDate() - curr.getDay() + 1;
-      const last = first + 6;
-
-      const firstday = new Date(curr.setDate(first));
-      const lastday = new Date(curr.setDate(last));
-
-      document.getElementById("sch-from-date").value = firstday.toISOString().split("T")[0];
-      document.getElementById("sch-to-date").value = lastday.toISOString().split("T")[0];
-      generateWeekRangeDates();
-    }
-
-    function generateWeekRangeDates() {
-      const fromStr = document.getElementById("sch-from-date").value;
-      const toStr = document.getElementById("sch-to-date").value;
-      const daySelect = document.getElementById("sch-day-select");
-      daySelect.innerHTML = "";
-
-      if (!fromStr || !toStr) return;
-
-      let start = new Date(fromStr);
-      const end = new Date(toStr);
-
-      while (start <= end) {
-        const opt = document.createElement("option");
-        const dateVal = start.toISOString().split("T")[0];
-        const dayName = start.toLocaleDateString("en-US", { weekday: "short" });
-        opt.value = dateVal;
-        opt.innerText = `${dateVal} (${dayName})`;
-        daySelect.appendChild(opt);
-        start.setDate(start.getDate() + 1);
-      }
-
-      loadRoutineForCurrentSelection();
-    }
-
-    function loadRoutineForCurrentSelection() {
-      const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-day-select").value;
-      const key = `${batch}_${date}`;
-
-      const saved = DB.schedules.find(s => s.key === key);
-      const classTbody = document.getElementById("class-rows-body");
-      const testTbody = document.getElementById("test-rows-body");
-      classTbody.innerHTML = "";
-      testTbody.innerHTML = "";
-
-      const classes = (saved && saved.classes && saved.classes.length) ? saved.classes : [
-        { time: "09:30 AM - 11:00 AM", teacher: "Maths Faculty", subject: "Arithmetic", topic: "Number Systems & Algebra", note: "Bring Notebook" },
-        { time: "11:30 AM - 01:00 PM", teacher: "English Faculty", subject: "English", topic: "Tenses & Voice Change", note: "Grammar Practice Set" },
-        { time: "02:00 PM - 03:30 PM", teacher: "GS Faculty", subject: "General Science", topic: "Physics Units & Motion", note: "Handouts provided" },
-        { time: "04:00 PM - 05:30 PM", teacher: "Reasoning Faculty", subject: "Reasoning", topic: "Blood Relations & Coding", note: "Daily Drill" }
-      ];
-
-      const tests = (saved && saved.tests && saved.tests.length) ? saved.tests : [
-        { name: "Morning Rapid Test", time: "08:30 AM - 09:00 AM", marks: "25", syllabus: "English & Current Affairs" },
-        { name: "Subject Assessment", time: "01:00 PM - 01:45 PM", marks: "50", syllabus: "Maths Sectional Test" },
-        { name: "Mock Examination", time: "06:00 PM - 07:30 PM", marks: "100", syllabus: "Full Combined Model Paper" }
-      ];
-
-      classes.forEach((c, idx) => renderClassRow(c, idx));
-      tests.forEach((t, idx) => renderTestRow(t, idx));
-    }
-
-    function addClassRow(data = {}) {
-      const idx = document.querySelectorAll("#class-rows-body tr").length;
-      renderClassRow({
-        time: data.time || "",
-        teacher: data.teacher || "",
-        subject: data.subject || "",
-        topic: data.topic || "",
-        note: data.note || ""
-      }, idx);
-    }
-
-    function renderClassRow(c, idx) {
-      const tbody = document.getElementById("class-rows-body");
-      const tr = document.createElement("tr");
-      tr.className = "class-row-item";
-      tr.innerHTML = `
-        <td class="editable-cell"><input type="text" class="c-time" value="${c.time}" placeholder="Time" /></td>
-        <td class="editable-cell"><input type="text" class="c-teacher" value="${c.teacher}" placeholder="Teacher" /></td>
-        <td class="editable-cell"><input type="text" class="c-subject" value="${c.subject}" placeholder="Subject" /></td>
-        <td class="editable-cell"><input type="text" class="c-topic" value="${c.topic}" placeholder="Topic" /></td>
-        <td class="editable-cell"><input type="text" class="c-note" value="${c.note}" placeholder="Note" /></td>
-        <td style="text-align:center;"><button type="button" style="color:red; cursor:pointer;" onclick="this.closest('tr').remove()">✕</button></td>
-      `;
-      tbody.appendChild(tr);
-    }
-
-    function addTestRow(data = {}) {
-      const idx = document.querySelectorAll("#test-rows-body tr").length;
-      renderTestRow({
-        name: data.name || "",
-        time: data.time || "",
-        marks: data.marks || "",
-        syllabus: data.syllabus || ""
-      }, idx);
-    }
-
-    function renderTestRow(t, idx) {
-      const tbody = document.getElementById("test-rows-body");
-      const tr = document.createElement("tr");
-      tr.className = "test-row-item";
-      tr.innerHTML = `
-        <td class="editable-cell"><input type="text" class="t-name" value="${t.name}" placeholder="Test Name" /></td>
-        <td class="editable-cell"><input type="text" class="t-time" value="${t.time}" placeholder="Timing" /></td>
-        <td class="editable-cell"><input type="text" class="t-marks" value="${t.marks}" placeholder="Total Marks" /></td>
-        <td class="editable-cell"><input type="text" class="t-syllabus" value="${t.syllabus}" placeholder="Syllabus" /></td>
-        <td style="text-align:center;"><button type="button" style="color:red; cursor:pointer;" onclick="this.closest('tr').remove()">✕</button></td>
-      `;
-      tbody.appendChild(tr);
-    }
-
-    function saveRoutineForCurrentSelection() {
-      const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-day-select").value;
-      const key = `${batch}_${date}`;
-
-      const classRows = document.querySelectorAll(".class-row-item");
-      const classes = [];
-      classRows.forEach(r => {
-        classes.push({
-          time: r.querySelector(".c-time").value,
-          teacher: r.querySelector(".c-teacher").value,
-          subject: r.querySelector(".c-subject").value,
-          topic: r.querySelector(".c-topic").value,
-          note: r.querySelector(".c-note").value
-        });
-      });
-
-      const testRows = document.querySelectorAll(".test-row-item");
-      const tests = [];
-      testRows.forEach(r => {
-        tests.push({
-          name: r.querySelector(".t-name").value,
-          time: r.querySelector(".t-time").value,
-          marks: r.querySelector(".t-marks").value,
-          syllabus: r.querySelector(".t-syllabus").value
-        });
-      });
-
-      const idx = DB.schedules.findIndex(s => s.key === key);
-      const payload = { key, batch, date, classes, tests, updatedAt: new Date().toISOString() };
-
-      if (idx > -1) DB.schedules[idx] = payload;
-      else DB.schedules.push(payload);
-
-      safeSet("ff_schedules", DB.schedules);
-      alert(`Routine saved for [${batch}] on ${date}!`);
-    }
-
-    function openCopyScheduleModal() {
-      const currentDate = document.getElementById("sch-day-select").value;
-      const daySelect = document.getElementById("sch-day-select");
-      const listContainer = document.getElementById("copy-target-dates-list");
-      listContainer.innerHTML = "";
-
-      let count = 0;
-      for (let i = 0; i < daySelect.options.length; i++) {
-        const d = daySelect.options[i].value;
-        const text = daySelect.options[i].innerText;
-        if (d !== currentDate) {
-          count++;
-          const label = document.createElement("label");
-          label.style = "display:flex; align-items:center; gap:8px; font-size:0.8rem; cursor:pointer;";
-          label.innerHTML = `<input type="checkbox" class="copy-target-date" value="${d}" checked /> <span>${text}</span>`;
-          listContainer.appendChild(label);
-        }
-      }
-
-      if (count === 0) {
-        alert("No other dates in this week range to copy to.");
-        return;
-      }
-
-      document.getElementById("copy-routine-modal").style.display = "flex";
-    }
-
-    function closeCopyScheduleModal() {
-      document.getElementById("copy-routine-modal").style.display = "none";
-    }
-
-    function toggleSelectAllCopyDates() {
-      const checkboxes = document.querySelectorAll(".copy-target-date");
-      const allChecked = Array.from(checkboxes).every(c => c.checked);
-      checkboxes.forEach(c => c.checked = !allChecked);
-    }
-
-    function executeCopySchedule() {
-      const batch = document.getElementById("sch-batch-select").value;
-      const sourceDate = document.getElementById("sch-day-select").value;
-
-      const classRows = document.querySelectorAll(".class-row-item");
-      const currentClasses = [];
-      classRows.forEach(r => {
-        currentClasses.push({
-          time: r.querySelector(".c-time").value,
-          teacher: r.querySelector(".c-teacher").value,
-          subject: r.querySelector(".c-subject").value,
-          topic: r.querySelector(".c-topic").value,
-          note: r.querySelector(".c-note").value
-        });
-      });
-
-      const testRows = document.querySelectorAll(".test-row-item");
-      const currentTests = [];
-      testRows.forEach(r => {
-        currentTests.push({
-          name: r.querySelector(".t-name").value,
-          time: r.querySelector(".t-time").value,
-          marks: r.querySelector(".t-marks").value,
-          syllabus: r.querySelector(".t-syllabus").value
-        });
-      });
-
-      const checkedDates = Array.from(document.querySelectorAll(".copy-target-date:checked")).map(c => c.value);
-      if (checkedDates.length === 0) {
-        alert("Please select at least one date.");
-        return;
-      }
-
-      checkedDates.forEach(targetDate => {
-        const targetKey = `${batch}_${targetDate}`;
-        const payload = {
-          key: targetKey,
-          batch,
-          date: targetDate,
-          classes: JSON.parse(JSON.stringify(currentClasses)),
-          tests: JSON.parse(JSON.stringify(currentTests)),
-          updatedAt: new Date().toISOString()
-        };
-
-        const idx = DB.schedules.findIndex(s => s.key === targetKey);
-        if (idx > -1) DB.schedules[idx] = payload;
-        else DB.schedules.push(payload);
-      });
-
-      safeSet("ff_schedules", DB.schedules);
-      alert(`Copied routine from ${sourceDate} to ${checkedDates.length} selected days!`);
-      closeCopyScheduleModal();
-    }
-
-    function printRoutineSheet() {
-      const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-day-select").value;
-      const key = `${batch}_${date}`;
-      const saved = DB.schedules.find(s => s.key === key);
-
-      document.getElementById("print-doc-subtitle").innerText = `DAILY ORDER & ACADEMIC ROUTINE (BATCH: ${batch})`;
-      const p = document.getElementById("printable-details");
-
-      const classes = saved ? saved.classes : [];
-      const tests = saved ? saved.tests : [];
-
-      let classTrs = classes.map(c => `
-        <tr><td><strong>${c.time}</strong></td><td>${c.teacher}</td><td>${c.subject}</td><td>${c.topic}</td><td>${c.note}</td></tr>
-      `).join("");
-
-      let testTrs = tests.map(t => `
-        <tr><td><strong>${t.name}</strong></td><td>${t.time}</td><td>${t.marks}</td><td>${t.syllabus}</td></tr>
-      `).join("");
-
-      p.innerHTML = `
-        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-          <div><p><strong>Scheduled Date:</strong> ${date}</p><p><strong>Formation / Batch:</strong> ${batch}</p></div>
-          <div style="text-align:right;"><p><strong>Campus:</strong> Headquarters</p><p><strong>Status:</strong> Approved Routine</p></div>
-        </div>
-        <h4 style="margin:8px 0 4px 0; color:#0A192F;">1. Academic Lectures & Routine Sessions</h4>
-        <table class="print-table">
-          <thead><tr><th>Time</th><th>Teacher</th><th>Subject</th><th>Topic</th><th>Note</th></tr></thead>
-          <tbody>${classTrs || '<tr><td colspan="5">No classes scheduled.</td></tr>'}</tbody>
-        </table>
-        <h4 style="margin:12px 0 4px 0; color:#E52521;">2. Evaluative Tests & Daily Benchmarks</h4>
-        <table class="print-table">
-          <thead><tr><th>Test Name</th><th>Timing</th><th>Marks</th><th>Syllabus</th></tr></thead>
-          <tbody>${testTrs || '<tr><td colspan="4">No tests scheduled.</td></tr>'}</tbody>
-        </table>
-        <div class="signature-row" style="margin-top:40px;">
-          <div class="signature-line">Officer In-Charge</div>
-          <div class="signature-line">Super Admin / Director</div>
-        </div>
-      `;
-
-      window.print();
     }
 
     function logout() {
@@ -3363,6 +3643,8 @@
       document.getElementById("tab-students-content").style.display = "none";
       document.getElementById("tab-schedule-content").style.display = "none";
       document.getElementById("tab-attendance-content").style.display = "none";
+      document.getElementById("tab-exams-content").style.display = "none";
+      document.getElementById("tab-360-content").style.display = "none";
       document.getElementById("tab-progress-content").style.display = "none";
       document.getElementById("tab-finance-content").style.display = "none";
       document.getElementById("personal-desk-view").style.display = "none";
