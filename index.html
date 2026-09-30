@@ -43,7 +43,6 @@
       padding-bottom: 20px;
     }
 
-    /* Top App Bar */
     .navbar {
       background-color: var(--navy-blue);
       color: var(--pure-white);
@@ -83,7 +82,6 @@
       color: var(--primary-red);
     }
 
-    /* Desktop Navigation Tabs */
     .desktop-nav-tabs {
       display: flex;
       gap: 6px;
@@ -136,7 +134,6 @@
       font-size: 0.78rem;
     }
 
-    /* Mobile Bottom Navigation Bar */
     .mobile-bottom-bar {
       display: none;
       position: fixed;
@@ -175,10 +172,6 @@
     .bottom-nav-item.active {
       color: var(--pure-white);
       background: rgba(229, 37, 33, 0.15);
-    }
-
-    .bottom-nav-item.active span.icon {
-      transform: scale(1.15);
     }
 
     @media (max-width: 768px) {
@@ -255,7 +248,6 @@
       margin-bottom: 10px;
     }
 
-    /* Mobile Responsive Form Grid */
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -279,7 +271,6 @@
       color: var(--navy-blue);
     }
 
-    /* Large touch-friendly input targets */
     input, select, textarea {
       padding: 12px 10px;
       border: 1px solid var(--border-gray);
@@ -511,7 +502,6 @@
       color: #0F172A;
     }
 
-    /* Financial Dual Split Layout */
     .finance-split-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -574,7 +564,6 @@
       color: var(--navy-blue);
     }
 
-    /* Roster Table Styles */
     .table-container {
       overflow-x: auto;
       border: 1px solid var(--border-gray);
@@ -605,7 +594,6 @@
       background-color: #F8FAFC;
     }
 
-    /* Mobile Responsive Card-Stack Format */
     @media (max-width: 768px) {
       .responsive-table thead {
         display: none;
@@ -643,7 +631,6 @@
       }
     }
 
-    /* Schedule Board Control Panel */
     .schedule-control-bar {
       background: #EDF2F7;
       border: 1px solid #CBD5E0;
@@ -686,7 +673,6 @@
       border-radius: 4px;
     }
 
-    /* Modals */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -753,7 +739,6 @@
     .att-badge.present { background: #DEF7EC; color: #03543F; border-color: #03543F; }
     .att-badge.absent { background: #FDE8E8; color: #9B1C1C; border-color: #9B1C1C; }
 
-    /* Print Template */
     #print-section { display: none; }
 
     @media print {
@@ -788,7 +773,6 @@
       <div class="brand-title">FAUJ-E-<span>FACTORY</span></div>
     </div>
     <div id="nav-controls" style="display: none; align-items: center; gap: 8px;">
-      <!-- Desktop Navigation Tabs -->
       <div class="desktop-nav-tabs" id="admin-nav-tabs" style="display: none;">
         <button type="button" class="tab-btn" id="btn-tab-students" onclick="switchTab('students')">Students & Admissions</button>
         <button type="button" class="tab-btn" id="btn-tab-schedule" onclick="switchTab('schedule')">Weekly Routine & Tests</button>
@@ -829,7 +813,7 @@
       <form id="login-form">
         <div class="form-group" style="margin-bottom: 12px;">
           <label>Mobile Number or Admin Email</label>
-          <input type="text" id="login-identifier" inputmode="tel" placeholder="10-digit Phone or Email" required autocomplete="username" />
+          <input type="text" id="login-identifier" inputmode="tel" placeholder="10-digit Mobile or Admin Email" required autocomplete="username" />
         </div>
         <div class="form-group" style="margin-bottom: 12px;">
           <label>Password</label>
@@ -893,7 +877,7 @@
         </form>
       </div>
 
-      <!-- Staff Directory (Print & Active/Inactive Switches Only) -->
+      <!-- Staff Directory -->
       <div class="card" id="staff-directory-box">
         <div class="card-header">Official & Faculty Directory</div>
         <div class="table-container">
@@ -1152,7 +1136,6 @@
           </div>
         </div>
 
-        <!-- Academic Classes -->
         <div class="schedule-grid-box">
           <div class="schedule-box-header">
             <span>📚 Daily Academic Classes (Min. 3-4 Sessions)</span>
@@ -1176,7 +1159,6 @@
           </div>
         </div>
 
-        <!-- Daily Tests -->
         <div class="schedule-grid-box test-box">
           <div class="schedule-box-header" style="color:var(--primary-red);">
             <span>🎯 Tests of the Day & Mock Assessments</span>
@@ -1436,6 +1418,13 @@
     const SUPABASE_REST_URL = "https://dyldejdkgfnyvunkrddh.supabase.co/rest/v1";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5bGRlamRrZ2ZueXZ1bmtyZGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2MDE4OTYsImV4cCI6MjEwNjE3Nzg5Nn0._JUB9WjiB3aJAdEZZyADueL9i6iyf7us6dD8L3S1o0E";
 
+    // Clean Phone Sanitizer: Extract only 10 digits
+    function sanitizePhone(val) {
+      if (!val) return "";
+      const cleaned = String(val).replace(/\D/g, "");
+      return cleaned.length > 10 ? cleaned.slice(-10) : cleaned;
+    }
+
     function safeGet(key) {
       try {
         const val = localStorage.getItem(key);
@@ -1499,6 +1488,7 @@
       }
     }
 
+    // Merge Cloud into Local without wiping unsynced records
     async function syncFromCloud() {
       const [staffData, studentData, incomeData, expenseData] = await Promise.all([
         cloudFetch("ff_staff?select=*"),
@@ -1507,20 +1497,31 @@
         cloudFetch("ff_expenses?select=*")
       ]);
 
-      if (staffData && Array.isArray(staffData)) {
-        DB.staff = staffData;
+      if (staffData && Array.isArray(staffData) && staffData.length > 0) {
+        const localMap = new Map(DB.staff.map(s => [s.id, s]));
+        staffData.forEach(s => localMap.set(s.id, { ...localMap.get(s.id), ...s }));
+        DB.staff = Array.from(localMap.values());
         safeSet("ff_staff", DB.staff);
       }
-      if (studentData && Array.isArray(studentData)) {
-        DB.students = studentData;
+      
+      if (studentData && Array.isArray(studentData) && studentData.length > 0) {
+        const localMap = new Map(DB.students.map(s => [s.id, s]));
+        studentData.forEach(s => localMap.set(s.id, { ...localMap.get(s.id), ...s }));
+        DB.students = Array.from(localMap.values());
         safeSet("ff_students", DB.students);
       }
-      if (incomeData && Array.isArray(incomeData)) {
-        DB.incomes = incomeData;
+
+      if (incomeData && Array.isArray(incomeData) && incomeData.length > 0) {
+        const localMap = new Map(DB.incomes.map(i => [i.id, i]));
+        incomeData.forEach(i => localMap.set(i.id, { ...localMap.get(i.id), ...i }));
+        DB.incomes = Array.from(localMap.values());
         safeSet("ff_incomes", DB.incomes);
       }
-      if (expenseData && Array.isArray(expenseData)) {
-        DB.expenses = expenseData;
+
+      if (expenseData && Array.isArray(expenseData) && expenseData.length > 0) {
+        const localMap = new Map(DB.expenses.map(e => [e.id, e]));
+        expenseData.forEach(e => localMap.set(e.id, { ...localMap.get(e.id), ...e }));
+        DB.expenses = Array.from(localMap.values());
         safeSet("ff_expenses", DB.expenses);
       }
 
@@ -1539,7 +1540,7 @@
         btn.innerText = "🙈";
       } else {
         passInput.type = "password";
-        btn.innerText = "👁️";
+        btn.innerText = "👁️️";
       }
     }
 
@@ -1573,7 +1574,7 @@
       calculateTotalFixedAndDue();
     }
 
-    // Fee Fixation & Itemized Collection Calculations
+    // Fee Fixation & Dynamic Due Calculations
     function calculateTotalFixedAndDue() {
       const adm = parseFloat(document.getElementById("fix-admission").value) || 0;
       const tuition = parseFloat(document.getElementById("fix-tuition").value) || 0;
@@ -1673,7 +1674,7 @@
       if (document.getElementById("exp-date")) document.getElementById("exp-date").value = today;
     }
 
-    // PROFILE CONTROLS: PRINT & ACTIVE/INACTIVE
+    // PROFILE MANAGEMENT: ONLY PRINT & INACTIVE SWITCH
     function toggleStaffStatus(idx) {
       if (currentUser.role !== "SuperAdmin") return;
       const st = DB.staff[idx];
@@ -1818,10 +1819,10 @@
       const newStaff = {
         id: "STAFF-" + Date.now(),
         name: document.getElementById("staff-name").value.trim(),
-        phone: document.getElementById("staff-phone").value.trim(),
+        phone: sanitizePhone(document.getElementById("staff-phone").value.trim()),
         dob: document.getElementById("staff-dob").value,
         role: document.getElementById("staff-role").value,
-        password: document.getElementById("staff-password").value,
+        password: document.getElementById("staff-password").value.trim(),
         permissions: perms,
         status: "Active"
       };
@@ -1885,8 +1886,8 @@
         date: admDate,
         name: studentName,
         guardian: document.getElementById("std-guardian").value.trim(),
-        ph1: document.getElementById("std-ph1").value.trim(),
-        ph2: document.getElementById("std-ph2").value.trim(),
+        ph1: sanitizePhone(document.getElementById("std-ph1").value.trim()),
+        ph2: sanitizePhone(document.getElementById("std-ph2").value.trim()),
         dob: document.getElementById("std-dob").value,
         aadhar: document.getElementById("std-aadhar").value.trim(),
         batch: document.getElementById("std-batch").value,
@@ -1910,16 +1911,17 @@
         remaining: Math.max(0, fixedAdm - pAdm),
         additional_payments: additionalPayments,
 
-        password: document.getElementById("std-generated-pw").value,
+        password: document.getElementById("std-generated-pw").value.trim(),
         notes: document.getElementById("std-notes").value.trim(),
         paid_months: [],
         status: "Active"
       };
 
+      // Guaranteed Instant Local Persistence
       DB.students.push(newStudent);
       safeSet("ff_students", DB.students);
 
-      // Log itemized breakdowns in Income Ledger
+      // Save Itemized Records to Income Ledger
       const breakdowns = [
         { purpose: "Admission Fee", amt: pAdm },
         { purpose: "Advance Study Fee", amt: pStudy },
@@ -1947,7 +1949,7 @@
 
       renderRoster();
       renderFinanceDashboard();
-      alert(`Student registered! Login Mobile: ${newStudent.ph1} | Password: ${newStudent.password}`);
+      alert(`Student registered successfully!\nLogin Mobile: ${newStudent.ph1}\nPassword: ${newStudent.password}`);
       
       if (lastReceiptItem && confirm("Would you like to print an official Money Receipt for this collection?")) {
         printInvoice(lastReceiptItem);
@@ -1958,8 +1960,454 @@
       initGenerators();
       calculateTotalFixedAndDue();
 
+      // Safe Background Cloud Sync
       cloudFetch("ff_students", "POST", newStudent);
     });
+
+    // INVOICE PRINT ENGINE
+    function printInvoiceByIndex(sortedIndex) {
+      const sortedIncomes = [...DB.incomes].sort((a, b) => new Date(b.date) - new Date(a.date));
+      const entry = sortedIncomes[sortedIndex];
+      if (entry) printInvoice(entry);
+    }
+
+    function printInvoice(item) {
+      document.getElementById("print-doc-subtitle").innerText = "OFFICIAL MONEY RECEIPT / INVOICE";
+      const p = document.getElementById("printable-details");
+      const receiptNo = item.id ? String(item.id).replace("INC-", "REC/") : "REC/" + Math.floor(1000 + Math.random() * 9000);
+
+      p.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+          <div>
+            <p style="font-size: 0.85rem; margin-bottom: 2px;"><strong>Receipt No:</strong> <span style="font-family: monospace; color: #E52521;">${receiptNo}</span></p>
+            <p style="font-size: 0.85rem; margin-bottom: 2px;"><strong>Date:</strong> ${item.date}</p>
+            <p style="font-size: 0.85rem;"><strong>Payment Mode:</strong> Cash / Clearing</p>
+          </div>
+          <div style="text-align: right;">
+            <p style="font-size: 0.8rem; color: #6B7280;">FAUJ-E-FACTORY HEADQUARTERS</p>
+            <span style="display: inline-block; background: #DEF7EC; color: #03543F; font-weight: 800; font-size: 0.8rem; padding: 2px 8px; border-radius: 4px; margin-top: 4px;">PAYMENT CLEARED</span>
+          </div>
+        </div>
+        <table class="print-table">
+          <tr>
+            <th style="width: 32%;">Received From</th>
+            <td style="font-size: 1rem; font-weight: bold; color: #0A192F;">${item.person}</td>
+          </tr>
+          <tr>
+            <th>Particulars / Purpose</th>
+            <td style="font-weight: 600;">${item.purpose}</td>
+          </tr>
+          <tr>
+            <th>Total Amount Paid</th>
+            <td style="font-size: 1.15rem; font-weight: 800; color: #E52521;">₹${Number(item.amount).toLocaleString('en-IN')} /-</td>
+          </tr>
+        </table>
+        <div style="margin-top: 14px; padding: 10px; background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 4px; font-size: 0.75rem; color: #4B5563;">
+          <p>• Official financial acknowledgment issued by <strong>FAUJ-E-FACTORY</strong>.</p>
+          <p>• Subject to academy training rules and regulations.</p>
+        </div>
+        <div class="signature-row" style="margin-top: 40px;">
+          <div class="signature-line">Student / Depositor Signature</div>
+          <div class="signature-line">Authorized Signatory / Accounts</div>
+        </div>
+      `;
+      window.print();
+    }
+
+    function printStudentVerification(index) {
+      const s = DB.students[index];
+      document.getElementById("print-doc-subtitle").innerText = "STUDENT ENROLLMENT & VERIFICATION BIODATA";
+      const p = document.getElementById("printable-details");
+      const paidMonthsSummary = (s.paid_months && s.paid_months.length) ? s.paid_months.join(", ") : "None";
+
+      p.innerHTML = `
+        <div style="display:flex; justify-content:space-between; margin-bottom:14px;">
+          <div>
+            <h3 style="color:#0A192F;">${s.name} (${s.gender || 'N/A'})</h3>
+            <p>Batch: <strong>${s.batch}</strong> | Phone: ${s.ph1}</p>
+            <p>Guardian: ${s.guardian}</p>
+            <p>Address: ${s.address}</p>
+          </div>
+          <div style="width:90px; height:110px; border:1px dashed #333; display:flex; align-items:center; justify-content:center; font-size:9px;">
+            STUDENT PHOTO
+          </div>
+        </div>
+        <table class="print-table">
+          <tr><th>Height</th><td>${s.height || '—'} cm</td><th>Weight</th><td>${s.weight || '—'} kg</td></tr>
+          <tr><th>Chest</th><td>${s.chest || '—'} cm</td><th>Date of Birth</th><td>${s.dob}</td></tr>
+          <tr><th>Qualification</th><td>${s.qualification || '—'}</td><th>Last Exam %</th><td>${s.marks || '—'}%</td></tr>
+        </table>
+        <h4 style="margin:10px 0 4px 0; color:#0A192F;">Financial Ledger Record</h4>
+        <table class="print-table">
+          <tr><th>Admission Fee</th><td>₹${s.admission_fee}</td><th>Total Paid</th><td>₹${s.paid}</td></tr>
+          <tr><th>Remaining Due</th><td>₹${s.remaining}</td><th>Cleared Months</th><td>${paidMonthsSummary}</td></tr>
+        </table>
+        <div class="signature-row" style="margin-top:40px;">
+          <div class="signature-line">Student Signature</div>
+          <div class="signature-line">Authorized Signatory / Director</div>
+        </div>
+      `;
+      window.print();
+    }
+
+    function printStaffProfile(idx) {
+      const st = DB.staff[idx];
+      document.getElementById("print-doc-subtitle").innerText = "OFFICIAL PROFILE & VERIFICATION RECORD";
+      document.getElementById("printable-details").innerHTML = `
+        <table class="print-table">
+          <tr><th>Full Name</th><td>${st.name}</td></tr>
+          <tr><th>Designation</th><td>${st.role}</td></tr>
+          <tr><th>Login Mobile</th><td>${st.phone}</td></tr>
+          <tr><th>Date of Birth</th><td>${st.dob}</td></tr>
+          <tr><th>Status</th><td>${st.status || 'Active'}</td></tr>
+        </table>
+        <div class="signature-row" style="margin-top:40px;">
+          <div class="signature-line">Staff Signature</div>
+          <div class="signature-line">Director / Super Admin</div>
+        </div>
+      `;
+      window.print();
+    }
+
+    // FINANCE FORMS
+    document.getElementById("income-entry-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const newIncome = {
+        id: "INC-" + Date.now(),
+        date: document.getElementById("inc-date").value,
+        purpose: document.getElementById("inc-purpose").value,
+        person: document.getElementById("inc-person").value.trim(),
+        amount: parseFloat(document.getElementById("inc-amount").value) || 0
+      };
+
+      DB.incomes.push(newIncome);
+      safeSet("ff_incomes", DB.incomes);
+      document.getElementById("income-entry-form").reset();
+      initGenerators();
+      renderFinanceDashboard();
+
+      cloudFetch("ff_incomes", "POST", newIncome);
+
+      if (confirm("Would you like to print/generate the Money Receipt for this entry?")) {
+        printInvoice(newIncome);
+      }
+    });
+
+    document.getElementById("expense-entry-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const newExpense = {
+        id: "EXP-" + Date.now(),
+        date: document.getElementById("exp-date").value,
+        purpose: document.getElementById("exp-purpose").value,
+        person: document.getElementById("exp-person").value.trim(),
+        amount: parseFloat(document.getElementById("exp-amount").value) || 0
+      };
+
+      DB.expenses.push(newExpense);
+      safeSet("ff_expenses", DB.expenses);
+      document.getElementById("expense-entry-form").reset();
+      initGenerators();
+      renderFinanceDashboard();
+
+      cloudFetch("ff_expenses", "POST", newExpense);
+    });
+
+    function renderFinanceDashboard() {
+      let totalIncome = 0;
+      let totalExpense = 0;
+
+      const incTbody = document.getElementById("income-table-body");
+      if (incTbody) {
+        incTbody.innerHTML = "";
+        const sortedIncomes = [...DB.incomes].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        sortedIncomes.forEach((inc, idx) => {
+          totalIncome += (Number(inc.amount) || 0);
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${inc.date}</td>
+            <td><strong>${inc.purpose}</strong></td>
+            <td>${inc.person}</td>
+            <td style="color:var(--success-green); font-weight:700;">+₹${Number(inc.amount).toLocaleString("en-IN")}</td>
+            <td>
+              <button type="button" class="btn-receipt" onclick="printInvoiceByIndex(${idx})">🧾 Receipt</button>
+            </td>
+          `;
+          incTbody.appendChild(tr);
+        });
+      }
+
+      const expTbody = document.getElementById("expense-table-body");
+      if (expTbody) {
+        expTbody.innerHTML = "";
+        const sortedExpenses = [...DB.expenses].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        sortedExpenses.forEach(exp => {
+          totalExpense += (Number(exp.amount) || 0);
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${exp.date}</td>
+            <td><strong>${exp.purpose}</strong></td>
+            <td>${exp.person}</td>
+            <td style="color:var(--primary-red); font-weight:700;">-₹${Number(exp.amount).toLocaleString("en-IN")}</td>
+          `;
+          expTbody.appendChild(tr);
+        });
+      }
+
+      const inEl = document.getElementById("stat-total-inflow");
+      if (inEl) inEl.innerText = "₹" + totalIncome.toLocaleString("en-IN");
+      const outEl = document.getElementById("stat-total-outflow");
+      if (outEl) outEl.innerText = "₹" + totalExpense.toLocaleString("en-IN");
+
+      const net = totalIncome - totalExpense;
+      const netElem = document.getElementById("stat-net-balance");
+      if (netElem) {
+        netElem.innerText = "₹" + net.toLocaleString("en-IN");
+        netElem.style.color = (net >= 0) ? "var(--navy-blue)" : "var(--primary-red)";
+      }
+    }
+
+    function switchTab(tab) {
+      document.getElementById("tab-students-content").style.display = (tab === 'students') ? 'block' : 'none';
+      document.getElementById("tab-schedule-content").style.display = (tab === 'schedule') ? 'block' : 'none';
+      document.getElementById("tab-finance-content").style.display = (tab === 'finance') ? 'block' : 'none';
+
+      document.getElementById("btn-tab-students").classList.toggle("active", tab === 'students');
+      document.getElementById("btn-tab-schedule").classList.toggle("active", tab === 'schedule');
+      document.getElementById("btn-tab-finance").classList.toggle("active", tab === 'finance');
+
+      const mStud = document.getElementById("m-btn-students");
+      const mSch = document.getElementById("m-btn-schedule");
+      const mFin = document.getElementById("m-btn-finance");
+      if (mStud) mStud.classList.toggle("active", tab === 'students');
+      if (mSch) mSch.classList.toggle("active", tab === 'schedule');
+      if (mFin) mFin.classList.toggle("active", tab === 'finance');
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // MULTI-ROLE LOGIN CONTROLLER (WITH WORKING PHONE SANITIZATION)
+    document.getElementById("login-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const rawId = document.getElementById("login-identifier").value.trim().toLowerCase();
+      const pass = document.getElementById("login-password").value.trim();
+      const remember = document.getElementById("remember-me-checkbox").checked;
+      const phoneClean = sanitizePhone(rawId);
+
+      // 1. Super Admin Check
+      const SUPER_ADMINS = [
+        { email: "supriyaskkundu@gmail.com", name: "Super Admin (Supriya)" },
+        { email: "ersadsir1986@gmail.com", name: "Super Admin (Ersad)" }
+      ];
+
+      const matchedAdmin = SUPER_ADMINS.find(a => a.email.toLowerCase() === rawId && pass === "Fauj-efactory2026");
+
+      if (matchedAdmin) {
+        startSession({ role: "SuperAdmin", name: matchedAdmin.name, email: matchedAdmin.email }, remember);
+        return;
+      }
+
+      // 2. Staff / Official Check (By Sanitized Phone Number & Password)
+      const staff = DB.staff.find(s => (sanitizePhone(s.phone) === phoneClean || s.phone.toLowerCase() === rawId) && s.password.trim() === pass);
+      if (staff) {
+        if (staff.status === "Inactive") {
+          alert("Account is marked INACTIVE. Contact Super Admin.");
+          return;
+        }
+        startSession({ ...staff, role: staff.role || "Official" }, remember);
+        return;
+      }
+
+      // 3. Student Check (By Sanitized Primary Phone & Password)
+      const student = DB.students.find(s => (sanitizePhone(s.ph1) === phoneClean || s.ph1.toLowerCase() === rawId) && s.password.trim() === pass);
+      if (student) {
+        if (student.status === "Inactive") {
+          alert("Your Student profile is marked INACTIVE. Contact Administrator.");
+          return;
+        }
+        startSession({ ...student, role: "Student" }, remember);
+        return;
+      }
+
+      alert("Invalid Mobile Number or Password. Please check with Super Admin.");
+    });
+
+    function startSession(user, remember) {
+      currentUser = user;
+      if (remember) {
+        localStorage.setItem("ff_remembered_session", JSON.stringify(user));
+      } else {
+        sessionStorage.setItem("ff_session", JSON.stringify(user));
+      }
+
+      document.getElementById("login-view").style.display = "none";
+      document.getElementById("nav-controls").style.display = "flex";
+      document.getElementById("current-user-tag").innerText = `${currentUser.name} (${currentUser.role || 'Student'})`;
+
+      const isSuperAdmin = (currentUser.role === "SuperAdmin");
+
+      if (isSuperAdmin) {
+        document.getElementById("admin-nav-tabs").style.display = "flex";
+        document.getElementById("mobile-nav-bar").style.display = "flex";
+        document.getElementById("btn-tab-students").style.display = "inline-block";
+        document.getElementById("btn-tab-schedule").style.display = "inline-block";
+        document.getElementById("btn-tab-finance").style.display = "inline-block";
+
+        document.getElementById("m-btn-students").style.display = "flex";
+        document.getElementById("m-btn-schedule").style.display = "flex";
+        document.getElementById("m-btn-finance").style.display = "flex";
+
+        document.getElementById("staff-creation-box").style.display = "block";
+        document.getElementById("student-admission-box").style.display = "block";
+        document.getElementById("staff-directory-box").style.display = "block";
+        document.getElementById("personal-desk-view").style.display = "none";
+
+        document.getElementById("btn-copy-routine-modal").style.display = "inline-block";
+        document.getElementById("save-routine-action-wrap").style.display = "block";
+        document.getElementById("btn-add-class-row").style.display = "inline-block";
+        document.getElementById("btn-add-test-row").style.display = "inline-block";
+        document.getElementById("sec-finance-income").style.display = "block";
+        document.getElementById("sec-finance-expense").style.display = "block";
+
+        switchTab("students");
+        renderStaffDirectory();
+        renderRoster();
+        renderFinanceDashboard();
+        initWeekRange();
+      } else if (currentUser.role === "Official" || currentUser.role === "Faculty") {
+        const perms = currentUser.permissions || {};
+        document.getElementById("admin-nav-tabs").style.display = "flex";
+        document.getElementById("mobile-nav-bar").style.display = "flex";
+        document.getElementById("staff-creation-box").style.display = "none";
+        document.getElementById("staff-directory-box").style.display = "none";
+        document.getElementById("personal-desk-view").style.display = "none";
+
+        const hasAdm = !!perms.admissions;
+        const hasSch = !!perms.schedule;
+        const hasFin = !!(perms.income || perms.expense);
+
+        document.getElementById("btn-tab-students").style.display = hasAdm ? "inline-block" : "none";
+        document.getElementById("btn-tab-schedule").style.display = hasSch ? "inline-block" : "none";
+        document.getElementById("btn-tab-finance").style.display = hasFin ? "inline-block" : "none";
+
+        document.getElementById("m-btn-students").style.display = hasAdm ? "flex" : "none";
+        document.getElementById("m-btn-schedule").style.display = hasSch ? "flex" : "none";
+        document.getElementById("m-btn-finance").style.display = hasFin ? "flex" : "none";
+
+        document.getElementById("student-admission-box").style.display = hasAdm ? "block" : "none";
+        document.getElementById("btn-copy-routine-modal").style.display = hasSch ? "inline-block" : "none";
+        document.getElementById("save-routine-action-wrap").style.display = hasSch ? "block" : "none";
+        document.getElementById("btn-add-class-row").style.display = hasSch ? "inline-block" : "none";
+        document.getElementById("btn-add-test-row").style.display = hasSch ? "inline-block" : "none";
+        
+        document.getElementById("sec-finance-income").style.display = perms.income ? "block" : "none";
+        document.getElementById("sec-finance-expense").style.display = perms.expense ? "block" : "none";
+
+        if (hasAdm) switchTab("students");
+        else if (hasSch) switchTab("schedule");
+        else if (hasFin) switchTab("finance");
+
+        renderRoster();
+        initWeekRange();
+      } else {
+        // Student: Fixed single view for all students
+        document.getElementById("admin-nav-tabs").style.display = "none";
+        document.getElementById("mobile-nav-bar").style.display = "none";
+        document.getElementById("tab-students-content").style.display = "none";
+        document.getElementById("tab-schedule-content").style.display = "none";
+        document.getElementById("tab-finance-content").style.display = "none";
+        document.getElementById("personal-desk-view").style.display = "block";
+        
+        document.getElementById("desk-title").innerText = `Student Portal: ${currentUser.name}`;
+        document.getElementById("personal-desk-content").innerHTML = `
+          <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:16px; margin-bottom:14px; font-size:0.9rem; line-height:1.6;">
+            <p><strong>Student Name:</strong> ${currentUser.name}</p>
+            <p><strong>Enrolled Batch:</strong> <span style="color:var(--primary-red); font-weight:800;">${currentUser.batch}</span></p>
+            <p><strong>Guardian's Name:</strong> ${currentUser.guardian}</p>
+            <p><strong>Registered Login Mobile:</strong> ${currentUser.ph1}</p>
+            <p><strong>Admission Date:</strong> ${currentUser.date}</p>
+            <p><strong>Admission Fee Remaining Due:</strong> ₹${currentUser.remaining}</p>
+            <p><strong>Total Amount Cleared:</strong> ₹${currentUser.paid}</p>
+            <p><strong>Months Cleared:</strong> ${(currentUser.paid_months && currentUser.paid_months.length) ? currentUser.paid_months.join(', ') : 'None'}</p>
+          </div>
+          <div style="margin-top:14px;">
+            <button type="button" class="btn-primary" onclick="showStudentRoutineView('${currentUser.batch}')">📅 View My Batch (${currentUser.batch}) Routine & Tests</button>
+          </div>
+        `;
+      }
+    }
+
+    function showStudentRoutineView(batch) {
+      const routineCard = document.getElementById("student-routine-display");
+      routineCard.style.display = "block";
+      document.getElementById("student-routine-batch-title").innerText = `Batch [${batch}] Daily Routine & Evaluation Schedule`;
+
+      const select = document.getElementById("std-read-date-select");
+      select.innerHTML = "";
+
+      const today = new Date();
+      const curr = new Date(today);
+      const first = curr.getDate() - curr.getDay() + 1;
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(curr.setDate(first + i));
+        const dateVal = d.toISOString().split("T")[0];
+        const dayName = d.toLocaleDateString("en-US", { weekday: "short" });
+        const opt = document.createElement("option");
+        opt.value = dateVal;
+        opt.innerText = `${dateVal} (${dayName})`;
+        select.appendChild(opt);
+      }
+      renderStudentReadRoutine();
+      routineCard.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function hideStudentRoutine() {
+      document.getElementById("student-routine-display").style.display = "none";
+    }
+
+    function renderStudentReadRoutine() {
+      const date = document.getElementById("std-read-date-select").value;
+      const batch = currentUser.batch;
+      const key = `${batch}_${date}`;
+      const saved = DB.schedules.find(s => s.key === key);
+
+      const classesTbody = document.getElementById("std-read-classes-body");
+      const testsTbody = document.getElementById("std-read-tests-body");
+      classesTbody.innerHTML = "";
+      testsTbody.innerHTML = "";
+
+      const classes = (saved && saved.classes) ? saved.classes : [];
+      const tests = (saved && saved.tests) ? saved.tests : [];
+
+      if (classes.length === 0) {
+        classesTbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6B7280;">No academic classes scheduled for this date.</td></tr>`;
+      } else {
+        classes.forEach(c => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><strong>${c.time}</strong></td>
+            <td><strong>${c.subject}</strong> (${c.teacher || 'Faculty'})</td>
+            <td><strong>Topic:</strong> ${c.topic || '—'}<br/><span style="font-size:0.75rem; color:#4B5563;">${c.note || ''}</span></td>
+          `;
+          classesTbody.appendChild(tr);
+        });
+      }
+
+      if (tests.length === 0) {
+        testsTbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6B7280;">No mock tests scheduled for this date.</td></tr>`;
+      } else {
+        tests.forEach(t => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td style="color:var(--primary-red); font-weight:700;">${t.name}</td>
+            <td>${t.time}</td>
+            <td>Marks: <strong>${t.marks}</strong><br/><span style="font-size:0.75rem;">Syllabus: ${t.syllabus}</span></td>
+          `;
+          testsTbody.appendChild(tr);
+        });
+      }
+    }
 
     // MONTHLY FEE MODAL
     function openMonthModal(studentIdx) {
@@ -2433,454 +2881,6 @@
       window.print();
     }
 
-    // INVOICE PRINT ENGINE
-    function printInvoiceByIndex(sortedIndex) {
-      const sortedIncomes = [...DB.incomes].sort((a, b) => new Date(b.date) - new Date(a.date));
-      const entry = sortedIncomes[sortedIndex];
-      if (entry) printInvoice(entry);
-    }
-
-    function printInvoice(item) {
-      document.getElementById("print-doc-subtitle").innerText = "OFFICIAL MONEY RECEIPT / INVOICE";
-      const p = document.getElementById("printable-details");
-      const receiptNo = item.id ? String(item.id).replace("INC-", "REC/") : "REC/" + Math.floor(1000 + Math.random() * 9000);
-
-      p.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-          <div>
-            <p style="font-size: 0.85rem; margin-bottom: 2px;"><strong>Receipt No:</strong> <span style="font-family: monospace; color: #E52521;">${receiptNo}</span></p>
-            <p style="font-size: 0.85rem; margin-bottom: 2px;"><strong>Date:</strong> ${item.date}</p>
-            <p style="font-size: 0.85rem;"><strong>Payment Mode:</strong> Cash / Clearing</p>
-          </div>
-          <div style="text-align: right;">
-            <p style="font-size: 0.8rem; color: #6B7280;">FAUJ-E-FACTORY HEADQUARTERS</p>
-            <span style="display: inline-block; background: #DEF7EC; color: #03543F; font-weight: 800; font-size: 0.8rem; padding: 2px 8px; border-radius: 4px; margin-top: 4px;">PAYMENT CLEARED</span>
-          </div>
-        </div>
-        <table class="print-table">
-          <tr>
-            <th style="width: 32%;">Received From</th>
-            <td style="font-size: 1rem; font-weight: bold; color: #0A192F;">${item.person}</td>
-          </tr>
-          <tr>
-            <th>Particulars / Purpose</th>
-            <td style="font-weight: 600;">${item.purpose}</td>
-          </tr>
-          <tr>
-            <th>Total Amount Paid</th>
-            <td style="font-size: 1.15rem; font-weight: 800; color: #E52521;">₹${Number(item.amount).toLocaleString('en-IN')} /-</td>
-          </tr>
-        </table>
-        <div style="margin-top: 14px; padding: 10px; background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 4px; font-size: 0.75rem; color: #4B5563;">
-          <p>• Official financial acknowledgment issued by <strong>FAUJ-E-FACTORY</strong>.</p>
-          <p>• Subject to academy training rules and regulations.</p>
-        </div>
-        <div class="signature-row" style="margin-top: 40px;">
-          <div class="signature-line">Student / Depositor Signature</div>
-          <div class="signature-line">Authorized Signatory / Accounts</div>
-        </div>
-      `;
-      window.print();
-    }
-
-    function printStudentVerification(index) {
-      const s = DB.students[index];
-      document.getElementById("print-doc-subtitle").innerText = "STUDENT ENROLLMENT & VERIFICATION BIODATA";
-      const p = document.getElementById("printable-details");
-      const paidMonthsSummary = (s.paid_months && s.paid_months.length) ? s.paid_months.join(", ") : "None";
-
-      p.innerHTML = `
-        <div style="display:flex; justify-content:space-between; margin-bottom:14px;">
-          <div>
-            <h3 style="color:#0A192F;">${s.name} (${s.gender || 'N/A'})</h3>
-            <p>Batch: <strong>${s.batch}</strong> | Phone: ${s.ph1}</p>
-            <p>Guardian: ${s.guardian}</p>
-            <p>Address: ${s.address}</p>
-          </div>
-          <div style="width:90px; height:110px; border:1px dashed #333; display:flex; align-items:center; justify-content:center; font-size:9px;">
-            STUDENT PHOTO
-          </div>
-        </div>
-        <table class="print-table">
-          <tr><th>Height</th><td>${s.height || '—'} cm</td><th>Weight</th><td>${s.weight || '—'} kg</td></tr>
-          <tr><th>Chest</th><td>${s.chest || '—'} cm</td><th>Date of Birth</th><td>${s.dob}</td></tr>
-          <tr><th>Qualification</th><td>${s.qualification || '—'}</td><th>Last Exam %</th><td>${s.marks || '—'}%</td></tr>
-        </table>
-        <h4 style="margin:10px 0 4px 0; color:#0A192F;">Financial Ledger Record</h4>
-        <table class="print-table">
-          <tr><th>Admission Fee</th><td>₹${s.admission_fee}</td><th>Total Paid</th><td>₹${s.paid}</td></tr>
-          <tr><th>Remaining Due</th><td>₹${s.remaining}</td><th>Cleared Months</th><td>${paidMonthsSummary}</td></tr>
-        </table>
-        <div class="signature-row" style="margin-top:40px;">
-          <div class="signature-line">Student Signature</div>
-          <div class="signature-line">Authorized Signatory / Director</div>
-        </div>
-      `;
-      window.print();
-    }
-
-    function printStaffProfile(idx) {
-      const st = DB.staff[idx];
-      document.getElementById("print-doc-subtitle").innerText = "OFFICIAL PROFILE & VERIFICATION RECORD";
-      document.getElementById("printable-details").innerHTML = `
-        <table class="print-table">
-          <tr><th>Full Name</th><td>${st.name}</td></tr>
-          <tr><th>Designation</th><td>${st.role}</td></tr>
-          <tr><th>Login Mobile</th><td>${st.phone}</td></tr>
-          <tr><th>Date of Birth</th><td>${st.dob}</td></tr>
-          <tr><th>Status</th><td>${st.status || 'Active'}</td></tr>
-        </table>
-        <div class="signature-row" style="margin-top:40px;">
-          <div class="signature-line">Staff Signature</div>
-          <div class="signature-line">Director / Super Admin</div>
-        </div>
-      `;
-      window.print();
-    }
-
-    // FINANCE FORMS
-    document.getElementById("income-entry-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const newIncome = {
-        id: "INC-" + Date.now(),
-        date: document.getElementById("inc-date").value,
-        purpose: document.getElementById("inc-purpose").value,
-        person: document.getElementById("inc-person").value.trim(),
-        amount: parseFloat(document.getElementById("inc-amount").value) || 0
-      };
-
-      DB.incomes.push(newIncome);
-      safeSet("ff_incomes", DB.incomes);
-      document.getElementById("income-entry-form").reset();
-      initGenerators();
-      renderFinanceDashboard();
-
-      cloudFetch("ff_incomes", "POST", newIncome);
-
-      if (confirm("Would you like to print/generate the Money Receipt for this entry?")) {
-        printInvoice(newIncome);
-      }
-    });
-
-    document.getElementById("expense-entry-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const newExpense = {
-        id: "EXP-" + Date.now(),
-        date: document.getElementById("exp-date").value,
-        purpose: document.getElementById("exp-purpose").value,
-        person: document.getElementById("exp-person").value.trim(),
-        amount: parseFloat(document.getElementById("exp-amount").value) || 0
-      };
-
-      DB.expenses.push(newExpense);
-      safeSet("ff_expenses", DB.expenses);
-      document.getElementById("expense-entry-form").reset();
-      initGenerators();
-      renderFinanceDashboard();
-
-      cloudFetch("ff_expenses", "POST", newExpense);
-    });
-
-    function renderFinanceDashboard() {
-      let totalIncome = 0;
-      let totalExpense = 0;
-
-      const incTbody = document.getElementById("income-table-body");
-      if (incTbody) {
-        incTbody.innerHTML = "";
-        const sortedIncomes = [...DB.incomes].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        sortedIncomes.forEach((inc, idx) => {
-          totalIncome += (Number(inc.amount) || 0);
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${inc.date}</td>
-            <td><strong>${inc.purpose}</strong></td>
-            <td>${inc.person}</td>
-            <td style="color:var(--success-green); font-weight:700;">+₹${Number(inc.amount).toLocaleString("en-IN")}</td>
-            <td>
-              <button type="button" class="btn-receipt" onclick="printInvoiceByIndex(${idx})">🧾 Receipt</button>
-            </td>
-          `;
-          incTbody.appendChild(tr);
-        });
-      }
-
-      const expTbody = document.getElementById("expense-table-body");
-      if (expTbody) {
-        expTbody.innerHTML = "";
-        const sortedExpenses = [...DB.expenses].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        sortedExpenses.forEach(exp => {
-          totalExpense += (Number(exp.amount) || 0);
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${exp.date}</td>
-            <td><strong>${exp.purpose}</strong></td>
-            <td>${exp.person}</td>
-            <td style="color:var(--primary-red); font-weight:700;">-₹${Number(exp.amount).toLocaleString("en-IN")}</td>
-          `;
-          expTbody.appendChild(tr);
-        });
-      }
-
-      const inEl = document.getElementById("stat-total-inflow");
-      if (inEl) inEl.innerText = "₹" + totalIncome.toLocaleString("en-IN");
-      const outEl = document.getElementById("stat-total-outflow");
-      if (outEl) outEl.innerText = "₹" + totalExpense.toLocaleString("en-IN");
-
-      const net = totalIncome - totalExpense;
-      const netElem = document.getElementById("stat-net-balance");
-      if (netElem) {
-        netElem.innerText = "₹" + net.toLocaleString("en-IN");
-        netElem.style.color = (net >= 0) ? "var(--navy-blue)" : "var(--primary-red)";
-      }
-    }
-
-    function switchTab(tab) {
-      document.getElementById("tab-students-content").style.display = (tab === 'students') ? 'block' : 'none';
-      document.getElementById("tab-schedule-content").style.display = (tab === 'schedule') ? 'block' : 'none';
-      document.getElementById("tab-finance-content").style.display = (tab === 'finance') ? 'block' : 'none';
-
-      // Desktop Tabs Active State
-      document.getElementById("btn-tab-students").classList.toggle("active", tab === 'students');
-      document.getElementById("btn-tab-schedule").classList.toggle("active", tab === 'schedule');
-      document.getElementById("btn-tab-finance").classList.toggle("active", tab === 'finance');
-
-      // Mobile Bottom Bar Active State
-      const mStud = document.getElementById("m-btn-students");
-      const mSch = document.getElementById("m-btn-schedule");
-      const mFin = document.getElementById("m-btn-finance");
-      if (mStud) mStud.classList.toggle("active", tab === 'students');
-      if (mSch) mSch.classList.toggle("active", tab === 'schedule');
-      if (mFin) mFin.classList.toggle("active", tab === 'finance');
-
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    // MULTI-ROLE LOGIN CONTROLLER
-    document.getElementById("login-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const id = document.getElementById("login-identifier").value.trim().toLowerCase();
-      const pass = document.getElementById("login-password").value.trim();
-      const remember = document.getElementById("remember-me-checkbox").checked;
-
-      // 1. Super Admin Check
-      const SUPER_ADMINS = [
-        { email: "supriyaskkundu@gmail.com", name: "Super Admin (Supriya)" },
-        { email: "ersadsir1986@gmail.com", name: "Super Admin (Ersad)" }
-      ];
-
-      const matchedAdmin = SUPER_ADMINS.find(a => a.email.toLowerCase() === id && pass === "Fauj-efactory2026");
-
-      if (matchedAdmin) {
-        startSession({ role: "SuperAdmin", name: matchedAdmin.name, email: matchedAdmin.email }, remember);
-        return;
-      }
-
-      // 2. Staff / Official Check (Registered Mobile + Assigned Password)
-      const staff = DB.staff.find(s => s.phone === id && s.password === pass);
-      if (staff) {
-        if (staff.status === "Inactive") {
-          alert("Account is marked INACTIVE. Contact Super Admin.");
-          return;
-        }
-        startSession({ ...staff, role: staff.role || "Official" }, remember);
-        return;
-      }
-
-      // 3. Student Check (Registered Mobile + Assigned Password)
-      const student = DB.students.find(s => s.ph1 === id && s.password === pass);
-      if (student) {
-        if (student.status === "Inactive") {
-          alert("Your Student profile is marked INACTIVE. Contact Administrator.");
-          return;
-        }
-        startSession({ ...student, role: "Student" }, remember);
-        return;
-      }
-
-      alert("Invalid Mobile Number/Email or Password.");
-    });
-
-    function startSession(user, remember) {
-      currentUser = user;
-      if (remember) {
-        localStorage.setItem("ff_remembered_session", JSON.stringify(user));
-      } else {
-        sessionStorage.setItem("ff_session", JSON.stringify(user));
-      }
-
-      document.getElementById("login-view").style.display = "none";
-      document.getElementById("nav-controls").style.display = "flex";
-      document.getElementById("current-user-tag").innerText = `${currentUser.name} (${currentUser.role || 'Student'})`;
-
-      const isSuperAdmin = (currentUser.role === "SuperAdmin");
-
-      if (isSuperAdmin) {
-        document.getElementById("admin-nav-tabs").style.display = "flex";
-        document.getElementById("mobile-nav-bar").style.display = "flex";
-        document.getElementById("btn-tab-students").style.display = "inline-block";
-        document.getElementById("btn-tab-schedule").style.display = "inline-block";
-        document.getElementById("btn-tab-finance").style.display = "inline-block";
-
-        document.getElementById("m-btn-students").style.display = "flex";
-        document.getElementById("m-btn-schedule").style.display = "flex";
-        document.getElementById("m-btn-finance").style.display = "flex";
-
-        document.getElementById("staff-creation-box").style.display = "block";
-        document.getElementById("student-admission-box").style.display = "block";
-        document.getElementById("staff-directory-box").style.display = "block";
-        document.getElementById("personal-desk-view").style.display = "none";
-
-        document.getElementById("btn-copy-routine-modal").style.display = "inline-block";
-        document.getElementById("save-routine-action-wrap").style.display = "block";
-        document.getElementById("btn-add-class-row").style.display = "inline-block";
-        document.getElementById("btn-add-test-row").style.display = "inline-block";
-        document.getElementById("sec-finance-income").style.display = "block";
-        document.getElementById("sec-finance-expense").style.display = "block";
-
-        switchTab("students");
-        renderStaffDirectory();
-        renderRoster();
-        renderFinanceDashboard();
-        initWeekRange();
-      } else if (currentUser.role === "Official" || currentUser.role === "Faculty") {
-        const perms = currentUser.permissions || {};
-        document.getElementById("admin-nav-tabs").style.display = "flex";
-        document.getElementById("mobile-nav-bar").style.display = "flex";
-        document.getElementById("staff-creation-box").style.display = "none";
-        document.getElementById("staff-directory-box").style.display = "none";
-        document.getElementById("personal-desk-view").style.display = "none";
-
-        // Tab Visibility Based on Assigned Entry Permissions
-        const hasAdm = !!perms.admissions;
-        const hasSch = !!perms.schedule;
-        const hasFin = !!(perms.income || perms.expense);
-
-        document.getElementById("btn-tab-students").style.display = hasAdm ? "inline-block" : "none";
-        document.getElementById("btn-tab-schedule").style.display = hasSch ? "inline-block" : "none";
-        document.getElementById("btn-tab-finance").style.display = hasFin ? "inline-block" : "none";
-
-        document.getElementById("m-btn-students").style.display = hasAdm ? "flex" : "none";
-        document.getElementById("m-btn-schedule").style.display = hasSch ? "flex" : "none";
-        document.getElementById("m-btn-finance").style.display = hasFin ? "flex" : "none";
-
-        document.getElementById("student-admission-box").style.display = hasAdm ? "block" : "none";
-        document.getElementById("btn-copy-routine-modal").style.display = hasSch ? "inline-block" : "none";
-        document.getElementById("save-routine-action-wrap").style.display = hasSch ? "block" : "none";
-        document.getElementById("btn-add-class-row").style.display = hasSch ? "inline-block" : "none";
-        document.getElementById("btn-add-test-row").style.display = hasSch ? "inline-block" : "none";
-        
-        document.getElementById("sec-finance-income").style.display = perms.income ? "block" : "none";
-        document.getElementById("sec-finance-expense").style.display = perms.expense ? "block" : "none";
-
-        if (hasAdm) switchTab("students");
-        else if (hasSch) switchTab("schedule");
-        else if (hasFin) switchTab("finance");
-
-        renderRoster();
-        initWeekRange();
-      } else {
-        // Student: Fixed single view for all students (Personal Desk + Batch Routine View)
-        document.getElementById("admin-nav-tabs").style.display = "none";
-        document.getElementById("mobile-nav-bar").style.display = "none";
-        document.getElementById("tab-students-content").style.display = "none";
-        document.getElementById("tab-schedule-content").style.display = "none";
-        document.getElementById("tab-finance-content").style.display = "none";
-        document.getElementById("personal-desk-view").style.display = "block";
-        
-        document.getElementById("desk-title").innerText = `Student Portal: ${currentUser.name}`;
-        document.getElementById("personal-desk-content").innerHTML = `
-          <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:16px; margin-bottom:14px; font-size:0.9rem; line-height:1.6;">
-            <p><strong>Student Name:</strong> ${currentUser.name}</p>
-            <p><strong>Enrolled Batch:</strong> <span style="color:var(--primary-red); font-weight:800;">${currentUser.batch}</span></p>
-            <p><strong>Guardian's Name:</strong> ${currentUser.guardian}</p>
-            <p><strong>Registered Login Mobile:</strong> ${currentUser.ph1}</p>
-            <p><strong>Admission Date:</strong> ${currentUser.date}</p>
-            <p><strong>Admission Fee Remaining Due:</strong> ₹${currentUser.remaining}</p>
-            <p><strong>Total Amount Cleared:</strong> ₹${currentUser.paid}</p>
-            <p><strong>Months Cleared:</strong> ${(currentUser.paid_months && currentUser.paid_months.length) ? currentUser.paid_months.join(', ') : 'None'}</p>
-          </div>
-          <div style="margin-top:14px;">
-            <button type="button" class="btn-primary" onclick="showStudentRoutineView('${currentUser.batch}')">📅 View My Batch (${currentUser.batch}) Routine & Tests</button>
-          </div>
-        `;
-      }
-    }
-
-    // Student Integrated Routine Viewer
-    function showStudentRoutineView(batch) {
-      const routineCard = document.getElementById("student-routine-display");
-      routineCard.style.display = "block";
-      document.getElementById("student-routine-batch-title").innerText = `Batch [${batch}] Daily Routine & Evaluation Schedule`;
-
-      const select = document.getElementById("std-read-date-select");
-      select.innerHTML = "";
-
-      const today = new Date();
-      const curr = new Date(today);
-      const first = curr.getDate() - curr.getDay() + 1;
-      for (let i = 0; i < 7; i++) {
-        const d = new Date(curr.setDate(first + i));
-        const dateVal = d.toISOString().split("T")[0];
-        const dayName = d.toLocaleDateString("en-US", { weekday: "short" });
-        const opt = document.createElement("option");
-        opt.value = dateVal;
-        opt.innerText = `${dateVal} (${dayName})`;
-        select.appendChild(opt);
-      }
-      renderStudentReadRoutine();
-      routineCard.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function hideStudentRoutine() {
-      document.getElementById("student-routine-display").style.display = "none";
-    }
-
-    function renderStudentReadRoutine() {
-      const date = document.getElementById("std-read-date-select").value;
-      const batch = currentUser.batch;
-      const key = `${batch}_${date}`;
-      const saved = DB.schedules.find(s => s.key === key);
-
-      const classesTbody = document.getElementById("std-read-classes-body");
-      const testsTbody = document.getElementById("std-read-tests-body");
-      classesTbody.innerHTML = "";
-      testsTbody.innerHTML = "";
-
-      const classes = (saved && saved.classes) ? saved.classes : [];
-      const tests = (saved && saved.tests) ? saved.tests : [];
-
-      if (classes.length === 0) {
-        classesTbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6B7280;">No academic classes scheduled for this date.</td></tr>`;
-      } else {
-        classes.forEach(c => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td><strong>${c.time}</strong></td>
-            <td><strong>${c.subject}</strong> (${c.teacher || 'Faculty'})</td>
-            <td><strong>Topic:</strong> ${c.topic || '—'}<br/><span style="font-size:0.75rem; color:#4B5563;">${c.note || ''}</span></td>
-          `;
-          classesTbody.appendChild(tr);
-        });
-      }
-
-      if (tests.length === 0) {
-        testsTbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6B7280;">No mock tests scheduled for this date.</td></tr>`;
-      } else {
-        tests.forEach(t => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td style="color:var(--primary-red); font-weight:700;">${t.name}</td>
-            <td>${t.time}</td>
-            <td>Marks: <strong>${t.marks}</strong><br/><span style="font-size:0.75rem;">Syllabus: ${t.syllabus}</span></td>
-          `;
-          testsTbody.appendChild(tr);
-        });
-      }
-    }
-
     function logout() {
       localStorage.removeItem("ff_remembered_session");
       sessionStorage.removeItem("ff_session");
@@ -2915,4 +2915,4 @@
     });
   </script>
 </body>
-  </html>
+</html>
