@@ -559,7 +559,6 @@
       color: var(--navy-blue);
     }
 
-    /* COMPACT TABLE */
     .table-container {
       overflow-x: auto;
       border: 1px solid var(--border-gray);
@@ -888,7 +887,7 @@
       <div style="text-align: center; margin-bottom: 16px;">
         <img src="logo.png" alt="Logo" style="height: 52px; object-fit: contain; margin-bottom: 6px;" onerror="this.style.display='none'" />
         <h3 style="color:var(--navy-blue); font-size:1.15rem;">PORTAL ACCESS</h3>
-        <p style="font-size:0.75rem; color:var(--text-muted);">Sign in with registered credentials</p>
+        <p style="font-size:0.75rem; color:var(--text-muted);">Sign in with registered mobile number & password</p>
       </div>
       <form id="login-form">
         <div class="form-group" style="margin-bottom: 12px;">
@@ -1043,7 +1042,8 @@
               <label>Educational Qualifications</label>
               <input type="text" id="std-qual" placeholder="e.g. 10th, 12th, Graduate" required />
             </div>
-            <div class="form-group">% of Last Passed Exam</div>
+            <div class="form-group">
+              <label>% of Last Passed Exam</label>
               <input type="number" step="0.01" id="std-marks" inputmode="decimal" placeholder="Percentage" required />
             </div>
             <div class="form-group">
@@ -1593,7 +1593,7 @@
       <div class="card">
         <div class="card-header">
           <span id="desk-title">Portal Desk</span>
-          <button type="button" class="btn-print" onclick="window.print()">🖨️ Print Profile</button>
+          <button type="button" class="btn-print" onclick="window.print()">🖨️️ Print Profile</button>
         </div>
         <div id="personal-desk-content"></div>
       </div>
@@ -1821,7 +1821,6 @@
       }
     }
 
-    // DUAL-LOCK STORAGE & SNAPSHOT BACKUP
     function safeSet(key, val) {
       try {
         localStorage.setItem(key, JSON.stringify(val));
@@ -1879,7 +1878,6 @@
       }
     }
 
-    // CENTRAL MASTER CLOUD SYNC ENGINE
     async function syncToCentralCloud() {
       try {
         const payload = {
@@ -2680,6 +2678,382 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    // MULTI-ROLE LOGIN CONTROLLER (UNIFIED & BULLETPROOF)
+    document.getElementById("login-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const rawInput = document.getElementById("login-identifier").value.trim();
+      const rawId = rawInput.toLowerCase();
+      const pass = document.getElementById("login-password").value.trim();
+      const remember = document.getElementById("remember-me-checkbox").checked;
+      const phoneClean = sanitizePhone(rawInput);
+
+      // 1. Super Admin Validation
+      const SUPER_ADMIN_EMAILS = [
+        "supriyaskkundu@gmail.com",
+        "supriya.sk.gunda@gmail.com",
+        "supriyaskgunda@gmail.com",
+        "ersadsir1986@gmail.com"
+      ];
+
+      const isSuperAdminEmail = SUPER_ADMIN_EMAILS.includes(rawId) || rawId.includes("supriya") || rawId.includes("ersad");
+
+      if (isSuperAdminEmail && pass === "Fauj-efactory2026") {
+        startSession({ role: "SuperAdmin", name: "Super Admin", email: rawId }, remember);
+        return;
+      }
+
+      // 2. Staff / Official Validation
+      const staff = DB.staff.find(s => {
+        const staffPhone = sanitizePhone(s.phone);
+        const matchId = (staffPhone && phoneClean && staffPhone === phoneClean) || ((s.phone || "").toLowerCase() === rawId);
+        const matchPass = (s.password || "").trim() === pass;
+        return matchId && matchPass;
+      });
+
+      if (staff) {
+        if (staff.status === "Inactive") {
+          alert("Account is marked INACTIVE. Contact Super Admin.");
+          return;
+        }
+        startSession({ ...staff, role: staff.role || "Official" }, remember);
+        return;
+      }
+
+      // 3. Student Validation (Flexible Matching: 10-Digit Phone OR Reg ID)
+      const student = DB.students.find(s => {
+        const stdPhone = sanitizePhone(s.ph1);
+        const stdReg = (s.reg_id || "").toLowerCase().trim();
+        const matchUser = (phoneClean && stdPhone === phoneClean) || (stdReg && stdReg === rawId);
+        const matchPass = (s.password || "").trim() === pass;
+        return matchUser && matchPass;
+      });
+
+      if (student) {
+        if (student.status === "Inactive") {
+          alert("Your Student profile is marked INACTIVE. Contact Administrator.");
+          return;
+        }
+        startSession({ ...student, role: "Student" }, remember);
+        return;
+      }
+
+      alert("Invalid Credentials! Please ensure you enter your registered ID/Phone and assigned password.");
+    });
+
+    function startSession(user, remember) {
+      currentUser = user;
+      
+      if (remember) {
+        localStorage.setItem("ff_remembered_session", JSON.stringify(user));
+      } else {
+        sessionStorage.setItem("ff_session", JSON.stringify(user));
+      }
+
+      document.getElementById("login-view").style.display = "none";
+      document.getElementById("nav-controls").style.display = "flex";
+      document.getElementById("current-user-tag").innerText = `${currentUser.name} (${currentUser.role || 'Student'})`;
+
+      const isSuperAdmin = (currentUser.role === "SuperAdmin");
+
+      if (isSuperAdmin) {
+        document.getElementById("admin-nav-tabs").style.display = "flex";
+        document.getElementById("mobile-nav-bar").style.display = "flex";
+        document.getElementById("btn-tab-students").style.display = "inline-block";
+        document.getElementById("btn-tab-schedule").style.display = "inline-block";
+        document.getElementById("btn-tab-attendance").style.display = "inline-block";
+        document.getElementById("btn-tab-exams").style.display = "inline-block";
+        document.getElementById("btn-tab-360").style.display = "inline-block";
+        document.getElementById("btn-tab-progress").style.display = "inline-block";
+        document.getElementById("btn-tab-finance").style.display = "inline-block";
+
+        document.getElementById("m-btn-students").style.display = "flex";
+        document.getElementById("m-btn-schedule").style.display = "flex";
+        document.getElementById("m-btn-attendance").style.display = "flex";
+        document.getElementById("m-btn-exams").style.display = "flex";
+        document.getElementById("m-btn-360").style.display = "flex";
+        document.getElementById("m-btn-progress").style.display = "flex";
+        document.getElementById("m-btn-finance").style.display = "flex";
+
+        document.getElementById("staff-creation-box").style.display = "block";
+        document.getElementById("student-admission-box").style.display = "block";
+        document.getElementById("staff-directory-box").style.display = "block";
+        document.getElementById("personal-desk-view").style.display = "none";
+
+        document.getElementById("btn-copy-routine-modal").style.display = "inline-block";
+        document.getElementById("save-routine-action-wrap").style.display = "block";
+        document.getElementById("btn-add-class-row").style.display = "inline-block";
+        document.getElementById("btn-add-test-row").style.display = "inline-block";
+        document.getElementById("sec-finance-income").style.display = "block";
+        document.getElementById("sec-finance-expense").style.display = "block";
+
+        switchTab("students");
+        renderStaffDirectory();
+        renderRoster();
+        renderFinanceDashboard();
+        initWeekRange();
+        populate360StudentDropdown();
+        populateIncomeStudentDropdown();
+      } else if (currentUser.role === "Official" || currentUser.role === "Faculty") {
+        const perms = currentUser.permissions || { admissions: true, schedule: true, attendance: true, exams: true, s360: true, progress: true, income: true, expense: false };
+        currentUser.permissions = perms;
+
+        document.getElementById("admin-nav-tabs").style.display = "flex";
+        document.getElementById("mobile-nav-bar").style.display = "flex";
+        document.getElementById("staff-creation-box").style.display = "none";
+        document.getElementById("staff-directory-box").style.display = "none";
+
+        const hasAdm = !!perms.admissions;
+        const hasSch = !!perms.schedule;
+        const hasAtt = !!perms.attendance;
+        const hasExm = !!perms.exams;
+        const has360 = !!perms.s360;
+        const hasProg = !!perms.progress;
+        const hasFin = !!(perms.income || perms.expense);
+
+        document.getElementById("btn-tab-students").style.display = hasAdm ? "inline-block" : "none";
+        document.getElementById("btn-tab-schedule").style.display = hasSch ? "inline-block" : "none";
+        document.getElementById("btn-tab-attendance").style.display = hasAtt ? "inline-block" : "none";
+        document.getElementById("btn-tab-exams").style.display = hasExm ? "inline-block" : "none";
+        document.getElementById("btn-tab-360").style.display = has360 ? "inline-block" : "none";
+        document.getElementById("btn-tab-progress").style.display = hasProg ? "inline-block" : "none";
+        document.getElementById("btn-tab-finance").style.display = hasFin ? "inline-block" : "none";
+
+        document.getElementById("m-btn-students").style.display = hasAdm ? "flex" : "none";
+        document.getElementById("m-btn-schedule").style.display = hasSch ? "flex" : "none";
+        document.getElementById("m-btn-attendance").style.display = hasAtt ? "flex" : "none";
+        document.getElementById("m-btn-exams").style.display = hasExm ? "flex" : "none";
+        document.getElementById("m-btn-360").style.display = has360 ? "flex" : "none";
+        document.getElementById("m-btn-progress").style.display = hasProg ? "flex" : "none";
+        document.getElementById("m-btn-finance").style.display = hasFin ? "flex" : "none";
+
+        document.getElementById("student-admission-box").style.display = hasAdm ? "block" : "none";
+        document.getElementById("btn-copy-routine-modal").style.display = hasSch ? "inline-block" : "none";
+        document.getElementById("save-routine-action-wrap").style.display = hasSch ? "block" : "none";
+        document.getElementById("btn-add-class-row").style.display = hasSch ? "inline-block" : "none";
+        document.getElementById("btn-add-test-row").style.display = hasSch ? "inline-block" : "none";
+        
+        document.getElementById("sec-finance-income").style.display = perms.income ? "block" : "none";
+        document.getElementById("sec-finance-expense").style.display = perms.expense ? "block" : "none";
+
+        document.getElementById("tab-students-content").style.display = "none";
+        document.getElementById("tab-schedule-content").style.display = "none";
+        document.getElementById("tab-attendance-content").style.display = "none";
+        document.getElementById("tab-exams-content").style.display = "none";
+        document.getElementById("tab-360-content").style.display = "none";
+        document.getElementById("tab-progress-content").style.display = "none";
+        document.getElementById("tab-finance-content").style.display = "none";
+        document.getElementById("personal-desk-view").style.display = "block";
+        document.getElementById("student-routine-display").style.display = "none";
+        document.getElementById("student-live-att-box").style.display = "none";
+
+        document.getElementById("desk-title").innerText = `${currentUser.role} Desk: ${currentUser.name}`;
+        
+        let actionButtonsHtml = '<div style="display:flex; flex-direction:column; gap:8px; margin-top:14px;">';
+        if (has360) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:var(--purple-accent);" onclick="switchTab('360')">🌐 Open Student 360° Monthly Dossier</button>`;
+        if (hasExm) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:var(--primary-red);" onclick="switchTab('exams')">🎯 Open Exam Desk & Marks Entry</button>`;
+        if (hasProg) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:var(--progress-blue);" onclick="switchTab('progress')">📊 Open Syllabus & Study Progress</button>`;
+        if (hasAtt) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:#0D9488;" onclick="switchTab('attendance')">📋 Open Attendance Desk & Generate Code</button>`;
+        if (hasSch) actionButtonsHtml += `<button type="button" class="btn-primary" onclick="switchTab('schedule')">📅 Open Routine & Class Schedules</button>`;
+        if (hasAdm) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:var(--navy-blue);" onclick="switchTab('students')">👥 Open Student Admissions & Directory</button>`;
+        if (hasFin) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:#047857;" onclick="switchTab('finance')">💰 Open Accounts & Ledgers</button>`;
+        actionButtonsHtml += '</div>';
+
+        document.getElementById("personal-desk-content").innerHTML = `
+          <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:16px; font-size:0.9rem; line-height:1.6;">
+            <p><strong>Official Name:</strong> ${currentUser.name}</p>
+            <p><strong>Designation:</strong> <span style="color:var(--primary-red); font-weight:800;">${currentUser.role}</span></p>
+            <p><strong>Registered Mobile:</strong> ${currentUser.phone}</p>
+            <p><strong>Date of Birth:</strong> ${currentUser.dob}</p>
+            <p><strong>Status:</strong> <span class="status-badge active">${currentUser.status || 'Active'}</span></p>
+          </div>
+          ${actionButtonsHtml}
+        `;
+
+        renderRoster();
+        initWeekRange();
+        populate360StudentDropdown();
+        populateIncomeStudentDropdown();
+      } else {
+        // STUDENT LOGIN - Fixed View
+        document.getElementById("admin-nav-tabs").style.display = "none";
+        document.getElementById("mobile-nav-bar").style.display = "none";
+        document.getElementById("tab-students-content").style.display = "none";
+        document.getElementById("tab-schedule-content").style.display = "none";
+        document.getElementById("tab-attendance-content").style.display = "none";
+        document.getElementById("tab-exams-content").style.display = "none";
+        document.getElementById("tab-360-content").style.display = "none";
+        document.getElementById("tab-progress-content").style.display = "none";
+        document.getElementById("tab-finance-content").style.display = "none";
+        document.getElementById("personal-desk-view").style.display = "block";
+        
+        document.getElementById("desk-title").innerText = `Student Portal: ${currentUser.name}`;
+        document.getElementById("personal-desk-content").innerHTML = `
+          <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:16px; margin-bottom:14px; font-size:0.9rem; line-height:1.6;">
+            <p><strong>Student Name:</strong> ${currentUser.name}</p>
+            <p><strong>Registration ID:</strong> <span class="reg-pill" style="font-size:0.9rem;">${currentUser.reg_id || 'FF0001'}</span></p>
+            <p><strong>Enrolled Batch:</strong> <span style="color:var(--primary-red); font-weight:800;">${currentUser.batch}</span></p>
+            <p><strong>Guardian's Name:</strong> ${currentUser.guardian}</p>
+            <p><strong>Registered Login Mobile:</strong> ${currentUser.ph1}</p>
+            <p><strong>Admission Date:</strong> ${currentUser.date}</p>
+            <p><strong>Total Assessed Fee:</strong> ₹${currentUser.total_fixed || currentUser.admission_fee}</p>
+            <p><strong>Total Amount Cleared:</strong> ₹${currentUser.paid || 0}</p>
+            <p><strong>Remaining Fee Due:</strong> <strong style="color:var(--primary-red);">₹${currentUser.remaining || 0}</strong></p>
+            <p><strong>Months Cleared:</strong> ${(currentUser.paid_months && currentUser.paid_months.length) ? currentUser.paid_months.join(', ') : 'None'}</p>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-top:14px;">
+            <button type="button" class="btn-primary" onclick="showStudentRoutineView('${currentUser.batch}')">📅 View My Batch (${currentUser.batch}) Routine & Tests</button>
+            <button type="button" class="btn-primary" style="background:var(--purple-accent);" onclick="showStudentSelf360View()">🌐 View My Complete 360° Monthly Dossier</button>
+            <button type="button" class="btn-primary" style="background:var(--primary-red);" onclick="showStudentScoresView()">🎯 View My Exam Marks & Scores</button>
+            <button type="button" class="btn-primary" style="background:var(--progress-blue);" onclick="showStudentProgressView('${currentUser.batch}')">📊 View My Batch (${currentUser.batch}) Study Progress</button>
+          </div>
+        `;
+
+        renderStudentLiveAttendanceBox();
+      }
+    }
+
+    function showStudentRoutineView(batch) {
+      const routineCard = document.getElementById("student-routine-display");
+      routineCard.style.display = "block";
+      document.getElementById("student-routine-batch-title").innerText = `Batch [${batch}] Daily Routine & Evaluation Schedule`;
+
+      const select = document.getElementById("std-read-date-select");
+      select.innerHTML = "";
+
+      const today = new Date();
+      const curr = new Date(today);
+      const first = curr.getDate() - curr.getDay() + 1;
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(curr.setDate(first + i));
+        const dateVal = d.toISOString().split("T")[0];
+        const dayName = d.toLocaleDateString("en-US", { weekday: "short" });
+        const opt = document.createElement("option");
+        opt.value = dateVal;
+        opt.innerText = `${dateVal} (${dayName})`;
+        select.appendChild(opt);
+      }
+      renderStudentReadRoutine();
+      routineCard.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function hideStudentRoutine() {
+      document.getElementById("student-routine-display").style.display = "none";
+    }
+
+    function renderStudentReadRoutine() {
+      const date = document.getElementById("std-read-date-select").value;
+      const batch = currentUser.batch;
+      const key = `${batch}_${date}`;
+      const saved = DB.schedules.find(s => s.key === key);
+
+      const classesTbody = document.getElementById("std-read-classes-body");
+      const testsTbody = document.getElementById("std-read-tests-body");
+      classesTbody.innerHTML = "";
+      testsTbody.innerHTML = "";
+
+      const classes = (saved && saved.classes) ? saved.classes : [];
+      const tests = (saved && saved.tests) ? saved.tests : [];
+
+      if (classes.length === 0) {
+        classesTbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6B7280;">No academic classes scheduled for this date.</td></tr>`;
+      } else {
+        classes.forEach(c => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><strong>${c.time}</strong></td>
+            <td><strong>${c.subject}</strong> (${c.teacher || 'Faculty'})</td>
+            <td><strong>Topic:</strong> ${c.topic || '—'}<br/><span style="font-size:0.75rem; color:#4B5563;">${c.note || ''}</span></td>
+          `;
+          classesTbody.appendChild(tr);
+        });
+      }
+
+      if (tests.length === 0) {
+        testsTbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6B7280;">No mock tests scheduled for this date.</td></tr>`;
+      } else {
+        tests.forEach(t => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td style="color:var(--primary-red); font-weight:700;">${t.name}</td>
+            <td>${t.time}</td>
+            <td>Marks: <strong>${t.marks}</strong><br/><span style="font-size:0.75rem;">Syllabus: ${t.syllabus}</span></td>
+          `;
+          testsTbody.appendChild(tr);
+        });
+      }
+    }
+
+    function openMonthModal(studentIdx) {
+      activeModalStudentIdx = studentIdx;
+      const student = DB.students[studentIdx];
+      document.getElementById("modal-student-title").innerText = `${student.name} (${student.batch}) - Monthly Clearances`;
+
+      const admOrder = getMonthOrder(student.date);
+      const container = document.getElementById("modal-months-container");
+      container.innerHTML = "";
+
+      const paidArr = Array.isArray(student.paid_months) ? student.paid_months : [];
+
+      ACADEMIC_MONTHS.forEach(m => {
+        const isInactive = (m.order < admOrder);
+        const isPaid = paidArr.includes(m.label);
+
+        const badge = document.createElement("div");
+        badge.className = `month-badge ${isInactive ? 'disabled-month' : (isPaid ? 'paid' : '')}`;
+        badge.innerText = m.label;
+
+        if (!isInactive) {
+          badge.onclick = () => toggleMonthPaidFromModal(m.label);
+        }
+        container.appendChild(badge);
+      });
+
+      document.getElementById("monthly-fee-modal").style.display = "flex";
+    }
+
+    function closeMonthModal() {
+      document.getElementById("monthly-fee-modal").style.display = "none";
+      activeModalStudentIdx = null;
+    }
+
+    function toggleMonthPaidFromModal(monthLabel) {
+      if (activeModalStudentIdx === null) return;
+      const student = DB.students[activeModalStudentIdx];
+      let monthsList = Array.isArray(student.paid_months) ? [...student.paid_months] : [];
+      const idx = monthsList.indexOf(monthLabel);
+      const monthlySum = (Number(student.tuition_fee) || 0) + (Number(student.hostel_fee) || 0);
+
+      let issuedReceiptItem = null;
+
+      if (idx > -1) {
+        monthsList.splice(idx, 1);
+      } else {
+        monthsList.push(monthLabel);
+        if (monthlySum > 0) {
+          issuedReceiptItem = {
+            id: "INC-" + Date.now(),
+            date: new Date().toISOString().split("T")[0],
+            purpose: `Monthly Study & Hostel Fee (${monthLabel})`,
+            person: student.name + ` (${student.reg_id})`,
+            reg_id: student.reg_id,
+            amount: monthlySum
+          };
+          DB.incomes.push(issuedReceiptItem);
+          safeSet("ff_incomes", DB.incomes);
+        }
+      }
+
+      student.paid_months = monthsList;
+      safeSet("ff_students", DB.students);
+      renderRoster();
+      renderFinanceDashboard();
+      openMonthModal(activeModalStudentIdx);
+
+      if (issuedReceiptItem && confirm(`Generate official receipt for ${student.name} (${monthLabel})?`)) {
+        printInvoice(issuedReceiptItem);
+      }
+    }
+
     function initWeekRange() {
       const fromInp = document.getElementById("sch-from-date");
       const toInp = document.getElementById("sch-to-date");
@@ -2963,240 +3337,6 @@
       `;
 
       window.print();
-    }
-
-    // AUTH CONTROLLER (BULLETPROOF FIX FOR SUPER ADMIN, STAFF & STUDENT)
-    document.getElementById("login-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const rawInput = document.getElementById("login-identifier").value.trim();
-      const rawId = rawInput.toLowerCase();
-      const pass = document.getElementById("login-password").value.trim();
-      const remember = document.getElementById("remember-me-checkbox").checked;
-      const phoneClean = sanitizePhone(rawInput);
-
-      // 1. Super Admin Validation
-      const SUPER_ADMIN_EMAILS = [
-        "supriyaskkundu@gmail.com",
-        "supriya.sk.gunda@gmail.com",
-        "supriyaskgunda@gmail.com",
-        "ersadsir1986@gmail.com"
-      ];
-
-      const isSuperAdminEmail = SUPER_ADMIN_EMAILS.includes(rawId) || rawId.includes("supriya") || rawId.includes("ersad");
-
-      if (isSuperAdminEmail && pass === "Fauj-efactory2026") {
-        startSession({ role: "SuperAdmin", name: "Super Admin", email: rawId }, remember);
-        return;
-      }
-
-      // 2. Staff / Official Validation
-      const staff = DB.staff.find(s => {
-        const staffPhone = sanitizePhone(s.phone);
-        const matchId = (staffPhone && phoneClean && staffPhone === phoneClean) || ((s.phone || "").toLowerCase() === rawId);
-        const matchPass = (s.password || "").trim() === pass;
-        return matchId && matchPass;
-      });
-
-      if (staff) {
-        if (staff.status === "Inactive") {
-          alert("Account is marked INACTIVE. Contact Super Admin.");
-          return;
-        }
-        startSession({ ...staff, role: staff.role || "Official" }, remember);
-        return;
-      }
-
-      // 3. Student Validation (Flexible Matching: 10-Digit Phone OR Reg ID)
-      const student = DB.students.find(s => {
-        const stdPhone = sanitizePhone(s.ph1);
-        const stdReg = (s.reg_id || "").toLowerCase().trim();
-        const matchUser = (phoneClean && stdPhone === phoneClean) || (stdReg && stdReg === rawId);
-        const matchPass = (s.password || "").trim() === pass;
-        return matchUser && matchPass;
-      });
-
-      if (student) {
-        if (student.status === "Inactive") {
-          alert("Your Student profile is marked INACTIVE. Contact Administrator.");
-          return;
-        }
-        startSession({ ...student, role: "Student" }, remember);
-        return;
-      }
-
-      alert("Invalid Credentials! Please ensure you enter your registered ID/Phone and assigned password.");
-    });
-
-    function startSession(user, remember) {
-      currentUser = user;
-      
-      if (remember) {
-        localStorage.setItem("ff_remembered_session", JSON.stringify(user));
-      } else {
-        sessionStorage.setItem("ff_session", JSON.stringify(user));
-      }
-
-      document.getElementById("login-view").style.display = "none";
-      document.getElementById("nav-controls").style.display = "flex";
-      document.getElementById("current-user-tag").innerText = `${currentUser.name} (${currentUser.role || 'Student'})`;
-
-      const isSuperAdmin = (currentUser.role === "SuperAdmin");
-
-      if (isSuperAdmin) {
-        document.getElementById("admin-nav-tabs").style.display = "flex";
-        document.getElementById("mobile-nav-bar").style.display = "flex";
-        document.getElementById("btn-tab-students").style.display = "inline-block";
-        document.getElementById("btn-tab-schedule").style.display = "inline-block";
-        document.getElementById("btn-tab-attendance").style.display = "inline-block";
-        document.getElementById("btn-tab-exams").style.display = "inline-block";
-        document.getElementById("btn-tab-360").style.display = "inline-block";
-        document.getElementById("btn-tab-progress").style.display = "inline-block";
-        document.getElementById("btn-tab-finance").style.display = "inline-block";
-
-        document.getElementById("m-btn-students").style.display = "flex";
-        document.getElementById("m-btn-schedule").style.display = "flex";
-        document.getElementById("m-btn-attendance").style.display = "flex";
-        document.getElementById("m-btn-exams").style.display = "flex";
-        document.getElementById("m-btn-360").style.display = "flex";
-        document.getElementById("m-btn-progress").style.display = "flex";
-        document.getElementById("m-btn-finance").style.display = "flex";
-
-        document.getElementById("staff-creation-box").style.display = "block";
-        document.getElementById("student-admission-box").style.display = "block";
-        document.getElementById("staff-directory-box").style.display = "block";
-        document.getElementById("personal-desk-view").style.display = "none";
-
-        document.getElementById("btn-copy-routine-modal").style.display = "inline-block";
-        document.getElementById("save-routine-action-wrap").style.display = "block";
-        document.getElementById("btn-add-class-row").style.display = "inline-block";
-        document.getElementById("btn-add-test-row").style.display = "inline-block";
-        document.getElementById("sec-finance-income").style.display = "block";
-        document.getElementById("sec-finance-expense").style.display = "block";
-
-        switchTab("students");
-        renderStaffDirectory();
-        renderRoster();
-        renderFinanceDashboard();
-        initWeekRange();
-        populate360StudentDropdown();
-        populateIncomeStudentDropdown();
-      } else if (currentUser.role === "Official" || currentUser.role === "Faculty") {
-        const perms = currentUser.permissions || { admissions: true, schedule: true, attendance: true, exams: true, s360: true, progress: true, income: true, expense: false };
-        currentUser.permissions = perms;
-
-        document.getElementById("admin-nav-tabs").style.display = "flex";
-        document.getElementById("mobile-nav-bar").style.display = "flex";
-        document.getElementById("staff-creation-box").style.display = "none";
-        document.getElementById("staff-directory-box").style.display = "none";
-
-        const hasAdm = !!perms.admissions;
-        const hasSch = !!perms.schedule;
-        const hasAtt = !!perms.attendance;
-        const hasExm = !!perms.exams;
-        const has360 = !!perms.s360;
-        const hasProg = !!perms.progress;
-        const hasFin = !!(perms.income || perms.expense);
-
-        document.getElementById("btn-tab-students").style.display = hasAdm ? "inline-block" : "none";
-        document.getElementById("btn-tab-schedule").style.display = hasSch ? "inline-block" : "none";
-        document.getElementById("btn-tab-attendance").style.display = hasAtt ? "inline-block" : "none";
-        document.getElementById("btn-tab-exams").style.display = hasExm ? "inline-block" : "none";
-        document.getElementById("btn-tab-360").style.display = has360 ? "inline-block" : "none";
-        document.getElementById("btn-tab-progress").style.display = hasProg ? "inline-block" : "none";
-        document.getElementById("btn-tab-finance").style.display = hasFin ? "inline-block" : "none";
-
-        document.getElementById("m-btn-students").style.display = hasAdm ? "flex" : "none";
-        document.getElementById("m-btn-schedule").style.display = hasSch ? "flex" : "none";
-        document.getElementById("m-btn-attendance").style.display = hasAtt ? "flex" : "none";
-        document.getElementById("m-btn-exams").style.display = hasExm ? "flex" : "none";
-        document.getElementById("m-btn-360").style.display = has360 ? "flex" : "none";
-        document.getElementById("m-btn-progress").style.display = hasProg ? "flex" : "none";
-        document.getElementById("m-btn-finance").style.display = hasFin ? "flex" : "none";
-
-        document.getElementById("student-admission-box").style.display = hasAdm ? "block" : "none";
-        document.getElementById("btn-copy-routine-modal").style.display = hasSch ? "inline-block" : "none";
-        document.getElementById("save-routine-action-wrap").style.display = hasSch ? "block" : "none";
-        document.getElementById("btn-add-class-row").style.display = hasSch ? "inline-block" : "none";
-        document.getElementById("btn-add-test-row").style.display = hasSch ? "inline-block" : "none";
-        
-        document.getElementById("sec-finance-income").style.display = perms.income ? "block" : "none";
-        document.getElementById("sec-finance-expense").style.display = perms.expense ? "block" : "none";
-
-        document.getElementById("tab-students-content").style.display = "none";
-        document.getElementById("tab-schedule-content").style.display = "none";
-        document.getElementById("tab-attendance-content").style.display = "none";
-        document.getElementById("tab-exams-content").style.display = "none";
-        document.getElementById("tab-360-content").style.display = "none";
-        document.getElementById("tab-progress-content").style.display = "none";
-        document.getElementById("tab-finance-content").style.display = "none";
-        document.getElementById("personal-desk-view").style.display = "block";
-        document.getElementById("student-routine-display").style.display = "none";
-        document.getElementById("student-live-att-box").style.display = "none";
-
-        document.getElementById("desk-title").innerText = `${currentUser.role} Desk: ${currentUser.name}`;
-        
-        let actionButtonsHtml = '<div style="display:flex; flex-direction:column; gap:8px; margin-top:14px;">';
-        if (has360) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:var(--purple-accent);" onclick="switchTab('360')">🌐 Open Student 360° Monthly Dossier</button>`;
-        if (hasExm) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:var(--primary-red);" onclick="switchTab('exams')">🎯 Open Exam Desk & Marks Entry</button>`;
-        if (hasProg) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:var(--progress-blue);" onclick="switchTab('progress')">📊 Open Syllabus & Study Progress</button>`;
-        if (hasAtt) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:#0D9488;" onclick="switchTab('attendance')">📋 Open Attendance Desk & Generate Code</button>`;
-        if (hasSch) actionButtonsHtml += `<button type="button" class="btn-primary" onclick="switchTab('schedule')">📅 Open Routine & Class Schedules</button>`;
-        if (hasAdm) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:var(--navy-blue);" onclick="switchTab('students')">👥 Open Student Admissions & Directory</button>`;
-        if (hasFin) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:#047857;" onclick="switchTab('finance')">💰 Open Accounts & Ledgers</button>`;
-        actionButtonsHtml += '</div>';
-
-        document.getElementById("personal-desk-content").innerHTML = `
-          <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:16px; font-size:0.9rem; line-height:1.6;">
-            <p><strong>Official Name:</strong> ${currentUser.name}</p>
-            <p><strong>Designation:</strong> <span style="color:var(--primary-red); font-weight:800;">${currentUser.role}</span></p>
-            <p><strong>Registered Mobile:</strong> ${currentUser.phone}</p>
-            <p><strong>Date of Birth:</strong> ${currentUser.dob}</p>
-            <p><strong>Status:</strong> <span class="status-badge active">${currentUser.status || 'Active'}</span></p>
-          </div>
-          ${actionButtonsHtml}
-        `;
-
-        renderRoster();
-        initWeekRange();
-        populate360StudentDropdown();
-        populateIncomeStudentDropdown();
-      } else {
-        // STUDENT LOGIN - Fixed Single View
-        document.getElementById("admin-nav-tabs").style.display = "none";
-        document.getElementById("mobile-nav-bar").style.display = "none";
-        document.getElementById("tab-students-content").style.display = "none";
-        document.getElementById("tab-schedule-content").style.display = "none";
-        document.getElementById("tab-attendance-content").style.display = "none";
-        document.getElementById("tab-exams-content").style.display = "none";
-        document.getElementById("tab-360-content").style.display = "none";
-        document.getElementById("tab-progress-content").style.display = "none";
-        document.getElementById("tab-finance-content").style.display = "none";
-        document.getElementById("personal-desk-view").style.display = "block";
-        
-        document.getElementById("desk-title").innerText = `Student Portal: ${currentUser.name}`;
-        document.getElementById("personal-desk-content").innerHTML = `
-          <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:16px; margin-bottom:14px; font-size:0.9rem; line-height:1.6;">
-            <p><strong>Student Name:</strong> ${currentUser.name}</p>
-            <p><strong>Registration ID:</strong> <span class="reg-pill" style="font-size:0.9rem;">${currentUser.reg_id || 'FF0001'}</span></p>
-            <p><strong>Enrolled Batch:</strong> <span style="color:var(--primary-red); font-weight:800;">${currentUser.batch}</span></p>
-            <p><strong>Guardian's Name:</strong> ${currentUser.guardian}</p>
-            <p><strong>Registered Login Mobile:</strong> ${currentUser.ph1}</p>
-            <p><strong>Admission Date:</strong> ${currentUser.date}</p>
-            <p><strong>Total Assessed Fee:</strong> ₹${currentUser.total_fixed || currentUser.admission_fee}</p>
-            <p><strong>Total Amount Cleared:</strong> ₹${currentUser.paid || 0}</p>
-            <p><strong>Remaining Fee Due:</strong> <strong style="color:var(--primary-red);">₹${currentUser.remaining || 0}</strong></p>
-            <p><strong>Months Cleared:</strong> ${(currentUser.paid_months && currentUser.paid_months.length) ? currentUser.paid_months.join(', ') : 'None'}</p>
-          </div>
-          <div style="display:flex; flex-direction:column; gap:8px; margin-top:14px;">
-            <button type="button" class="btn-primary" onclick="showStudentRoutineView('${currentUser.batch}')">📅 View My Batch (${currentUser.batch}) Routine & Tests</button>
-            <button type="button" class="btn-primary" style="background:var(--purple-accent);" onclick="showStudentSelf360View()">🌐 View My Complete 360° Monthly Dossier</button>
-            <button type="button" class="btn-primary" style="background:var(--primary-red);" onclick="showStudentScoresView()">🎯 View My Exam Marks & Scores</button>
-            <button type="button" class="btn-primary" style="background:var(--progress-blue);" onclick="showStudentProgressView('${currentUser.batch}')">📊 View My Batch (${currentUser.batch}) Study Progress</button>
-          </div>
-        `;
-
-        renderStudentLiveAttendanceBox();
-      }
     }
 
     function logout() {
