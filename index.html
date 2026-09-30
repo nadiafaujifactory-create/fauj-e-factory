@@ -23,6 +23,8 @@
       --text-muted: #64748B;
       --success-green: #059669;
       --warning-amber: #D97706;
+      --progress-blue: #2563EB;
+      --unit-black: #1E293B;
       --bottom-bar-h: 56px;
     }
 
@@ -501,6 +503,14 @@
     .finance-column-box.income-box { border-top-color: var(--success-green); }
     .finance-column-box.expense-box { border-top-color: var(--primary-red); }
 
+    .finance-box-title {
+      font-size: 0.98rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .finance-box-title.income-title { color: #065F46; }
+    .finance-box-title.expense-title { color: #991B1B; }
+
     .metric-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -533,7 +543,7 @@
       color: var(--navy-blue);
     }
 
-    /* COMPACT, SLIM, NON-EXPANDING DIRECTORY TABLE */
+    /* COMPACT TABLE */
     .table-container {
       overflow-x: auto;
       border: 1px solid var(--border-gray);
@@ -568,31 +578,84 @@
       background-color: #F8FAFC;
     }
 
-    .schedule-control-bar {
-      background: #EDF2F7;
-      border: 1px solid #CBD5E0;
-      border-radius: 6px;
-      padding: 10px;
-      margin-bottom: 12px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 8px;
-      align-items: flex-end;
-    }
-
-    .schedule-grid-box {
-      background: white;
-      border-radius: 6px;
+    /* STUDY PROGRESS SEGMENT STYLING */
+    .progress-subject-box {
+      background: #FFFFFF;
       border: 1px solid #E2E8F0;
-      padding: 12px;
-      margin-bottom: 12px;
-      border-left: 4px solid var(--navy-blue);
-    }
-    .schedule-grid-box.test-box {
-      border-left-color: var(--primary-red);
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     }
 
-    /* ATTENDANCE DESK STYLING */
+    .progress-subject-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #F1F5F9;
+      padding-bottom: 6px;
+    }
+
+    .progress-subject-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--navy-blue);
+    }
+
+    .progress-units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+      gap: 5px;
+    }
+
+    .unit-block {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+      color: #FFFFFF;
+      background-color: var(--unit-black); /* Default State: Black */
+    }
+
+    .unit-block.in-progress {
+      background-color: var(--progress-blue) !important; /* Touch 1: Blue */
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+    }
+
+    .unit-block.completed {
+      background-color: var(--primary-red) !important; /* Touch 2: Red */
+      box-shadow: 0 0 0 2px rgba(229, 37, 33, 0.3);
+    }
+
+    .progress-legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 10px 0 14px 0;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    /* ATTENDANCE DESK */
     .att-session-card {
       background: white;
       border: 1px solid #E2E8F0;
@@ -680,7 +743,6 @@
       text-decoration: line-through;
     }
 
-    /* Print Template */
     #print-section { display: none; }
 
     @media print {
@@ -717,10 +779,11 @@
     <div id="nav-controls" style="display: none; align-items: center; gap: 8px;">
       <!-- Desktop Navigation Tabs -->
       <div class="desktop-nav-tabs" id="admin-nav-tabs" style="display: none;">
-        <button type="button" class="tab-btn" id="btn-tab-students" onclick="switchTab('students')">Students & Admissions</button>
-        <button type="button" class="tab-btn" id="btn-tab-schedule" onclick="switchTab('schedule')">Weekly Routine & Tests</button>
-        <button type="button" class="tab-btn" id="btn-tab-attendance" onclick="switchTab('attendance')">Attendance Desk</button>
-        <button type="button" class="tab-btn" id="btn-tab-finance" onclick="switchTab('finance')">Income & Expenditure</button>
+        <button type="button" class="tab-btn" id="btn-tab-students" onclick="switchTab('students')">Students</button>
+        <button type="button" class="tab-btn" id="btn-tab-schedule" onclick="switchTab('schedule')">Routine</button>
+        <button type="button" class="tab-btn" id="btn-tab-attendance" onclick="switchTab('attendance')">Attendance</button>
+        <button type="button" class="tab-btn" id="btn-tab-progress" onclick="switchTab('progress')">Study Progress</button>
+        <button type="button" class="tab-btn" id="btn-tab-finance" onclick="switchTab('finance')">Accounts</button>
       </div>
       <div class="user-badge-wrap">
         <span class="user-tag" id="current-user-tag"></span>
@@ -743,6 +806,10 @@
       <span class="icon">📋</span>
       <span>Attendance</span>
     </button>
+    <button type="button" class="bottom-nav-item" id="m-btn-progress" onclick="switchTab('progress')">
+      <span class="icon">📊</span>
+      <span>Progress</span>
+    </button>
     <button type="button" class="bottom-nav-item" id="m-btn-finance" onclick="switchTab('finance')">
       <span class="icon">💰</span>
       <span>Accounts</span>
@@ -760,14 +827,14 @@
       </div>
       <form id="login-form">
         <div class="form-group" style="margin-bottom: 12px;">
-          <label>Registered Mobile Number or Admin Email</label>
+          <label>Mobile Number or Admin Email</label>
           <input type="text" id="login-identifier" inputmode="tel" placeholder="10-digit Mobile or Admin Email" required autocomplete="username" />
         </div>
         <div class="form-group" style="margin-bottom: 12px;">
           <label>Password</label>
           <div class="password-wrapper">
             <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password" />
-            <button type="button" class="toggle-password-btn" id="eye-toggle-btn" onclick="togglePasswordVisibility()" title="Show/Hide">👁️</button>
+            <button type="button" class="toggle-password-btn" id="eye-toggle-btn" onclick="togglePasswordVisibility()" title="Show/Hide">👁️️</button>
           </div>
         </div>
         <label style="display:flex; align-items:center; gap:8px; margin:10px 0 16px 0; font-size:0.8rem; cursor:pointer;">
@@ -781,7 +848,7 @@
     <!-- 2. STUDENTS & ADMISSIONS PORTAL (TAB 1) -->
     <div id="tab-students-content" style="display: none;">
       
-      <!-- Staff Profile Creation (Super Admin Only: Assigns Entry Permissions) -->
+      <!-- Staff Profile Creation (Super Admin Only) -->
       <div class="card" id="staff-creation-box">
         <div class="card-header">Register Official / Faculty & Assign Entry Places</div>
         <form id="staff-form">
@@ -817,6 +884,7 @@
                 <label class="perm-item"><input type="checkbox" id="perm-admissions" checked /> Student Admissions</label>
                 <label class="perm-item"><input type="checkbox" id="perm-schedule" checked /> Weekly Routine & Tests</label>
                 <label class="perm-item"><input type="checkbox" id="perm-attendance" checked /> Attendance Desk</label>
+                <label class="perm-item"><input type="checkbox" id="perm-progress" checked /> Study Progress Tracker</label>
                 <label class="perm-item"><input type="checkbox" id="perm-income" checked /> Income Ledger</label>
                 <label class="perm-item"><input type="checkbox" id="perm-expense" /> Expenditure Ledger</label>
               </div>
@@ -848,11 +916,10 @@
         </div>
       </div>
 
-      <!-- Complete Student Admission Form -->
+      <!-- Student Admission Form -->
       <div class="card" id="student-admission-box">
         <div class="card-header">Student Admission & Multi-Tier Fee Form</div>
         <form id="student-form">
-          
           <div class="section-subtitle">1. Personal & Physical Identity Details</div>
           <div class="form-grid">
             <div class="form-group">
@@ -869,7 +936,7 @@
             </div>
             <div class="form-group">
               <label>Guardian's Name</label>
-              <input type="text" id="std-guardian" placeholder="Father / Mother / Guardian" required />
+              <input type="text" id="std-guardian" placeholder="Guardian Name" required />
             </div>
             <div class="form-group">
               <label>Primary Phone (Phone 1 - Login ID)</label>
@@ -890,6 +957,7 @@
             <div class="form-group">
               <label>Batch / Group</label>
               <select id="std-batch" required>
+                <option value="B1">B1</option>
                 <option value="G1">G1</option><option value="G2">G2</option><option value="G3">G3</option><option value="G4">G4</option>
                 <option value="H1">H1</option><option value="H2">H2</option><option value="H3">H3</option><option value="H4">H4</option>
               </select>
@@ -962,12 +1030,9 @@
             </div>
           </div>
 
-          <!-- PART 2: ITEMIZED MONEY COLLECTION AT ADMISSION -->
+          <!-- PART 2: ITEMIZED MONEY COLLECTION -->
           <div class="step-box success">
             <div class="step-title">Part 2: Money Collection & Itemized Allocation at Admission</div>
-            <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">
-              Specify exact amounts collected for each purpose right now:
-            </p>
             <div class="form-grid">
               <div class="form-group">
                 <label>Paid towards: Admission Fee (₹)</label>
@@ -1002,9 +1067,8 @@
               </div>
             </div>
 
-            <!-- Future Running Installment Ledger -->
             <div class="section-subtitle" style="margin-top: 14px; margin-bottom: 8px;">
-              Future Payments / Installments Ledger (ভবিষ্যতে টাকা দিলে এখানে যোগ করুন)
+              Future Payments / Installments Ledger
             </div>
             <div id="dynamic-payments-container"></div>
             <button type="button" class="btn-add-entry" onclick="addPaymentRow()">
@@ -1025,10 +1089,10 @@
         </form>
       </div>
 
-      <!-- Student Directory (Compact, Non-Bulky Table) -->
+      <!-- Student Directory Table -->
       <div class="card">
         <div class="card-header">
-          <span>Registered Students Directory (Session Apr 2026 – Mar 2027)</span>
+          <span>Registered Students Directory</span>
         </div>
         <div class="table-container">
           <table>
@@ -1075,6 +1139,7 @@
             <label>Group / Batch</label>
             <select id="sch-batch-select" onchange="loadRoutineForCurrentSelection()">
               <option value="ALL">ALL (Common Drill / Tests)</option>
+              <option value="B1">B1</option>
               <option value="H1">H1</option><option value="H2">H2</option>
               <option value="H3">H3</option><option value="H4">H4</option>
               <option value="G1">G1</option><option value="G2">G2</option>
@@ -1092,7 +1157,7 @@
 
         <div class="schedule-grid-box">
           <div class="schedule-box-header">
-            <span>📚 Daily Academic Classes (Min. 3-4 Sessions)</span>
+            <span>📚 Daily Academic Classes</span>
             <button type="button" class="btn-print" id="btn-add-class-row" style="background:var(--navy-light);" onclick="addClassRow()">+ Add Class</button>
           </div>
           <div class="table-container">
@@ -1135,7 +1200,7 @@
       </div>
     </div>
 
-    <!-- 4. SEPARATE ATTENDANCE DESK (TAB 3) -->
+    <!-- 4. ATTENDANCE DESK (TAB 3) -->
     <div id="tab-attendance-content" style="display: none;">
       <div class="card">
         <div class="card-header">
@@ -1151,6 +1216,7 @@
             <label>Group / Batch:</label>
             <select id="att-desk-batch" onchange="renderAttendanceDeskSessions()">
               <option value="ALL">ALL BATCHES</option>
+              <option value="B1">B1</option>
               <option value="H1">H1</option><option value="H2">H2</option>
               <option value="H3">H3</option><option value="H4">H4</option>
               <option value="G1">G1</option><option value="G2">G2</option>
@@ -1159,13 +1225,59 @@
           </div>
         </div>
 
-        <div id="att-sessions-feed">
-          <!-- Active Sessions for Attendance rendered here -->
+        <div id="att-sessions-feed"></div>
+      </div>
+    </div>
+
+    <!-- 5. NEW: STUDY PROGRESS SEGMENT (TAB 4) -->
+    <div id="tab-progress-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <span>Batch Syllabus & Unit Study Progress Tracker</span>
+          <button type="button" class="btn-primary" style="max-width:200px;" onclick="saveStudyProgress()">💾 Save Study Progress</button>
+        </div>
+
+        <div class="schedule-control-bar">
+          <div class="form-group">
+            <label>Select Target Batch:</label>
+            <select id="prog-batch-select" onchange="renderProgressBoard()">
+              <option value="B1">B1 Batch</option>
+              <option value="G1">G1 Batch</option><option value="G2">G2 Batch</option>
+              <option value="G3">G3 Batch</option><option value="G4">G4 Batch</option>
+              <option value="H1">H1 Batch</option><option value="H2">H2 Batch</option>
+              <option value="H3">H3 Batch</option><option value="H4">H4 Batch</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Progress Color Legend -->
+        <div class="progress-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--unit-black);"></div>
+            <span>Black: Pending / Not Started (নরমাল)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--progress-blue);"></div>
+            <span>Blue: In Progress (চলমান)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--primary-red);"></div>
+            <span>Red: Completed (সম্পন্ন)</span>
+          </div>
+        </div>
+
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:12px;">
+          * নির্দেশিকা: যে কোনো ইউনিটের ব্লকে টাচ করুন: <strong>প্রথম টাচ = Blue (চলমান)</strong>, <strong>দ্বিতীয় টাচ = Red (সম্পন্ন)</strong>, <strong>তৃতীয় টাচ = Black (রিসেট)</strong>।
+        </p>
+
+        <!-- Subjects Container (Math, GI, GK, English, Hindi) -->
+        <div id="progress-subjects-feed">
+          <!-- Dynamically generated 5 subjects x 84 units each -->
         </div>
       </div>
     </div>
 
-    <!-- 5. FINANCE PORTAL (TAB 4) -->
+    <!-- 6. FINANCE PORTAL (TAB 5) -->
     <div id="tab-finance-content" style="display: none;">
       <div class="metric-grid">
         <div class="metric-box inflow">
@@ -1273,11 +1385,11 @@
       </div>
     </div>
 
-    <!-- 6. STUDENT PERSONAL DESK (FIXED VIEW) -->
+    <!-- 7. PERSONAL DESK VIEW (STUDENT / OFFICIAL) -->
     <div id="personal-desk-view" style="display: none;">
       <div class="card">
         <div class="card-header">
-          <span id="desk-title">Student Portal Desk</span>
+          <span id="desk-title">Portal Desk</span>
           <button type="button" class="btn-print" onclick="window.print()">🖨️ Print Profile</button>
         </div>
         <div id="personal-desk-content"></div>
@@ -1288,9 +1400,7 @@
         <div class="card-header" style="color:var(--success-green);">
           <span>Live Session Self-Attendance</span>
         </div>
-        <div id="student-live-sessions-container">
-          <!-- Render active classes within 15 min window -->
-        </div>
+        <div id="student-live-sessions-container"></div>
       </div>
 
       <!-- READ-ONLY SCHEDULE CONTAINER FOR STUDENTS -->
@@ -1329,6 +1439,20 @@
             <tbody id="std-read-tests-body"></tbody>
           </table>
         </div>
+      </div>
+
+      <!-- READ-ONLY STUDY PROGRESS CONTAINER FOR STUDENTS -->
+      <div class="card" id="student-progress-display" style="display:none; border-top: 3px solid var(--progress-blue);">
+        <div class="card-header" style="color:var(--navy-blue);">
+          <span id="student-progress-batch-title">My Batch Syllabus & Unit Progress</span>
+          <button type="button" class="btn-print" onclick="hideStudentProgress()">✕ Close Progress</button>
+        </div>
+        <div class="progress-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--unit-black);"></div><span>Black: Pending</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--progress-blue);"></div><span>Blue: In Progress</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--primary-red);"></div><span>Red: Completed</span></div>
+        </div>
+        <div id="student-progress-subjects-feed"></div>
       </div>
     </div>
 
@@ -1412,6 +1536,14 @@
     const SUPABASE_REST_URL = "https://dyldejdkgfnyvunkrddh.supabase.co/rest/v1";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5bGRlamRrZ2ZueXZ1bmtyZGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2MDE4OTYsImV4cCI6MjEwNjE3Nzg5Nn0._JUB9WjiB3aJAdEZZyADueL9i6iyf7us6dD8L3S1o0E";
 
+    const SUBJECTS = [
+      { id: "math", name: "Mathematics" },
+      { id: "gi", name: "General Intelligence (GI / Reasoning)" },
+      { id: "gk", name: "General Knowledge (GK / GS)" },
+      { id: "english", name: "English" },
+      { id: "hindi", name: "Hindi" }
+    ];
+
     function sanitizePhone(val) {
       if (!val) return "";
       const cleaned = String(val).replace(/\D/g, "");
@@ -1457,7 +1589,8 @@
       incomes: safeGet("ff_incomes"),
       expenses: safeGet("ff_expenses"),
       schedules: safeGet("ff_schedules"),
-      attendanceSessions: safeGet("ff_att_sessions") || [] // holds OTP sessions with 15m timer
+      attendanceSessions: safeGet("ff_att_sessions") || [],
+      studyProgress: safeGet("ff_study_progress") || {} // stores progress per batch
     };
 
     let currentUser = null;
@@ -1539,7 +1672,6 @@
       return "FF" + Math.floor(100000 + Math.random() * 900000);
     }
 
-    // Auto-generate Sequential Student Reg IDs (FF0001, FF0002, ...)
     function getNextStudentRegId() {
       const existing = DB.students.map(s => s.reg_id || "").filter(id => id.startsWith("FF"));
       let maxNum = 0;
@@ -1714,7 +1846,7 @@
           ${isSuperAdmin ? `<td><span class="password-pill">${st.password}</span></td>` : ''}
           <td><span class="status-badge ${isInactive ? 'inactive' : 'active'}">${st.status || 'Active'}</span></td>
           <td style="display:flex; gap:4px;">
-            <button type="button" class="btn-print" onclick="printStaffProfile(${idx})">🖨️️ PDF</button>
+            <button type="button" class="btn-print" onclick="printStaffProfile(${idx})">🖨 PDF</button>
             ${isSuperAdmin ? `
               <button type="button" class="btn-status-toggle ${isInactive ? 'is-inactive' : 'is-active'}" onclick="toggleStaffStatus(${idx})">
                 ${isInactive ? 'Activate' : 'Make Inactive'}
@@ -1817,6 +1949,7 @@
         admissions: document.getElementById("perm-admissions").checked,
         schedule: document.getElementById("perm-schedule").checked,
         attendance: document.getElementById("perm-attendance").checked,
+        progress: document.getElementById("perm-progress").checked,
         income: document.getElementById("perm-income").checked,
         expense: document.getElementById("perm-expense").checked
       };
@@ -2173,28 +2306,170 @@
       document.getElementById("tab-students-content").style.display = (tab === 'students') ? 'block' : 'none';
       document.getElementById("tab-schedule-content").style.display = (tab === 'schedule') ? 'block' : 'none';
       document.getElementById("tab-attendance-content").style.display = (tab === 'attendance') ? 'block' : 'none';
+      document.getElementById("tab-progress-content").style.display = (tab === 'progress') ? 'block' : 'none';
       document.getElementById("tab-finance-content").style.display = (tab === 'finance') ? 'block' : 'none';
       document.getElementById("personal-desk-view").style.display = 'none';
 
       document.getElementById("btn-tab-students").classList.toggle("active", tab === 'students');
       document.getElementById("btn-tab-schedule").classList.toggle("active", tab === 'schedule');
       document.getElementById("btn-tab-attendance").classList.toggle("active", tab === 'attendance');
+      document.getElementById("btn-tab-progress").classList.toggle("active", tab === 'progress');
       document.getElementById("btn-tab-finance").classList.toggle("active", tab === 'finance');
 
       const mStud = document.getElementById("m-btn-students");
       const mSch = document.getElementById("m-btn-schedule");
       const mAtt = document.getElementById("m-btn-attendance");
+      const mProg = document.getElementById("m-btn-progress");
       const mFin = document.getElementById("m-btn-finance");
       if (mStud) mStud.classList.toggle("active", tab === 'students');
       if (mSch) mSch.classList.toggle("active", tab === 'schedule');
       if (mAtt) mAtt.classList.toggle("active", tab === 'attendance');
+      if (mProg) mProg.classList.toggle("active", tab === 'progress');
       if (mFin) mFin.classList.toggle("active", tab === 'finance');
 
       if (tab === 'attendance') {
         renderAttendanceDeskSessions();
+      } else if (tab === 'progress') {
+        renderProgressBoard();
       }
 
       window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // -------------------------------------------------------------
+    // STUDY PROGRESS SEGMENT LOGIC (MATH, GI, GK, ENGLISH, HINDI)
+    // -------------------------------------------------------------
+    function renderProgressBoard() {
+      const feed = document.getElementById("progress-subjects-feed");
+      const batch = document.getElementById("prog-batch-select").value || "B1";
+      feed.innerHTML = "";
+
+      const batchProgress = DB.studyProgress[batch] || {};
+
+      SUBJECTS.forEach(sub => {
+        const subData = batchProgress[sub.id] || {};
+        const box = document.createElement("div");
+        box.className = "progress-subject-box";
+
+        let completedCount = 0;
+        let inProgressCount = 0;
+
+        for (let i = 1; i <= 84; i++) {
+          const st = subData[i] || 0; // 0=black, 1=blue, 2=red
+          if (st === 2) completedCount++;
+          else if (st === 1) inProgressCount++;
+        }
+
+        const header = document.createElement("div");
+        header.className = "progress-subject-header";
+        header.innerHTML = `
+          <div class="progress-subject-title">${sub.name}</div>
+          <div style="font-size:0.75rem; font-weight:700;">
+            <span style="color:var(--primary-red);">Completed: ${completedCount}</span> / 
+            <span style="color:var(--progress-blue);">In Progress: ${inProgressCount}</span> / 
+            <span>Total: 84</span>
+          </div>
+        `;
+        box.appendChild(header);
+
+        const grid = document.createElement("div");
+        grid.className = "progress-units-grid";
+
+        for (let u = 1; u <= 84; u++) {
+          const status = subData[u] || 0;
+          const uDiv = document.createElement("div");
+          uDiv.className = `unit-block ${status === 2 ? 'completed' : (status === 1 ? 'in-progress' : '')}`;
+          uDiv.innerText = u;
+          uDiv.title = `Unit ${u} (${status === 2 ? 'Completed' : (status === 1 ? 'In Progress' : 'Pending')})`;
+          uDiv.onclick = () => toggleUnitProgress(batch, sub.id, u);
+          grid.appendChild(uDiv);
+        }
+
+        box.appendChild(grid);
+        feed.appendChild(box);
+      });
+    }
+
+    // Touch cycle: 0 (Black) -> 1 (Blue/In Progress) -> 2 (Red/Completed) -> 0 (Black)
+    function toggleUnitProgress(batch, subjectId, unitNum) {
+      if (!DB.studyProgress[batch]) DB.studyProgress[batch] = {};
+      if (!DB.studyProgress[batch][subjectId]) DB.studyProgress[batch][subjectId] = {};
+
+      const currentStatus = DB.studyProgress[batch][subjectId][unitNum] || 0;
+      let nextStatus = 0;
+
+      if (currentStatus === 0) nextStatus = 1; // 1st touch: Blue (In Progress)
+      else if (currentStatus === 1) nextStatus = 2; // 2nd touch: Red (Completed)
+      else nextStatus = 0; // 3rd touch: Reset to Black
+
+      DB.studyProgress[batch][subjectId][unitNum] = nextStatus;
+      renderProgressBoard();
+    }
+
+    function saveStudyProgress() {
+      safeSet("ff_study_progress", DB.studyProgress);
+      alert("Study Progress saved successfully!");
+    }
+
+    // Student View-Only Progress Renderer
+    function showStudentProgressView(batch) {
+      const disp = document.getElementById("student-progress-display");
+      disp.style.display = "block";
+      document.getElementById("student-progress-batch-title").innerText = `Batch [${batch}] Syllabus & Unit Progress`;
+
+      const feed = document.getElementById("student-progress-subjects-feed");
+      feed.innerHTML = "";
+
+      const batchProgress = DB.studyProgress[batch] || {};
+
+      SUBJECTS.forEach(sub => {
+        const subData = batchProgress[sub.id] || {};
+        const box = document.createElement("div");
+        box.className = "progress-subject-box";
+
+        let completedCount = 0;
+        let inProgressCount = 0;
+
+        for (let i = 1; i <= 84; i++) {
+          const st = subData[i] || 0;
+          if (st === 2) completedCount++;
+          else if (st === 1) inProgressCount++;
+        }
+
+        const header = document.createElement("div");
+        header.className = "progress-subject-header";
+        header.innerHTML = `
+          <div class="progress-subject-title">${sub.name}</div>
+          <div style="font-size:0.75rem; font-weight:700;">
+            <span style="color:var(--primary-red);">Completed: ${completedCount}</span> / 
+            <span style="color:var(--progress-blue);">In Progress: ${inProgressCount}</span> / 
+            <span>Total: 84</span>
+          </div>
+        `;
+        box.appendChild(header);
+
+        const grid = document.createElement("div");
+        grid.className = "progress-units-grid";
+
+        for (let u = 1; u <= 84; u++) {
+          const status = subData[u] || 0;
+          const uDiv = document.createElement("div");
+          uDiv.className = `unit-block ${status === 2 ? 'completed' : (status === 1 ? 'in-progress' : '')}`;
+          uDiv.innerText = u;
+          uDiv.style.cursor = "default";
+          uDiv.title = `Unit ${u}: ${status === 2 ? 'Completed' : (status === 1 ? 'In Progress' : 'Pending')}`;
+          grid.appendChild(uDiv);
+        }
+
+        box.appendChild(grid);
+        feed.appendChild(box);
+      });
+
+      disp.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function hideStudentProgress() {
+      document.getElementById("student-progress-display").style.display = "none";
     }
 
     // -------------------------------------------------------------
@@ -2207,7 +2482,6 @@
 
       feed.innerHTML = "";
 
-      // Gather matching sessions from schedules
       const relevantSchedules = DB.schedules.filter(s => {
         const matchesDate = s.date === date;
         const matchesBatch = (selectedBatch === "ALL" || s.batch === "ALL" || s.batch === selectedBatch);
@@ -2220,13 +2494,11 @@
       }
 
       relevantSchedules.forEach(sch => {
-        // Classes
         (sch.classes || []).forEach((c, idx) => {
           const sessId = `CLS_${sch.batch}_${sch.date}_${idx}`;
           feed.appendChild(createAttendanceSessionElement("Class", c.subject, c.time, c.teacher, sch.batch, sch.date, sessId));
         });
 
-        // Tests
         (sch.tests || []).forEach((t, idx) => {
           const sessId = `TST_${sch.batch}_${sch.date}_${idx}`;
           feed.appendChild(createAttendanceSessionElement("Exam", t.name, t.time, "Examiner", sch.batch, sch.date, sessId));
@@ -2238,7 +2510,6 @@
       const card = document.createElement("div");
       card.className = `att-session-card ${type === 'Exam' ? 'exam-type' : ''}`;
 
-      // Check if session has active OTP
       let attRecord = DB.attendanceSessions.find(s => s.sessId === sessId);
       const now = Date.now();
       const isActive = attRecord && attRecord.expiresAt > now;
@@ -2248,17 +2519,17 @@
         const remainingMins = Math.ceil((attRecord.expiresAt - now) / 60000);
         codeHtml = `
           <div style="margin-top:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-            <span>Live Attendance Passcode:</span>
+            <span>Live Passcode:</span>
             <span class="live-code-box">${attRecord.code}</span>
-            <span class="timer-badge">⏳ Active for ${remainingMins} more min(s)</span>
+            <span class="timer-badge">⏳ Active for ${remainingMins} min(s)</span>
           </div>
         `;
       } else {
         codeHtml = `
           <div style="margin-top:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
             <input type="text" id="code_inp_${sessId}" inputmode="numeric" maxlength="5" placeholder="5-Digit Code" style="width:130px; text-align:center; font-weight:bold; letter-spacing:2px; min-height:36px; padding:6px;" />
-            <button type="button" class="btn-print" style="background:#047857;" onclick="generateAndSetCode('${sessId}')">Generate & Start 15M Timer</button>
-            <button type="button" class="btn-print" onclick="activateManualCode('${sessId}', '${type}', '${title}', '${time}', '${batch}', '${date}')">Save Code</button>
+            <button type="button" class="btn-print" style="background:#047857;" onclick="generateAndSetCode('${sessId}')">Generate 5 Digits</button>
+            <button type="button" class="btn-print" onclick="activateManualCode('${sessId}', '${type}', '${title}', '${time}', '${batch}', '${date}')">Activate (15 Mins)</button>
           </div>
         `;
       }
@@ -2297,7 +2568,7 @@
       }
 
       const now = Date.now();
-      const expiresAt = now + (15 * 60 * 1000); // exactly 15 minutes
+      const expiresAt = now + (15 * 60 * 1000); // 15 minutes
 
       let session = DB.attendanceSessions.find(s => s.sessId === sessId);
       if (session) {
@@ -2321,7 +2592,7 @@
       }
 
       safeSet("ff_att_sessions", DB.attendanceSessions);
-      alert(`5-Digit Code [${code}] is now LIVE for 15 minutes! Students can now mark their attendance.`);
+      alert(`5-Digit Code [${code}] is now LIVE for 15 minutes! Students can mark attendance.`);
       renderAttendanceDeskSessions();
     }
 
@@ -2359,7 +2630,7 @@
     }
 
     // -------------------------------------------------------------
-    // STUDENT SELF-ATTENDANCE WORKFLOW (WITHIN 15 MINS)
+    // STUDENT LIVE SELF-ATTENDANCE WORKFLOW (15 MINS)
     // -------------------------------------------------------------
     function renderStudentLiveAttendanceBox() {
       const box = document.getElementById("student-live-att-box");
@@ -2369,7 +2640,6 @@
       const today = new Date().toISOString().split("T")[0];
       const now = Date.now();
 
-      // Find active sessions for student's batch or ALL
       const activeSessions = DB.attendanceSessions.filter(s => {
         const matchesDate = s.date === today;
         const matchesBatch = (s.batch === "ALL" || s.batch === currentUser.batch);
@@ -2411,7 +2681,7 @@
               </div>
               <p style="font-size:0.75rem; color:var(--text-muted); margin:2px 0 6px 0;">Class Time: ${sess.time} | Assigned Batch: ${sess.batch}</p>
               <div style="background:#F1F5F9; padding:8px; border-radius:5px; margin-bottom:8px; font-size:0.8rem;">
-                Live Passcode: <span style="font-weight:800; color:var(--primary-red); letter-spacing:2px; font-size:1rem;">${sess.code}</span>
+                Teacher Passcode: <span style="font-weight:800; color:var(--primary-red); letter-spacing:2px; font-size:1rem;">${sess.code}</span>
               </div>
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px;">
                 <input type="text" value="${currentUser.reg_id || 'FF0001'}" readonly style="background:#e2e8f0; font-weight:bold;" title="My Registration ID" />
@@ -2434,7 +2704,7 @@
 
       const now = Date.now();
       if (now > session.expiresAt) {
-        alert("Time limit expired! This 5-digit passcode is no longer valid. Contact teacher.");
+        alert("Time limit expired! Passcode is no longer valid. Contact teacher.");
         renderStudentLiveAttendanceBox();
         return;
       }
@@ -2464,7 +2734,7 @@
       });
 
       safeSet("ff_att_sessions", DB.attendanceSessions);
-      alert(`Success! You have been successfully marked PRESENT for ${session.title}.`);
+      alert(`Success! You are marked PRESENT for ${session.title}.`);
       renderStudentLiveAttendanceBox();
     }
 
@@ -2529,17 +2799,18 @@
       const isSuperAdmin = (currentUser.role === "SuperAdmin");
 
       if (isSuperAdmin) {
-        // Super Admin Gets Complete Unrestricted Master Control
         document.getElementById("admin-nav-tabs").style.display = "flex";
         document.getElementById("mobile-nav-bar").style.display = "flex";
         document.getElementById("btn-tab-students").style.display = "inline-block";
         document.getElementById("btn-tab-schedule").style.display = "inline-block";
         document.getElementById("btn-tab-attendance").style.display = "inline-block";
+        document.getElementById("btn-tab-progress").style.display = "inline-block";
         document.getElementById("btn-tab-finance").style.display = "inline-block";
 
         document.getElementById("m-btn-students").style.display = "flex";
         document.getElementById("m-btn-schedule").style.display = "flex";
         document.getElementById("m-btn-attendance").style.display = "flex";
+        document.getElementById("m-btn-progress").style.display = "flex";
         document.getElementById("m-btn-finance").style.display = "flex";
 
         document.getElementById("staff-creation-box").style.display = "block";
@@ -2560,8 +2831,7 @@
         renderFinanceDashboard();
         initWeekRange();
       } else if (currentUser.role === "Official" || currentUser.role === "Faculty") {
-        // Official / Faculty Access Controls
-        const perms = currentUser.permissions || { admissions: true, schedule: true, attendance: true, income: true, expense: false };
+        const perms = currentUser.permissions || { admissions: true, schedule: true, attendance: true, progress: true, income: true, expense: false };
         currentUser.permissions = perms;
 
         document.getElementById("admin-nav-tabs").style.display = "flex";
@@ -2572,16 +2842,19 @@
         const hasAdm = !!perms.admissions;
         const hasSch = !!perms.schedule;
         const hasAtt = !!perms.attendance;
+        const hasProg = !!perms.progress;
         const hasFin = !!(perms.income || perms.expense);
 
         document.getElementById("btn-tab-students").style.display = hasAdm ? "inline-block" : "none";
         document.getElementById("btn-tab-schedule").style.display = hasSch ? "inline-block" : "none";
         document.getElementById("btn-tab-attendance").style.display = hasAtt ? "inline-block" : "none";
+        document.getElementById("btn-tab-progress").style.display = hasProg ? "inline-block" : "none";
         document.getElementById("btn-tab-finance").style.display = hasFin ? "inline-block" : "none";
 
         document.getElementById("m-btn-students").style.display = hasAdm ? "flex" : "none";
         document.getElementById("m-btn-schedule").style.display = hasSch ? "flex" : "none";
         document.getElementById("m-btn-attendance").style.display = hasAtt ? "flex" : "none";
+        document.getElementById("m-btn-progress").style.display = hasProg ? "flex" : "none";
         document.getElementById("m-btn-finance").style.display = hasFin ? "flex" : "none";
 
         document.getElementById("student-admission-box").style.display = hasAdm ? "block" : "none";
@@ -2596,6 +2869,7 @@
         document.getElementById("tab-students-content").style.display = "none";
         document.getElementById("tab-schedule-content").style.display = "none";
         document.getElementById("tab-attendance-content").style.display = "none";
+        document.getElementById("tab-progress-content").style.display = "none";
         document.getElementById("tab-finance-content").style.display = "none";
         document.getElementById("personal-desk-view").style.display = "block";
         document.getElementById("student-routine-display").style.display = "none";
@@ -2604,6 +2878,7 @@
         document.getElementById("desk-title").innerText = `${currentUser.role} Desk: ${currentUser.name}`;
         
         let actionButtonsHtml = '<div style="display:flex; flex-direction:column; gap:8px; margin-top:14px;">';
+        if (hasProg) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:var(--progress-blue);" onclick="switchTab('progress')">📊 Open Syllabus & Study Progress</button>`;
         if (hasAtt) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:#0D9488;" onclick="switchTab('attendance')">📋 Open Attendance Desk & Generate Code</button>`;
         if (hasSch) actionButtonsHtml += `<button type="button" class="btn-primary" onclick="switchTab('schedule')">📅 Open Routine & Class Schedules</button>`;
         if (hasAdm) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:var(--navy-blue);" onclick="switchTab('students')">👥 Open Student Admissions & Directory</button>`;
@@ -2624,12 +2899,13 @@
         renderRoster();
         initWeekRange();
       } else {
-        // STUDENT LOGIN: Fixed Single View
+        // STUDENT LOGIN - Fixed Single View
         document.getElementById("admin-nav-tabs").style.display = "none";
         document.getElementById("mobile-nav-bar").style.display = "none";
         document.getElementById("tab-students-content").style.display = "none";
         document.getElementById("tab-schedule-content").style.display = "none";
         document.getElementById("tab-attendance-content").style.display = "none";
+        document.getElementById("tab-progress-content").style.display = "none";
         document.getElementById("tab-finance-content").style.display = "none";
         document.getElementById("personal-desk-view").style.display = "block";
         
@@ -2646,12 +2922,12 @@
             <p><strong>Total Amount Cleared:</strong> ₹${currentUser.paid}</p>
             <p><strong>Months Cleared:</strong> ${(currentUser.paid_months && currentUser.paid_months.length) ? currentUser.paid_months.join(', ') : 'None'}</p>
           </div>
-          <div style="margin-top:14px;">
+          <div style="display:flex; flex-direction:column; gap:8px; margin-top:14px;">
             <button type="button" class="btn-primary" onclick="showStudentRoutineView('${currentUser.batch}')">📅 View My Batch (${currentUser.batch}) Routine & Tests</button>
+            <button type="button" class="btn-primary" style="background:var(--progress-blue);" onclick="showStudentProgressView('${currentUser.batch}')">📊 View My Batch (${currentUser.batch}) Study Progress</button>
           </div>
         `;
 
-        // Render Live 15-Minute Attendance Submission Box
         renderStudentLiveAttendanceBox();
       }
     }
@@ -3097,6 +3373,7 @@
       document.getElementById("tab-students-content").style.display = "none";
       document.getElementById("tab-schedule-content").style.display = "none";
       document.getElementById("tab-attendance-content").style.display = "none";
+      document.getElementById("tab-progress-content").style.display = "none";
       document.getElementById("tab-finance-content").style.display = "none";
       document.getElementById("personal-desk-view").style.display = "none";
       document.getElementById("nav-controls").style.display = "none";
