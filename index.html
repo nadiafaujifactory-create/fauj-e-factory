@@ -91,11 +91,11 @@
       background: var(--navy-light);
       color: var(--pure-white);
       border: 1px solid rgba(255,255,255,0.15);
-      padding: 8px 14px;
+      padding: 8px 12px;
       border-radius: 6px;
       font-weight: 600;
       cursor: pointer;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       white-space: nowrap;
       transition: all 0.2s ease;
     }
@@ -117,7 +117,7 @@
       padding: 5px 10px;
       border-radius: 6px;
       border: 1px solid rgba(255,255,255,0.2);
-      max-width: 150px;
+      max-width: 140px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -157,7 +157,7 @@
       background: none;
       border: none;
       color: #94A3B8;
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       font-weight: 600;
       gap: 2px;
       flex: 1;
@@ -166,7 +166,7 @@
     }
 
     .bottom-nav-item span.icon {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
     }
 
     .bottom-nav-item.active {
@@ -449,40 +449,6 @@
       font-size: 0.75rem;
     }
 
-    .btn-attendance {
-      background: #0D9488;
-      color: white;
-      border: none;
-      padding: 4px 7px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.72rem;
-      white-space: nowrap;
-    }
-
-    .dynamic-pay-row {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr 1fr 1fr auto;
-      gap: 6px;
-      align-items: center;
-      background: white;
-      padding: 8px;
-      border: 1px solid #E2E8F0;
-      border-radius: 5px;
-      margin-bottom: 6px;
-    }
-
-    .btn-del-row {
-      background: #FEE2E2;
-      color: #991B1B;
-      border: none;
-      padding: 6px 8px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
     .status-badge {
       display: inline-block;
       padding: 2px 6px;
@@ -492,6 +458,17 @@
     }
     .status-badge.active { background: #DEF7EC; color: #03543F; }
     .status-badge.inactive { background: #FDE8E8; color: #9B1C1C; }
+
+    .reg-pill {
+      background: #0A192F;
+      color: #FFFFFF;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: 800;
+      font-size: 0.78rem;
+      letter-spacing: 0.5px;
+    }
 
     .password-pill {
       background: #E2E8F0;
@@ -512,7 +489,6 @@
 
     @media (max-width: 850px) {
       .finance-split-grid { grid-template-columns: 1fr; }
-      .dynamic-pay-row { grid-template-columns: 1fr; }
     }
 
     .finance-column-box {
@@ -524,14 +500,6 @@
     }
     .finance-column-box.income-box { border-top-color: var(--success-green); }
     .finance-column-box.expense-box { border-top-color: var(--primary-red); }
-
-    .finance-box-title {
-      font-size: 0.98rem;
-      font-weight: 800;
-      margin-bottom: 10px;
-    }
-    .finance-box-title.income-title { color: #065F46; }
-    .finance-box-title.expense-title { color: #991B1B; }
 
     .metric-grid {
       display: grid;
@@ -600,10 +568,6 @@
       background-color: #F8FAFC;
     }
 
-    tr:hover {
-      background-color: #F1F5F9;
-    }
-
     .schedule-control-bar {
       background: #EDF2F7;
       border: 1px solid #CBD5E0;
@@ -628,21 +592,37 @@
       border-left-color: var(--primary-red);
     }
 
-    .schedule-box-header {
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: var(--navy-blue);
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    /* ATTENDANCE DESK STYLING */
+    .att-session-card {
+      background: white;
+      border: 1px solid #E2E8F0;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--navy-blue);
     }
-
-    .editable-cell input {
-      width: 100%;
-      padding: 5px 6px;
-      font-size: 0.78rem;
-      border: 1px solid #CBD5E0;
+    .att-session-card.exam-type {
+      border-left-color: var(--primary-red);
+    }
+    .live-code-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #FEF2F2;
+      border: 1px dashed var(--primary-red);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 800;
+      color: var(--primary-red);
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+    }
+    .timer-badge {
+      font-size: 0.75rem;
+      color: #991B1B;
+      font-weight: 700;
+      background: #FEE2E2;
+      padding: 2px 6px;
       border-radius: 4px;
     }
 
@@ -700,18 +680,6 @@
       text-decoration: line-through;
     }
 
-    .att-badge {
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      cursor: pointer;
-      user-select: none;
-      border: 1px solid #CBD5E0;
-    }
-    .att-badge.present { background: #DEF7EC; color: #03543F; border-color: #03543F; }
-    .att-badge.absent { background: #FDE8E8; color: #9B1C1C; border-color: #9B1C1C; }
-
     /* Print Template */
     #print-section { display: none; }
 
@@ -751,6 +719,7 @@
       <div class="desktop-nav-tabs" id="admin-nav-tabs" style="display: none;">
         <button type="button" class="tab-btn" id="btn-tab-students" onclick="switchTab('students')">Students & Admissions</button>
         <button type="button" class="tab-btn" id="btn-tab-schedule" onclick="switchTab('schedule')">Weekly Routine & Tests</button>
+        <button type="button" class="tab-btn" id="btn-tab-attendance" onclick="switchTab('attendance')">Attendance Desk</button>
         <button type="button" class="tab-btn" id="btn-tab-finance" onclick="switchTab('finance')">Income & Expenditure</button>
       </div>
       <div class="user-badge-wrap">
@@ -770,6 +739,10 @@
       <span class="icon">📅</span>
       <span>Routine</span>
     </button>
+    <button type="button" class="bottom-nav-item" id="m-btn-attendance" onclick="switchTab('attendance')">
+      <span class="icon">📋</span>
+      <span>Attendance</span>
+    </button>
     <button type="button" class="bottom-nav-item" id="m-btn-finance" onclick="switchTab('finance')">
       <span class="icon">💰</span>
       <span>Accounts</span>
@@ -787,7 +760,7 @@
       </div>
       <form id="login-form">
         <div class="form-group" style="margin-bottom: 12px;">
-          <label>Mobile Number or Admin Email</label>
+          <label>Registered Mobile Number or Admin Email</label>
           <input type="text" id="login-identifier" inputmode="tel" placeholder="10-digit Mobile or Admin Email" required autocomplete="username" />
         </div>
         <div class="form-group" style="margin-bottom: 12px;">
@@ -808,7 +781,7 @@
     <!-- 2. STUDENTS & ADMISSIONS PORTAL (TAB 1) -->
     <div id="tab-students-content" style="display: none;">
       
-      <!-- Staff Profile Creation (Super Admin Only) -->
+      <!-- Staff Profile Creation (Super Admin Only: Assigns Entry Permissions) -->
       <div class="card" id="staff-creation-box">
         <div class="card-header">Register Official / Faculty & Assign Entry Places</div>
         <form id="staff-form">
@@ -843,6 +816,7 @@
               <div class="permissions-container">
                 <label class="perm-item"><input type="checkbox" id="perm-admissions" checked /> Student Admissions</label>
                 <label class="perm-item"><input type="checkbox" id="perm-schedule" checked /> Weekly Routine & Tests</label>
+                <label class="perm-item"><input type="checkbox" id="perm-attendance" checked /> Attendance Desk</label>
                 <label class="perm-item"><input type="checkbox" id="perm-income" checked /> Income Ledger</label>
                 <label class="perm-item"><input type="checkbox" id="perm-expense" /> Expenditure Ledger</label>
               </div>
@@ -888,6 +862,10 @@
             <div class="form-group">
               <label>Student Full Name</label>
               <input type="text" id="std-name" placeholder="Full Name" required />
+            </div>
+            <div class="form-group">
+              <label>Auto-Generated Registration ID</label>
+              <input type="text" id="std-auto-reg-id" readonly style="background:#e2e8f0; font-weight:800; color:var(--navy-blue);" />
             </div>
             <div class="form-group">
               <label>Guardian's Name</label>
@@ -1056,6 +1034,7 @@
           <table>
             <thead>
               <tr>
+                <th>Reg ID</th>
                 <th>Student Details</th>
                 <th>Admission Dues</th>
                 <th>Installments</th>
@@ -1125,7 +1104,6 @@
                   <th style="width: 14%;">Subject</th>
                   <th style="width: 24%;">Topic</th>
                   <th style="width: 18%;">Note</th>
-                  <th style="width: 10%;">Attendance</th>
                   <th style="width: 4%;">Del</th>
                 </tr>
               </thead>
@@ -1147,7 +1125,6 @@
                   <th style="width: 15%;">Timing</th>
                   <th style="width: 15%;">Total Marks</th>
                   <th style="width: 31%;">Syllabus</th>
-                  <th style="width: 10%;">Attendance</th>
                   <th style="width: 4%;">Del</th>
                 </tr>
               </thead>
@@ -1158,7 +1135,37 @@
       </div>
     </div>
 
-    <!-- 4. FINANCE PORTAL (TAB 3) -->
+    <!-- 4. SEPARATE ATTENDANCE DESK (TAB 3) -->
+    <div id="tab-attendance-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <span>Official Attendance Desk - Class & Exam Passcode Manager</span>
+        </div>
+        
+        <div class="schedule-control-bar">
+          <div class="form-group">
+            <label>Select Date:</label>
+            <input type="date" id="att-desk-date" onchange="renderAttendanceDeskSessions()" />
+          </div>
+          <div class="form-group">
+            <label>Group / Batch:</label>
+            <select id="att-desk-batch" onchange="renderAttendanceDeskSessions()">
+              <option value="ALL">ALL BATCHES</option>
+              <option value="H1">H1</option><option value="H2">H2</option>
+              <option value="H3">H3</option><option value="H4">H4</option>
+              <option value="G1">G1</option><option value="G2">G2</option>
+              <option value="G3">G3</option><option value="G4">G4</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="att-sessions-feed">
+          <!-- Active Sessions for Attendance rendered here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. FINANCE PORTAL (TAB 4) -->
     <div id="tab-finance-content" style="display: none;">
       <div class="metric-grid">
         <div class="metric-box inflow">
@@ -1266,14 +1273,24 @@
       </div>
     </div>
 
-    <!-- 5. PERSONAL DESK VIEW (STUDENT / OFFICIAL) -->
+    <!-- 6. STUDENT PERSONAL DESK (FIXED VIEW) -->
     <div id="personal-desk-view" style="display: none;">
       <div class="card">
         <div class="card-header">
-          <span id="desk-title">Portal Desk</span>
+          <span id="desk-title">Student Portal Desk</span>
           <button type="button" class="btn-print" onclick="window.print()">🖨️ Print Profile</button>
         </div>
         <div id="personal-desk-content"></div>
+      </div>
+
+      <!-- STUDENT LIVE CODE ATTENDANCE SUBMISSION BOX -->
+      <div class="card" id="student-live-att-box" style="border-top:3px solid var(--success-green); display:none;">
+        <div class="card-header" style="color:var(--success-green);">
+          <span>Live Session Self-Attendance</span>
+        </div>
+        <div id="student-live-sessions-container">
+          <!-- Render active classes within 15 min window -->
+        </div>
       </div>
 
       <!-- READ-ONLY SCHEDULE CONTAINER FOR STUDENTS -->
@@ -1350,27 +1367,29 @@
     </div>
   </div>
 
-  <!-- IN-LINE ATTENDANCE MODAL -->
-  <div id="session-attendance-modal" class="modal-overlay">
+  <!-- SESSION ATTENDEES VIEW MODAL -->
+  <div id="view-attendees-modal" class="modal-overlay">
     <div class="modal-card">
       <div class="card-header" style="border:none; padding:0 0 8px 0;">
-        <span id="att-modal-title">Attendance Register</span>
-        <button type="button" onclick="closeAttendanceModal()" style="border:none; background:none; font-size:1.3rem; cursor:pointer;">&times;</button>
+        <span id="att-view-title">Attended Students Register</span>
+        <button type="button" onclick="closeAttendeesModal()" style="border:none; background:none; font-size:1.3rem; cursor:pointer;">&times;</button>
       </div>
-      <p id="att-modal-sub" style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;"></p>
-      <div class="table-container" style="max-height: 48vh;">
+      <p id="att-view-sub" style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;"></p>
+      <div class="table-container" style="max-height: 50vh;">
         <table>
           <thead>
             <tr>
-              <th>Student Name</th><th>Batch</th><th>Status</th>
+              <th>Reg ID</th>
+              <th>Student Name</th>
+              <th>Recorded Time</th>
+              <th>Status</th>
             </tr>
           </thead>
-          <tbody id="att-student-list-body"></tbody>
+          <tbody id="att-view-list-body"></tbody>
         </table>
       </div>
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px;">
-        <span id="att-summary-count" style="font-weight:700; font-size:0.8rem;"></span>
-        <button type="button" class="btn-primary" onclick="saveSessionAttendance()">Save Register</button>
+      <div style="text-align: right; margin-top: 14px;">
+        <button type="button" class="btn-print" onclick="closeAttendeesModal()">Close</button>
       </div>
     </div>
   </div>
@@ -1438,12 +1457,11 @@
       incomes: safeGet("ff_incomes"),
       expenses: safeGet("ff_expenses"),
       schedules: safeGet("ff_schedules"),
-      attendance: safeGet("ff_attendance")
+      attendanceSessions: safeGet("ff_att_sessions") || [] // holds OTP sessions with 15m timer
     };
 
     let currentUser = null;
     let activeModalStudentIdx = null;
-    let currentAttContext = null;
 
     async function cloudFetch(endpoint, method = "GET", body = null) {
       try {
@@ -1519,6 +1537,18 @@
 
     function generateSecurePassword() {
       return "FF" + Math.floor(100000 + Math.random() * 900000);
+    }
+
+    // Auto-generate Sequential Student Reg IDs (FF0001, FF0002, ...)
+    function getNextStudentRegId() {
+      const existing = DB.students.map(s => s.reg_id || "").filter(id => id.startsWith("FF"));
+      let maxNum = 0;
+      existing.forEach(id => {
+        const n = parseInt(id.replace("FF", ""), 10);
+        if (!isNaN(n) && n > maxNum) maxNum = n;
+      });
+      const nextNum = maxNum + 1;
+      return "FF" + String(nextNum).padStart(4, "0");
     }
 
     function toggleChestField(val) {
@@ -1639,11 +1669,14 @@
       if (sp) sp.value = generateSecurePassword();
       const stp = document.getElementById("std-generated-pw");
       if (stp) stp.value = generateSecurePassword();
+      const sReg = document.getElementById("std-auto-reg-id");
+      if (sReg) sReg.value = getNextStudentRegId();
 
       const today = new Date().toISOString().split("T")[0];
       if (document.getElementById("std-admission-date")) document.getElementById("std-admission-date").value = today;
       if (document.getElementById("inc-date")) document.getElementById("inc-date").value = today;
       if (document.getElementById("exp-date")) document.getElementById("exp-date").value = today;
+      if (document.getElementById("att-desk-date")) document.getElementById("att-desk-date").value = today;
     }
 
     function toggleStaffStatus(idx) {
@@ -1681,7 +1714,7 @@
           ${isSuperAdmin ? `<td><span class="password-pill">${st.password}</span></td>` : ''}
           <td><span class="status-badge ${isInactive ? 'inactive' : 'active'}">${st.status || 'Active'}</span></td>
           <td style="display:flex; gap:4px;">
-            <button type="button" class="btn-print" onclick="printStaffProfile(${idx})">🖨️ PDF</button>
+            <button type="button" class="btn-print" onclick="printStaffProfile(${idx})">🖨️️ PDF</button>
             ${isSuperAdmin ? `
               <button type="button" class="btn-status-toggle ${isInactive ? 'is-inactive' : 'is-active'}" onclick="toggleStaffStatus(${idx})">
                 ${isInactive ? 'Activate' : 'Make Inactive'}
@@ -1720,6 +1753,7 @@
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
+          <td><span class="reg-pill">${s.reg_id || 'FF0000'}</span></td>
           <td>
             <strong>${s.name}</strong> (${s.gender || 'N/A'})<br/>
             <span style="font-size:0.75rem; color:var(--text-muted);">Batch: ${s.batch} | Ph: ${s.ph1}</span>
@@ -1782,6 +1816,7 @@
       const perms = {
         admissions: document.getElementById("perm-admissions").checked,
         schedule: document.getElementById("perm-schedule").checked,
+        attendance: document.getElementById("perm-attendance").checked,
         income: document.getElementById("perm-income").checked,
         expense: document.getElementById("perm-expense").checked
       };
@@ -1813,6 +1848,7 @@
 
       const admDate = document.getElementById("std-admission-date").value;
       const studentName = document.getElementById("std-name").value.trim();
+      const assignedRegId = document.getElementById("std-auto-reg-id").value;
 
       const pAdm = parseFloat(document.getElementById("pay-part-adm").value) || 0;
       const pStudy = parseFloat(document.getElementById("pay-part-study").value) || 0;
@@ -1852,6 +1888,7 @@
 
       const newStudent = {
         id: "STD-" + Date.now(),
+        reg_id: assignedRegId,
         date: admDate,
         name: studentName,
         guardian: document.getElementById("std-guardian").value.trim(),
@@ -1916,7 +1953,7 @@
 
       renderRoster();
       renderFinanceDashboard();
-      alert(`Student registered successfully!\nLogin Mobile: ${newStudent.ph1}\nPassword: ${newStudent.password}`);
+      alert(`Student registered successfully!\nReg ID: ${newStudent.reg_id}\nLogin Mobile: ${newStudent.ph1}\nPassword: ${newStudent.password}`);
       
       if (lastReceiptItem && confirm("Would you like to print an official Money Receipt for this collection?")) {
         printInvoice(lastReceiptItem);
@@ -1988,7 +2025,7 @@
       p.innerHTML = `
         <div style="display:flex; justify-content:space-between; margin-bottom:14px;">
           <div>
-            <h3 style="color:#0A192F;">${s.name} (${s.gender || 'N/A'})</h3>
+            <h3 style="color:#0A192F;">${s.name} (${s.gender || 'N/A'}) - Reg ID: [${s.reg_id || 'N/A'}]</h3>
             <p>Batch: <strong>${s.batch}</strong> | Phone: ${s.ph1}</p>
             <p>Guardian: ${s.guardian}</p>
             <p>Address: ${s.address}</p>
@@ -2135,24 +2172,303 @@
     function switchTab(tab) {
       document.getElementById("tab-students-content").style.display = (tab === 'students') ? 'block' : 'none';
       document.getElementById("tab-schedule-content").style.display = (tab === 'schedule') ? 'block' : 'none';
+      document.getElementById("tab-attendance-content").style.display = (tab === 'attendance') ? 'block' : 'none';
       document.getElementById("tab-finance-content").style.display = (tab === 'finance') ? 'block' : 'none';
       document.getElementById("personal-desk-view").style.display = 'none';
 
       document.getElementById("btn-tab-students").classList.toggle("active", tab === 'students');
       document.getElementById("btn-tab-schedule").classList.toggle("active", tab === 'schedule');
+      document.getElementById("btn-tab-attendance").classList.toggle("active", tab === 'attendance');
       document.getElementById("btn-tab-finance").classList.toggle("active", tab === 'finance');
 
       const mStud = document.getElementById("m-btn-students");
       const mSch = document.getElementById("m-btn-schedule");
+      const mAtt = document.getElementById("m-btn-attendance");
       const mFin = document.getElementById("m-btn-finance");
       if (mStud) mStud.classList.toggle("active", tab === 'students');
       if (mSch) mSch.classList.toggle("active", tab === 'schedule');
+      if (mAtt) mAtt.classList.toggle("active", tab === 'attendance');
       if (mFin) mFin.classList.toggle("active", tab === 'finance');
+
+      if (tab === 'attendance') {
+        renderAttendanceDeskSessions();
+      }
 
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    // MULTI-ROLE LOGIN CONTROLLER (SUPER ADMIN, STAFF & STUDENT)
+    // -------------------------------------------------------------
+    // ATTENDANCE DESK ENGINE: 5-DIGIT CODE & 15-MINUTE EXPIRY
+    // -------------------------------------------------------------
+    function renderAttendanceDeskSessions() {
+      const feed = document.getElementById("att-sessions-feed");
+      const date = document.getElementById("att-desk-date").value || new Date().toISOString().split("T")[0];
+      const selectedBatch = document.getElementById("att-desk-batch").value;
+
+      feed.innerHTML = "";
+
+      // Gather matching sessions from schedules
+      const relevantSchedules = DB.schedules.filter(s => {
+        const matchesDate = s.date === date;
+        const matchesBatch = (selectedBatch === "ALL" || s.batch === "ALL" || s.batch === selectedBatch);
+        return matchesDate && matchesBatch;
+      });
+
+      if (relevantSchedules.length === 0) {
+        feed.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted);">No classes or exams assigned on ${date} for batch [${selectedBatch}].</div>`;
+        return;
+      }
+
+      relevantSchedules.forEach(sch => {
+        // Classes
+        (sch.classes || []).forEach((c, idx) => {
+          const sessId = `CLS_${sch.batch}_${sch.date}_${idx}`;
+          feed.appendChild(createAttendanceSessionElement("Class", c.subject, c.time, c.teacher, sch.batch, sch.date, sessId));
+        });
+
+        // Tests
+        (sch.tests || []).forEach((t, idx) => {
+          const sessId = `TST_${sch.batch}_${sch.date}_${idx}`;
+          feed.appendChild(createAttendanceSessionElement("Exam", t.name, t.time, "Examiner", sch.batch, sch.date, sessId));
+        });
+      });
+    }
+
+    function createAttendanceSessionElement(type, title, time, teacher, batch, date, sessId) {
+      const card = document.createElement("div");
+      card.className = `att-session-card ${type === 'Exam' ? 'exam-type' : ''}`;
+
+      // Check if session has active OTP
+      let attRecord = DB.attendanceSessions.find(s => s.sessId === sessId);
+      const now = Date.now();
+      const isActive = attRecord && attRecord.expiresAt > now;
+
+      let codeHtml = "";
+      if (isActive) {
+        const remainingMins = Math.ceil((attRecord.expiresAt - now) / 60000);
+        codeHtml = `
+          <div style="margin-top:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span>Live Attendance Passcode:</span>
+            <span class="live-code-box">${attRecord.code}</span>
+            <span class="timer-badge">⏳ Active for ${remainingMins} more min(s)</span>
+          </div>
+        `;
+      } else {
+        codeHtml = `
+          <div style="margin-top:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <input type="text" id="code_inp_${sessId}" inputmode="numeric" maxlength="5" placeholder="5-Digit Code" style="width:130px; text-align:center; font-weight:bold; letter-spacing:2px; min-height:36px; padding:6px;" />
+            <button type="button" class="btn-print" style="background:#047857;" onclick="generateAndSetCode('${sessId}')">Generate & Start 15M Timer</button>
+            <button type="button" class="btn-print" onclick="activateManualCode('${sessId}', '${type}', '${title}', '${time}', '${batch}', '${date}')">Save Code</button>
+          </div>
+        `;
+      }
+
+      const attendeeCount = (attRecord && attRecord.presentStudents) ? attRecord.presentStudents.length : 0;
+
+      card.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+            <span class="status-badge" style="background:${type === 'Exam' ? '#FEE2E2' : '#E0E7FF'}; color:${type === 'Exam' ? '#991B1B' : '#3730A3'};">${type}</span>
+            <strong style="margin-left:6px; color:var(--navy-blue);">${title}</strong>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Time: <strong>${time}</strong> | Batch: <strong>${batch}</strong> | Faculty: ${teacher}</p>
+          </div>
+          <div>
+            <button type="button" class="btn-print" onclick="viewSessionAttendees('${sessId}')">📋 Present: ${attendeeCount}</button>
+          </div>
+        </div>
+        ${codeHtml}
+      `;
+
+      return card;
+    }
+
+    function generateAndSetCode(sessId) {
+      const code = String(Math.floor(10000 + Math.random() * 90000));
+      const inp = document.getElementById(`code_inp_${sessId}`);
+      if (inp) inp.value = code;
+    }
+
+    function activateManualCode(sessId, type, title, time, batch, date) {
+      const inp = document.getElementById(`code_inp_${sessId}`);
+      const code = inp ? inp.value.trim() : "";
+      if (!/^\d{5}$/.test(code)) {
+        alert("Please enter or generate a valid 5-digit numeric passcode!");
+        return;
+      }
+
+      const now = Date.now();
+      const expiresAt = now + (15 * 60 * 1000); // exactly 15 minutes
+
+      let session = DB.attendanceSessions.find(s => s.sessId === sessId);
+      if (session) {
+        session.code = code;
+        session.startedAt = now;
+        session.expiresAt = expiresAt;
+      } else {
+        session = {
+          sessId,
+          type,
+          title,
+          time,
+          batch,
+          date,
+          code,
+          startedAt: now,
+          expiresAt: expiresAt,
+          presentStudents: []
+        };
+        DB.attendanceSessions.push(session);
+      }
+
+      safeSet("ff_att_sessions", DB.attendanceSessions);
+      alert(`5-Digit Code [${code}] is now LIVE for 15 minutes! Students can now mark their attendance.`);
+      renderAttendanceDeskSessions();
+    }
+
+    function viewSessionAttendees(sessId) {
+      const session = DB.attendanceSessions.find(s => s.sessId === sessId);
+      const titleElem = document.getElementById("att-view-title");
+      const subElem = document.getElementById("att-view-sub");
+      const tbody = document.getElementById("att-view-list-body");
+
+      tbody.innerHTML = "";
+      if (!session || !session.presentStudents || session.presentStudents.length === 0) {
+        titleElem.innerText = "Session Attendance Record";
+        subElem.innerText = "No students have marked attendance for this session yet.";
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No records found.</td></tr>`;
+      } else {
+        titleElem.innerText = `Attendance: ${session.title} (${session.batch})`;
+        subElem.innerText = `Date: ${session.date} | Session Time: ${session.time} | Total Present: ${session.presentStudents.length}`;
+        session.presentStudents.forEach(st => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><span class="reg-pill">${st.regId}</span></td>
+            <td><strong>${st.name}</strong></td>
+            <td>${st.recordedAt}</td>
+            <td><span class="status-badge active">Present</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      document.getElementById("view-attendees-modal").style.display = "flex";
+    }
+
+    function closeAttendeesModal() {
+      document.getElementById("view-attendees-modal").style.display = "none";
+    }
+
+    // -------------------------------------------------------------
+    // STUDENT SELF-ATTENDANCE WORKFLOW (WITHIN 15 MINS)
+    // -------------------------------------------------------------
+    function renderStudentLiveAttendanceBox() {
+      const box = document.getElementById("student-live-att-box");
+      const container = document.getElementById("student-live-sessions-container");
+      container.innerHTML = "";
+
+      const today = new Date().toISOString().split("T")[0];
+      const now = Date.now();
+
+      // Find active sessions for student's batch or ALL
+      const activeSessions = DB.attendanceSessions.filter(s => {
+        const matchesDate = s.date === today;
+        const matchesBatch = (s.batch === "ALL" || s.batch === currentUser.batch);
+        const isNotExpired = s.expiresAt > now;
+        return matchesDate && matchesBatch && isNotExpired;
+      });
+
+      if (activeSessions.length === 0) {
+        box.style.display = "none";
+        return;
+      }
+
+      box.style.display = "block";
+
+      activeSessions.forEach(sess => {
+        const alreadyPresent = (sess.presentStudents || []).some(st => st.regId === currentUser.reg_id || st.phone === currentUser.ph1);
+        const remainingMins = Math.ceil((sess.expiresAt - now) / 60000);
+
+        const div = document.createElement("div");
+        div.className = "att-session-card";
+        div.style.borderColor = alreadyPresent ? "var(--success-green)" : "var(--primary-red)";
+
+        if (alreadyPresent) {
+          div.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>${sess.title} (${sess.type})</strong>
+                <p style="font-size:0.75rem; color:var(--text-muted);">Time: ${sess.time} | Batch: ${sess.batch}</p>
+              </div>
+              <span class="status-badge active" style="font-size:0.8rem; padding:4px 8px;">✓ Already Present</span>
+            </div>
+          `;
+        } else {
+          div.innerHTML = `
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <strong>${sess.title} (${sess.type})</strong>
+                <span class="timer-badge">⏳ Expires in ${remainingMins} min(s)</span>
+              </div>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin:2px 0 6px 0;">Class Time: ${sess.time} | Assigned Batch: ${sess.batch}</p>
+              <div style="background:#F1F5F9; padding:8px; border-radius:5px; margin-bottom:8px; font-size:0.8rem;">
+                Live Passcode: <span style="font-weight:800; color:var(--primary-red); letter-spacing:2px; font-size:1rem;">${sess.code}</span>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px;">
+                <input type="text" value="${currentUser.reg_id || 'FF0001'}" readonly style="background:#e2e8f0; font-weight:bold;" title="My Registration ID" />
+                <input type="text" id="std_code_input_${sess.sessId}" inputmode="numeric" maxlength="5" placeholder="Enter 5-Digit Code" style="font-weight:bold; letter-spacing:2px; text-align:center;" />
+              </div>
+              <button type="button" class="btn-primary" style="min-height:36px; padding:6px;" onclick="submitStudentSelfAttendance('${sess.sessId}')">✓ Confirm & Mark Present</button>
+            </div>
+          `;
+        }
+        container.appendChild(div);
+      });
+    }
+
+    function submitStudentSelfAttendance(sessId) {
+      const session = DB.attendanceSessions.find(s => s.sessId === sessId);
+      if (!session) {
+        alert("Session not found!");
+        return;
+      }
+
+      const now = Date.now();
+      if (now > session.expiresAt) {
+        alert("Time limit expired! This 5-digit passcode is no longer valid. Contact teacher.");
+        renderStudentLiveAttendanceBox();
+        return;
+      }
+
+      const input = document.getElementById(`std_code_input_${sessId}`);
+      const codeEntered = input ? input.value.trim() : "";
+
+      if (codeEntered !== session.code) {
+        alert("Incorrect 5-digit passcode! Please enter the exact code shown above.");
+        return;
+      }
+
+      session.presentStudents = session.presentStudents || [];
+      const alreadyPresent = session.presentStudents.some(st => st.regId === currentUser.reg_id || st.phone === currentUser.ph1);
+      if (alreadyPresent) {
+        alert("You have already marked attendance for this session.");
+        return;
+      }
+
+      const nowTimeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      session.presentStudents.push({
+        regId: currentUser.reg_id || getNextStudentRegId(),
+        name: currentUser.name,
+        phone: currentUser.ph1,
+        batch: currentUser.batch,
+        recordedAt: nowTimeStr
+      });
+
+      safeSet("ff_att_sessions", DB.attendanceSessions);
+      alert(`Success! You have been successfully marked PRESENT for ${session.title}.`);
+      renderStudentLiveAttendanceBox();
+    }
+
+    // MULTI-ROLE LOGIN CONTROLLER
     document.getElementById("login-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const rawId = document.getElementById("login-identifier").value.trim().toLowerCase();
@@ -2185,7 +2501,7 @@
       }
 
       // 3. Student Validation
-      const student = DB.students.find(s => (sanitizePhone(s.ph1) === phoneClean || s.ph1.toLowerCase() === rawId) && s.password.trim() === pass);
+      const student = DB.students.find(s => (sanitizePhone(s.ph1) === phoneClean || s.ph1.toLowerCase() === rawId || (s.reg_id && s.reg_id.toLowerCase() === rawId)) && s.password.trim() === pass);
       if (student) {
         if (student.status === "Inactive") {
           alert("Your Student profile is marked INACTIVE. Contact Administrator.");
@@ -2195,7 +2511,7 @@
         return;
       }
 
-      alert("Invalid Mobile Number or Password. Please check with Super Admin.");
+      alert("Invalid Mobile Number/Reg ID or Password. Please check with Super Admin.");
     });
 
     function startSession(user, remember) {
@@ -2213,15 +2529,17 @@
       const isSuperAdmin = (currentUser.role === "SuperAdmin");
 
       if (isSuperAdmin) {
-        // Super Admin Gets Full Unrestricted Access
+        // Super Admin Gets Complete Unrestricted Master Control
         document.getElementById("admin-nav-tabs").style.display = "flex";
         document.getElementById("mobile-nav-bar").style.display = "flex";
         document.getElementById("btn-tab-students").style.display = "inline-block";
         document.getElementById("btn-tab-schedule").style.display = "inline-block";
+        document.getElementById("btn-tab-attendance").style.display = "inline-block";
         document.getElementById("btn-tab-finance").style.display = "inline-block";
 
         document.getElementById("m-btn-students").style.display = "flex";
         document.getElementById("m-btn-schedule").style.display = "flex";
+        document.getElementById("m-btn-attendance").style.display = "flex";
         document.getElementById("m-btn-finance").style.display = "flex";
 
         document.getElementById("staff-creation-box").style.display = "block";
@@ -2242,8 +2560,8 @@
         renderFinanceDashboard();
         initWeekRange();
       } else if (currentUser.role === "Official" || currentUser.role === "Faculty") {
-        // OFFICIAL / FACULTY LOGIN - NEVER BLANK!
-        const perms = currentUser.permissions || { admissions: true, schedule: true, income: true, expense: false };
+        // Official / Faculty Access Controls
+        const perms = currentUser.permissions || { admissions: true, schedule: true, attendance: true, income: true, expense: false };
         currentUser.permissions = perms;
 
         document.getElementById("admin-nav-tabs").style.display = "flex";
@@ -2253,14 +2571,17 @@
 
         const hasAdm = !!perms.admissions;
         const hasSch = !!perms.schedule;
+        const hasAtt = !!perms.attendance;
         const hasFin = !!(perms.income || perms.expense);
 
         document.getElementById("btn-tab-students").style.display = hasAdm ? "inline-block" : "none";
         document.getElementById("btn-tab-schedule").style.display = hasSch ? "inline-block" : "none";
+        document.getElementById("btn-tab-attendance").style.display = hasAtt ? "inline-block" : "none";
         document.getElementById("btn-tab-finance").style.display = hasFin ? "inline-block" : "none";
 
         document.getElementById("m-btn-students").style.display = hasAdm ? "flex" : "none";
         document.getElementById("m-btn-schedule").style.display = hasSch ? "flex" : "none";
+        document.getElementById("m-btn-attendance").style.display = hasAtt ? "flex" : "none";
         document.getElementById("m-btn-finance").style.display = hasFin ? "flex" : "none";
 
         document.getElementById("student-admission-box").style.display = hasAdm ? "block" : "none";
@@ -2272,17 +2593,19 @@
         document.getElementById("sec-finance-income").style.display = perms.income ? "block" : "none";
         document.getElementById("sec-finance-expense").style.display = perms.expense ? "block" : "none";
 
-        // Show Official Desk with direct access buttons
         document.getElementById("tab-students-content").style.display = "none";
         document.getElementById("tab-schedule-content").style.display = "none";
+        document.getElementById("tab-attendance-content").style.display = "none";
         document.getElementById("tab-finance-content").style.display = "none";
         document.getElementById("personal-desk-view").style.display = "block";
         document.getElementById("student-routine-display").style.display = "none";
+        document.getElementById("student-live-att-box").style.display = "none";
 
         document.getElementById("desk-title").innerText = `${currentUser.role} Desk: ${currentUser.name}`;
         
         let actionButtonsHtml = '<div style="display:flex; flex-direction:column; gap:8px; margin-top:14px;">';
-        if (hasSch) actionButtonsHtml += `<button type="button" class="btn-primary" onclick="switchTab('schedule')">📅 Open Routine & Class Register</button>`;
+        if (hasAtt) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:#0D9488;" onclick="switchTab('attendance')">📋 Open Attendance Desk & Generate Code</button>`;
+        if (hasSch) actionButtonsHtml += `<button type="button" class="btn-primary" onclick="switchTab('schedule')">📅 Open Routine & Class Schedules</button>`;
         if (hasAdm) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:var(--navy-blue);" onclick="switchTab('students')">👥 Open Student Admissions & Directory</button>`;
         if (hasFin) actionButtonsHtml += `<button type="button" class="btn-primary" style="background:#047857;" onclick="switchTab('finance')">💰 Open Accounts & Ledgers</button>`;
         actionButtonsHtml += '</div>';
@@ -2301,11 +2624,12 @@
         renderRoster();
         initWeekRange();
       } else {
-        // STUDENT LOGIN - Fixed Single View
+        // STUDENT LOGIN: Fixed Single View
         document.getElementById("admin-nav-tabs").style.display = "none";
         document.getElementById("mobile-nav-bar").style.display = "none";
         document.getElementById("tab-students-content").style.display = "none";
         document.getElementById("tab-schedule-content").style.display = "none";
+        document.getElementById("tab-attendance-content").style.display = "none";
         document.getElementById("tab-finance-content").style.display = "none";
         document.getElementById("personal-desk-view").style.display = "block";
         
@@ -2313,6 +2637,7 @@
         document.getElementById("personal-desk-content").innerHTML = `
           <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:16px; margin-bottom:14px; font-size:0.9rem; line-height:1.6;">
             <p><strong>Student Name:</strong> ${currentUser.name}</p>
+            <p><strong>Registration ID:</strong> <span class="reg-pill" style="font-size:0.9rem;">${currentUser.reg_id || 'FF0001'}</span></p>
             <p><strong>Enrolled Batch:</strong> <span style="color:var(--primary-red); font-weight:800;">${currentUser.batch}</span></p>
             <p><strong>Guardian's Name:</strong> ${currentUser.guardian}</p>
             <p><strong>Registered Login Mobile:</strong> ${currentUser.ph1}</p>
@@ -2325,6 +2650,9 @@
             <button type="button" class="btn-primary" onclick="showStudentRoutineView('${currentUser.batch}')">📅 View My Batch (${currentUser.batch}) Routine & Tests</button>
           </div>
         `;
+
+        // Render Live 15-Minute Attendance Submission Box
+        renderStudentLiveAttendanceBox();
       }
     }
 
@@ -2559,9 +2887,6 @@
         <td class="editable-cell"><input type="text" class="c-subject" value="${c.subject}" placeholder="Subject" /></td>
         <td class="editable-cell"><input type="text" class="c-topic" value="${c.topic}" placeholder="Topic" /></td>
         <td class="editable-cell"><input type="text" class="c-note" value="${c.note}" placeholder="Note" /></td>
-        <td style="text-align:center;">
-          <button type="button" class="btn-attendance" onclick="openAttendanceModal('Class', '${c.subject || 'Session'}', '${c.time}')">📋 Roll Call</button>
-        </td>
         <td style="text-align:center;"><button type="button" style="color:red; cursor:pointer;" onclick="this.closest('tr').remove()">✕</button></td>
       `;
       tbody.appendChild(tr);
@@ -2586,9 +2911,6 @@
         <td class="editable-cell"><input type="text" class="t-time" value="${t.time}" placeholder="Timing" /></td>
         <td class="editable-cell"><input type="text" class="t-marks" value="${t.marks}" placeholder="Total Marks" /></td>
         <td class="editable-cell"><input type="text" class="t-syllabus" value="${t.syllabus}" placeholder="Syllabus" /></td>
-        <td style="text-align:center;">
-          <button type="button" class="btn-attendance" style="background:#E52521;" onclick="openAttendanceModal('Test', '${t.name || 'Exam'}', '${t.time}')">🎯 Exam Roll</button>
-        </td>
         <td style="text-align:center;"><button type="button" style="color:red; cursor:pointer;" onclick="this.closest('tr').remove()">✕</button></td>
       `;
       tbody.appendChild(tr);
@@ -2723,106 +3045,6 @@
       closeCopyScheduleModal();
     }
 
-    function openAttendanceModal(type, title, time) {
-      const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-day-select").value;
-
-      currentAttContext = {
-        type,
-        title,
-        time,
-        batch,
-        date,
-        key: `ATT_${batch}_${date}_${title}_${time}`
-      };
-
-      document.getElementById("att-modal-title").innerText = `${type} Attendance: ${title} (${time})`;
-      document.getElementById("att-modal-sub").innerText = `Batch: ${batch} | Date: ${date}`;
-
-      const students = (batch === "ALL") 
-        ? DB.students 
-        : DB.students.filter(s => s.batch === batch);
-
-      const tbody = document.getElementById("att-student-list-body");
-      tbody.innerHTML = "";
-
-      if (students.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#6B7280;">No registered students found in batch [${batch}].</td></tr>`;
-        document.getElementById("att-summary-count").innerText = "";
-        document.getElementById("session-attendance-modal").style.display = "flex";
-        return;
-      }
-
-      const existingRecord = DB.attendance.find(a => a.key === currentAttContext.key);
-      const savedMap = existingRecord ? existingRecord.records : {};
-
-      students.forEach(student => {
-        const status = savedMap[student.id] || "Present";
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><strong>${student.name}</strong></td>
-          <td>${student.batch}</td>
-          <td>
-            <span class="att-badge ${status.toLowerCase()}" data-id="${student.id}" onclick="toggleAttBadge(this)">
-              ${status}
-            </span>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      updateAttSummary();
-      document.getElementById("session-attendance-modal").style.display = "flex";
-    }
-
-    function toggleAttBadge(badge) {
-      if (badge.innerText === "Present") {
-        badge.innerText = "Absent";
-        badge.className = "att-badge absent";
-      } else {
-        badge.innerText = "Present";
-        badge.className = "att-badge present";
-      }
-      updateAttSummary();
-    }
-
-    function updateAttSummary() {
-      const badges = document.querySelectorAll("#att-student-list-body .att-badge");
-      let presentCount = 0;
-      badges.forEach(b => {
-        if (b.innerText === "Present") presentCount++;
-      });
-      document.getElementById("att-summary-count").innerText = `Present: ${presentCount} / ${badges.length}`;
-    }
-
-    function closeAttendanceModal() {
-      document.getElementById("session-attendance-modal").style.display = "none";
-      currentAttContext = null;
-    }
-
-    function saveSessionAttendance() {
-      if (!currentAttContext) return;
-      const records = {};
-      const badges = document.querySelectorAll("#att-student-list-body .att-badge");
-      badges.forEach(b => {
-        records[b.getAttribute("data-id")] = b.innerText;
-      });
-
-      const payload = {
-        ...currentAttContext,
-        records,
-        recordedAt: new Date().toISOString()
-      };
-
-      const idx = DB.attendance.findIndex(a => a.key === currentAttContext.key);
-      if (idx > -1) DB.attendance[idx] = payload;
-      else DB.attendance.push(payload);
-
-      safeSet("ff_attendance", DB.attendance);
-      alert("Attendance register saved!");
-      closeAttendanceModal();
-    }
-
     function printRoutineSheet() {
       const batch = document.getElementById("sch-batch-select").value;
       const date = document.getElementById("sch-day-select").value;
@@ -2874,6 +3096,7 @@
       document.getElementById("login-view").style.display = "block";
       document.getElementById("tab-students-content").style.display = "none";
       document.getElementById("tab-schedule-content").style.display = "none";
+      document.getElementById("tab-attendance-content").style.display = "none";
       document.getElementById("tab-finance-content").style.display = "none";
       document.getElementById("personal-desk-view").style.display = "none";
       document.getElementById("nav-controls").style.display = "none";
@@ -2900,4 +3123,4 @@
     });
   </script>
 </body>
-  </html>
+</html>
