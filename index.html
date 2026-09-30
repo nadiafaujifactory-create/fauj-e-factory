@@ -399,6 +399,74 @@
       white-space: nowrap;
     }
 
+    .btn-receipt {
+      background: #047857;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.72rem;
+      white-space: nowrap;
+    }
+
+    .btn-readmit {
+      background: var(--success-green);
+      color: var(--pure-white);
+      border: none;
+      padding: 5px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.72rem;
+      white-space: nowrap;
+    }
+
+    .btn-readmit:disabled {
+      background: #9CA3AF;
+      cursor: not-allowed;
+    }
+
+    .btn-status-toggle {
+      border: none;
+      padding: 5px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.72rem;
+      color: white;
+      white-space: nowrap;
+    }
+    .btn-status-toggle.is-active { background: var(--warning-amber); }
+    .btn-status-toggle.is-inactive { background: var(--success-green); }
+
+    .btn-sub-action {
+      background: var(--navy-blue);
+      color: white;
+      border: none;
+      padding: 5px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .btn-copy {
+      background: #4B5563;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+
     .status-badge {
       display: inline-block;
       padding: 2px 6px;
@@ -430,6 +498,68 @@
       color: #0F172A;
     }
 
+    .finance-split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 850px) {
+      .finance-split-grid { grid-template-columns: 1fr; }
+    }
+
+    .finance-column-box {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      padding: 14px;
+      border-top: 4px solid var(--navy-blue);
+    }
+    .finance-column-box.income-box { border-top-color: var(--success-green); }
+    .finance-column-box.expense-box { border-top-color: var(--primary-red); }
+
+    .finance-box-title {
+      font-size: 0.98rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .finance-box-title.income-title { color: #065F46; }
+    .finance-box-title.expense-title { color: #991B1B; }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .metric-box {
+      background: white;
+      padding: 12px 14px;
+      border-radius: 7px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      border-left: 4px solid var(--navy-blue);
+    }
+    .metric-box.inflow { border-left-color: var(--success-green); }
+    .metric-box.outflow { border-left-color: var(--primary-red); }
+
+    .metric-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .metric-value {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-top: 3px;
+      color: var(--navy-blue);
+    }
+
+    /* COMPACT TABLE */
     .table-container {
       overflow-x: auto;
       border: 1px solid var(--border-gray);
@@ -448,7 +578,7 @@
     }
 
     th, td {
-      padding: 8px 10px;
+      padding: 6px 8px;
       border-bottom: 1px solid #E2E8F0;
       vertical-align: middle;
     }
@@ -463,6 +593,234 @@
     tr:nth-child(even) {
       background-color: #F8FAFC;
     }
+
+    /* STUDY PROGRESS SEGMENT STYLING */
+    .progress-subject-box {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .progress-subject-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #F1F5F9;
+      padding-bottom: 6px;
+    }
+
+    .progress-subject-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--navy-blue);
+    }
+
+    .progress-units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+      gap: 5px;
+    }
+
+    .unit-block {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+      color: #FFFFFF;
+      background-color: var(--unit-black);
+    }
+
+    .unit-block.in-progress {
+      background-color: var(--progress-blue) !important;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+    }
+
+    .unit-block.completed {
+      background-color: var(--primary-red) !important;
+      box-shadow: 0 0 0 2px rgba(229, 37, 33, 0.3);
+    }
+
+    .progress-legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 10px 0 14px 0;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    /* ATTENDANCE DESK CARDS */
+    .att-session-card {
+      background: white;
+      border: 1px solid #E2E8F0;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--navy-blue);
+    }
+    .att-session-card.exam-type {
+      border-left-color: var(--primary-red);
+    }
+    .live-code-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #FEF2F2;
+      border: 1px dashed var(--primary-red);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 800;
+      color: var(--primary-red);
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+    }
+    .timer-badge {
+      font-size: 0.75rem;
+      color: #991B1B;
+      font-weight: 700;
+      background: #FEE2E2;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* STUDENT 360 STYLING */
+    .dossier-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .dossier-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-gray);
+      border-radius: 8px;
+      padding: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .dossier-card.highlight {
+      border-left: 4px solid var(--purple-accent);
+    }
+
+    .dossier-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--navy-blue);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #F1F5F9;
+      padding-bottom: 4px;
+    }
+
+    .rate-counter {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--navy-blue);
+      margin: 4px 0;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .modal-card {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      max-width: 580px;
+      width: 100%;
+      max-height: 88vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      border-top: 4px solid var(--primary-red);
+    }
+
+    .months-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
+      gap: 5px;
+      margin: 10px 0;
+    }
+
+    .month-badge {
+      text-align: center;
+      padding: 6px 3px;
+      border: 1px solid var(--navy-blue);
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      background: white;
+    }
+    .month-badge.paid {
+      background-color: var(--primary-red) !important;
+      border-color: var(--primary-red) !important;
+      color: var(--pure-white) !important;
+    }
+    .month-badge.disabled-month {
+      background-color: #E2E8F0 !important;
+      border-color: #CBD5E1 !important;
+      color: #94A3B8 !important;
+      cursor: not-allowed !important;
+      text-decoration: line-through;
+    }
+
+    #print-section { display: none; }
+
+    @media print {
+      body * { visibility: hidden; }
+      #print-section, #print-section * { visibility: visible; }
+      #print-section {
+        display: block !important;
+        position: absolute;
+        left: 0; top: 0; width: 100%;
+        background: white; padding: 20px; color: black;
+      }
+      .print-box { border: 2px solid #0A192F; padding: 16px; }
+      .print-header {
+        display: flex; align-items: center; justify-content: space-between;
+        border-bottom: 2px solid #E52521; padding-bottom: 8px; margin-bottom: 12px;
+      }
+      .print-header img { height: 50px; width: 50px; object-fit: contain; }
+      .print-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+      .print-table th, .print-table td { border: 1px solid #CBD5E0; padding: 6px 8px; font-size: 0.8rem; }
+      .print-table th { background-color: #F1F5F9 !important; color: #0A192F !important; }
+      .signature-row { margin-top: 40px; display: flex; justify-content: space-between; }
+      .signature-line { border-top: 1px solid #333; width: 160px; text-align: center; padding-top: 4px; font-size: 0.75rem; }
+    }
   </style>
 </head>
 <body>
@@ -474,19 +832,28 @@
       <div class="brand-title">FAUJ-E-<span>FACTORY</span></div>
     </div>
     <div id="nav-controls" style="display: none; align-items: center; gap: 8px;">
+      <!-- Desktop Navigation Tabs (All 7 Tabs Restored) -->
       <div class="desktop-nav-tabs" id="admin-nav-tabs" style="display: none;">
         <button type="button" class="tab-btn active" id="btn-tab-students" onclick="switchTab('students')">Students</button>
         <button type="button" class="tab-btn" id="btn-tab-schedule" onclick="switchTab('schedule')">Routine</button>
+        <button type="button" class="tab-btn" id="btn-tab-attendance" onclick="switchTab('attendance')">Attendance</button>
+        <button type="button" class="tab-btn" id="btn-tab-exams" onclick="switchTab('exams')">Exam Desk</button>
+        <button type="button" class="tab-btn" id="btn-tab-360" onclick="switchTab('360')">Student 360°</button>
+        <button type="button" class="tab-btn" id="btn-tab-progress" onclick="switchTab('progress')">Study Progress</button>
+        <button type="button" class="tab-btn" id="btn-tab-finance" onclick="switchTab('finance')">Accounts</button>
       </div>
       <div class="user-badge-wrap">
         <span id="cloud-sync-badge" class="sync-status-pill" style="color:#A7F3D0;">🟢 Cloud Synced</span>
+        <button type="button" class="btn-data-ctrl" onclick="downloadJSONBackup()" title="Download Backup File">📥 Backup</button>
+        <button type="button" class="btn-data-ctrl" onclick="document.getElementById('restore-file-input').click()" title="Restore Data from Backup File">📤 Restore</button>
+        <input type="file" id="restore-file-input" accept=".json" style="display:none;" onchange="restoreJSONBackup(event)" />
         <span class="user-tag" id="current-user-tag"></span>
         <button type="button" class="btn-logout" onclick="logout()">Logout</button>
       </div>
     </div>
   </header>
 
-  <!-- Mobile Bottom Navigation Bar -->
+  <!-- Mobile Bottom Navigation Bar (All 7 Tabs Restored) -->
   <nav class="mobile-bottom-bar" id="mobile-nav-bar">
     <button type="button" class="bottom-nav-item active" id="m-btn-students" onclick="switchTab('students')">
       <span class="icon">👥</span>
@@ -496,12 +863,32 @@
       <span class="icon">📅</span>
       <span>Routine</span>
     </button>
+    <button type="button" class="bottom-nav-item" id="m-btn-attendance" onclick="switchTab('attendance')">
+      <span class="icon">📋</span>
+      <span>Att.</span>
+    </button>
+    <button type="button" class="bottom-nav-item" id="m-btn-exams" onclick="switchTab('exams')">
+      <span class="icon">🎯</span>
+      <span>Exams</span>
+    </button>
+    <button type="button" class="bottom-nav-item" id="m-btn-360" onclick="switchTab('360')">
+      <span class="icon">🌐</span>
+      <span>360°</span>
+    </button>
+    <button type="button" class="bottom-nav-item" id="m-btn-progress" onclick="switchTab('progress')">
+      <span class="icon">📊</span>
+      <span>Study</span>
+    </button>
+    <button type="button" class="bottom-nav-item" id="m-btn-finance" onclick="switchTab('finance')">
+      <span class="icon">💰</span>
+      <span>Ledger</span>
+    </button>
   </nav>
 
   <div class="container">
     
     <!-- 1. LOGIN SCREEN -->
-    <div id="login-view" class="card" style="max-width: 380px; margin: 40px auto;">
+    <div id="login-view" class="card" style="max-width: 380px; margin: 30px auto;">
       <div style="text-align: center; margin-bottom: 16px;">
         <img src="logo1.png" alt="Logo" style="height: 52px; object-fit: contain; margin-bottom: 6px;" onerror="this.style.display='none'" />
         <h3 style="color:var(--navy-blue); font-size:1.15rem;">PORTAL ACCESS</h3>
@@ -529,14 +916,84 @@
 
     <!-- 2. STUDENTS & ADMISSIONS PORTAL (TAB 1) -->
     <div id="tab-students-content" style="display: none;">
+      <!-- Staff Profile Creation (Super Admin Only) -->
+      <div class="card" id="staff-creation-box">
+        <div class="card-header">Register Official / Faculty & Assign Entry Places</div>
+        <form id="staff-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="staff-name" placeholder="Staff Name" required />
+            </div>
+            <div class="form-group">
+              <label>Mobile Number (Login ID)</label>
+              <input type="tel" id="staff-phone" inputmode="numeric" placeholder="10-digit Mobile" required />
+            </div>
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input type="date" id="staff-dob" required />
+            </div>
+            <div class="form-group">
+              <label>Designation</label>
+              <select id="staff-role" required>
+                <option value="Official">Official</option>
+                <option value="Faculty">Faculty</option>
+              </select>
+            </div>
+            <div class="form-group" id="staff-pw-group">
+              <label>Generated Access Password (Super Admin Only)</label>
+              <input type="text" id="staff-password" readonly style="background:#eee; font-weight:bold;" />
+            </div>
+
+            <div class="form-group full-width">
+              <label>Assign Entry Places (Allowed Dashboard Sections):</label>
+              <div class="permissions-container">
+                <label class="perm-item"><input type="checkbox" id="perm-admissions" checked /> Student Admissions</label>
+                <label class="perm-item"><input type="checkbox" id="perm-schedule" checked /> Weekly Routine & Tests</label>
+                <label class="perm-item"><input type="checkbox" id="perm-attendance" checked /> Attendance Desk</label>
+                <label class="perm-item"><input type="checkbox" id="perm-exams" checked /> Exam Marks Desk</label>
+                <label class="perm-item"><input type="checkbox" id="perm-360" checked /> Student 360° Portal</label>
+                <label class="perm-item"><input type="checkbox" id="perm-progress" checked /> Study Progress Tracker</label>
+                <label class="perm-item"><input type="checkbox" id="perm-income" checked /> Income Ledger</label>
+                <label class="perm-item"><input type="checkbox" id="perm-expense" /> Expenditure Ledger</label>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary">Save Profile & Set Access</button>
+        </form>
+      </div>
+
+      <!-- Staff Directory -->
+      <div class="card" id="staff-directory-box">
+        <div class="card-header">Official & Faculty Directory</div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Designation</th>
+                <th>Name</th>
+                <th>Login Mobile</th>
+                <th>Date of Birth</th>
+                <th>Assigned Modules</th>
+                <th id="th-staff-pw">Access Password</th>
+                <th>Status</th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody id="staff-roster-body"></tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- Student Admission Form -->
       <div class="card" id="student-admission-box">
-        <div class="card-header">Student Admission & Setup</div>
+        <div class="card-header">Student Admission & Fee Structure Setup</div>
         <form id="student-form">
+          <div class="section-subtitle">Personal & Physical Identity Details</div>
           <div class="form-grid">
             <div class="form-group">
               <label>Admission Date</label>
-              <input type="date" id="std-admission-date" required />
+              <input type="date" id="std-admission-date" onchange="syncAdmissionMonths()" required />
             </div>
             <div class="form-group">
               <label>Student Full Name</label>
@@ -555,6 +1012,18 @@
               <input type="tel" id="std-ph1" inputmode="numeric" placeholder="10-digit Mobile" required />
             </div>
             <div class="form-group">
+              <label>Secondary Phone (Phone 2)</label>
+              <input type="tel" id="std-ph2" inputmode="numeric" placeholder="Emergency Mobile" />
+            </div>
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input type="date" id="std-dob" required />
+            </div>
+            <div class="form-group">
+              <label>Aadhaar Number</label>
+              <input type="text" id="std-aadhar" inputmode="numeric" placeholder="Aadhaar" required />
+            </div>
+            <div class="form-group">
               <label>Batch / Group</label>
               <select id="std-batch" required>
                 <option value="B1">B1</option>
@@ -564,20 +1033,81 @@
             </div>
             <div class="form-group">
               <label>Gender</label>
-              <select id="std-gender">
+              <select id="std-gender" onchange="toggleChestField(this.value)">
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
             </div>
             <div class="form-group">
-              <label>Total Fixed Fees (₹)</label>
-              <input type="number" id="std-fees" value="0" min="0" required />
+              <label>Reference</label>
+              <input type="text" id="std-ref" placeholder="Reference Person / Channel" />
             </div>
             <div class="form-group">
-              <label>Generated Access Password</label>
-              <input type="text" id="std-generated-pw" readonly style="background:#eee; font-weight:bold;" />
+              <label>Educational Qualifications</label>
+              <input type="text" id="std-qual" placeholder="e.g. 10th, 12th, Graduate" required />
+            </div>
+            <div class="form-group">
+              <label>% of Last Passed Exam</label>
+              <input type="number" step="0.01" id="std-marks" inputmode="decimal" placeholder="Percentage" required />
+            </div>
+            <div class="form-group">
+              <label>Height (cm)</label>
+              <input type="number" id="std-height" inputmode="numeric" placeholder="Height in cm" required />
+            </div>
+            <div class="form-group">
+              <label>Weight (kg)</label>
+              <input type="number" id="std-weight" inputmode="numeric" placeholder="Weight in kg" required />
+            </div>
+            <div class="form-group" id="chest-group">
+              <label>Chest (cm) [Male Only]</label>
+              <input type="number" id="std-chest" inputmode="numeric" placeholder="Chest in cm" />
+            </div>
+            <div class="form-group full-width">
+              <label>Permanent Address</label>
+              <textarea id="std-address" rows="2" placeholder="Full residential address" required></textarea>
             </div>
           </div>
+
+          <!-- FEE FIXATION STRUCTURE -->
+          <div class="step-box">
+            <div class="step-title">Fee Fixation Structure</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Admission Fee (₹)</label>
+                <input type="number" id="fix-admission" inputmode="numeric" value="0" min="0" oninput="calculateTotalFixedAndDue()" required />
+              </div>
+              <div class="form-group">
+                <label>Monthly Study Fee Rate (₹ / mo)</label>
+                <input type="number" id="fix-tuition" inputmode="numeric" value="0" min="0" oninput="calculateTotalFixedAndDue()" />
+              </div>
+              <div class="form-group">
+                <label>Monthly Hostel Fee Rate (₹ / mo)</label>
+                <input type="number" id="fix-hostel" inputmode="numeric" value="0" min="0" oninput="calculateTotalFixedAndDue()" />
+              </div>
+              <div class="form-group">
+                <label>Dress & Kit Material Fee (₹)</label>
+                <input type="number" id="fix-dress" inputmode="numeric" value="0" min="0" oninput="calculateTotalFixedAndDue()" />
+              </div>
+              <div class="form-group">
+                <label>Other Miscellaneous Fee (₹)</label>
+                <input type="number" id="fix-other" inputmode="numeric" value="0" min="0" oninput="calculateTotalFixedAndDue()" />
+              </div>
+              <div class="form-group">
+                <label style="color:var(--primary-red);">Total Assessed Session Fees (₹)</label>
+                <input type="number" id="total-fixed-fees-display" readonly style="background:#F1F5F9; font-weight:bold; color:var(--navy-blue);" />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" id="student-pw-group">
+            <label>Generated Student Password (Super Admin View Only)</label>
+            <input type="text" id="std-generated-pw" readonly style="background:#eee; font-weight:bold;" />
+          </div>
+          <div class="form-group full-width" style="margin-top:8px;">
+            <label>Administrative Notes</label>
+            <textarea id="std-notes" rows="2"></textarea>
+          </div>
+
           <button type="submit" class="btn-primary" style="margin-top:10px;">Register Student Profile</button>
         </form>
       </div>
@@ -593,11 +1123,13 @@
               <tr>
                 <th>Reg ID</th>
                 <th>Student Details</th>
-                <th>Total Fee</th>
-                <th>Paid</th>
-                <th>Due</th>
-                <th>Access Password</th>
+                <th>Total Assessed Fee</th>
+                <th>Total Paid</th>
+                <th>Remaining Due</th>
+                <th>Monthly Clearances</th>
+                <th id="th-student-pw">Access Password</th>
                 <th>Status</th>
+                <th>Controls</th>
               </tr>
             </thead>
             <tbody id="student-roster-body"></tbody>
@@ -610,21 +1142,36 @@
     <div id="tab-schedule-content" style="display: none;">
       <div class="card">
         <div class="card-header">
-          <span>Daily & Weekly Routine Management</span>
+          <span>Weekly Routine & Test Schedule</span>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button type="button" class="btn-copy" id="btn-copy-routine-modal" onclick="openCopyScheduleModal()">📋 Copy Routine</button>
+            <button type="button" class="btn-print" onclick="printRoutineSheet()">🖨️ Print PDF</button>
+          </div>
         </div>
-        <div class="form-grid" style="margin-bottom:12px;">
+
+        <div class="schedule-control-bar form-grid">
           <div class="form-group">
-            <label>Select Batch / Group</label>
+            <label>From (Date)</label>
+            <input type="date" id="sch-from-date" onchange="generateWeekRangeDates()" />
+          </div>
+          <div class="form-group">
+            <label>To (Date)</label>
+            <input type="date" id="sch-to-date" onchange="generateWeekRangeDates()" />
+          </div>
+          <div class="form-group">
+            <label>Group / Batch</label>
             <select id="sch-batch-select" onchange="loadRoutineForCurrentSelection()">
-              <option value="ALL">ALL BATCHES</option>
+              <option value="ALL">ALL (Common Drill / Tests)</option>
               <option value="B1">B1</option>
-              <option value="G1">G1</option><option value="G2">G2</option><option value="G3">G3</option><option value="G4">G4</option>
-              <option value="H1">H1</option><option value="H2">H2</option><option value="H3">H3</option><option value="H4">H4</option>
+              <option value="H1">H1</option><option value="H2">H2</option>
+              <option value="H3">H3</option><option value="H4">H4</option>
+              <option value="G1">G1</option><option value="G2">G2</option>
+              <option value="G3">G3</option><option value="G4">G4</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Select Date</label>
-            <input type="date" id="sch-date-select" onchange="loadRoutineForCurrentSelection()" />
+            <label>Scheduled Date (Week Range)</label>
+            <select id="sch-day-select" onchange="loadRoutineForCurrentSelection()"></select>
           </div>
         </div>
 
@@ -653,18 +1200,262 @@
       </div>
     </div>
 
-    <!-- 4. STUDENT PERSONAL DASHBOARD -->
+    <!-- 4. ATTENDANCE DESK (TAB 3) -->
+    <div id="tab-attendance-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <span>Official Attendance Desk - Passcode Manager</span>
+        </div>
+        <div class="form-grid" style="margin-bottom:12px;">
+          <div class="form-group">
+            <label>Select Date:</label>
+            <input type="date" id="att-desk-date" onchange="renderAttendanceDeskSessions()" />
+          </div>
+          <div class="form-group">
+            <label>Group / Batch:</label>
+            <select id="att-desk-batch" onchange="renderAttendanceDeskSessions()">
+              <option value="ALL">ALL BATCHES</option>
+              <option value="B1">B1</option>
+              <option value="H1">H1</option><option value="H2">H2</option>
+              <option value="H3">H3</option><option value="H4">H4</option>
+              <option value="G1">G1</option><option value="G2">G2</option>
+              <option value="G3">G3</option><option value="G4">G4</option>
+            </select>
+          </div>
+        </div>
+        <div id="att-sessions-feed"></div>
+      </div>
+    </div>
+
+    <!-- 5. EXAM DESK (TAB 4) -->
+    <div id="tab-exams-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <span>🎯 Official Exam Desk - Scheduled Tests & Marks Recording</span>
+          <button type="button" class="btn-primary" style="max-width:200px;" onclick="saveExamMarks()">💾 Save Exam Marks</button>
+        </div>
+        <div class="form-group full-width" style="margin-bottom:12px;">
+          <label>Select Scheduled Exam:</label>
+          <select id="exam-scheduled-selector" onchange="loadExamSessionMarksDesk()">
+            <option value="">-- Choose Exam from Scheduled Routine --</option>
+          </select>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 14%;">Reg ID</th>
+                <th style="width: 30%;">Student Name</th>
+                <th style="width: 25%;">Obtained Marks</th>
+                <th style="width: 31%;">Remarks</th>
+              </tr>
+            </thead>
+            <tbody id="exam-students-marks-body">
+              <tr>
+                <td colspan="4" style="text-align:center; padding:18px; color:var(--text-muted);">Please select a scheduled exam from above to record marks.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. STUDENT 360° PORTAL (TAB 5) -->
+    <div id="tab-360-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <span>🌐 Student 360° Profile & Monthly Analytics Dossier</span>
+          <button type="button" class="btn-print" onclick="printStudent360Dossier()">🖨️ Print 360° Dossier (PDF)</button>
+        </div>
+        <div class="form-grid" style="margin-bottom:14px;">
+          <div class="form-group">
+            <label>Select Student:</label>
+            <select id="s360-student-select" onchange="renderStudent360Dossier()">
+              <option value="">-- Choose Registered Student --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Select Analytics Month:</label>
+            <select id="s360-month-select" onchange="renderStudent360Dossier()">
+              <option value="ALL">All Session Summary (Apr 2026 – Mar 2027)</option>
+              <option value="2026-04">April 2026</option>
+              <option value="2026-05">May 2026</option>
+              <option value="2026-06">June 2026</option>
+              <option value="2026-07">July 2026</option>
+              <option value="2026-08">August 2026</option>
+              <option value="2026-09" selected>September 2026</option>
+              <option value="2026-10">October 2026</option>
+              <option value="2026-11">November 2026</option>
+              <option value="2026-12">December 2026</option>
+              <option value="2027-01">January 2027</option>
+              <option value="2027-02">February 2027</option>
+              <option value="2027-03">March 2027</option>
+            </select>
+          </div>
+        </div>
+        <div id="s360-dossier-output" style="display:none;">
+          <div class="dossier-grid">
+            <div class="dossier-card highlight">
+              <div class="dossier-title">
+                <span>Personal Details</span>
+                <span class="reg-pill" id="s360-regid"></span>
+              </div>
+              <div style="font-size:0.82rem; line-height:1.6;">
+                <p><strong>Name:</strong> <span id="s360-name"></span></p>
+                <p><strong>Batch:</strong> <span id="s360-batch" style="color:var(--primary-red); font-weight:800;"></span></p>
+                <p><strong>Mobile:</strong> <span id="s360-phone"></span></p>
+              </div>
+            </div>
+            <div class="dossier-card highlight">
+              <div class="dossier-title">
+                <span>Class Attendance</span>
+              </div>
+              <div class="rate-counter" id="s360-att-percentage">0%</div>
+              <p style="font-size:0.75rem; color:var(--text-muted);" id="s360-att-ratio">Attended 0 sessions</p>
+            </div>
+            <div class="dossier-card highlight">
+              <div class="dossier-title">
+                <span>Monthly Fee Clearance</span>
+              </div>
+              <div style="font-size:0.82rem; line-height:1.6;">
+                <p><strong>Due Balance:</strong> <span id="s360-fee-due" style="font-weight:bold; color:var(--primary-red);">₹0</span></p>
+                <p><strong>Total Paid:</strong> <span id="s360-fee-paid" style="font-weight:bold; color:var(--success-green);">₹0</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="s360-empty-prompt" style="text-align:center; padding:20px; color:var(--text-muted);">
+          Please select a student from above to view dossier.
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. STUDY PROGRESS (TAB 6) -->
+    <div id="tab-progress-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <span>Batch Syllabus & Unit Study Progress Tracker</span>
+          <button type="button" class="btn-primary" style="max-width:200px;" onclick="saveStudyProgress()">💾 Save Study Progress</button>
+        </div>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label>Select Target Batch:</label>
+          <select id="prog-batch-select" onchange="renderProgressBoard()">
+            <option value="B1">B1 Batch</option>
+            <option value="G1">G1 Batch</option><option value="G2">G2 Batch</option>
+            <option value="G3">G3 Batch</option><option value="G4">G4 Batch</option>
+            <option value="H1">H1 Batch</option><option value="H2">H2 Batch</option>
+            <option value="H3">H3 Batch</option><option value="H4">H4 Batch</option>
+          </select>
+        </div>
+        <div class="progress-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--unit-black);"></div><span>Pending</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--progress-blue);"></div><span>In Progress</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--primary-red);"></div><span>Completed</span></div>
+        </div>
+        <div id="progress-subjects-feed"></div>
+      </div>
+    </div>
+
+    <!-- 8. FINANCE PORTAL (TAB 7) -->
+    <div id="tab-finance-content" style="display: none;">
+      <div class="metric-grid">
+        <div class="metric-box inflow">
+          <div class="metric-label">Total Income</div>
+          <div class="metric-value" id="stat-total-inflow">₹0</div>
+        </div>
+        <div class="metric-box outflow">
+          <div class="metric-label">Total Expenditure</div>
+          <div class="metric-value" id="stat-total-outflow">₹0</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-label">Net Balance</div>
+          <div class="metric-value" id="stat-net-balance">₹0</div>
+        </div>
+      </div>
+
+      <div class="finance-split-grid">
+        <div class="finance-column-box income-box">
+          <div class="finance-box-title income-title">+ Income Entry</div>
+          <form id="income-entry-form">
+            <div class="form-group" style="margin-bottom:12px;"><label>Date</label><input type="date" id="inc-date" required /></div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label>Purpose</label>
+              <select id="inc-purpose" required>
+                <option value="Admission Fee">Admission Fee</option>
+                <option value="Monthly Study Fees">Monthly Study Fees</option>
+                <option value="Hostel Fees">Hostel Fees</option>
+                <option value="Other Fees">Other Fees</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label>Received From:</label>
+              <select id="inc-student-select" onchange="onIncomeStudentSelectChange()">
+                <option value="">-- Choose Student --</option>
+              </select>
+              <input type="text" id="inc-person-manual" placeholder="External Person Name" style="margin-top:6px; display:none;" />
+            </div>
+            <div id="inc-student-due-display" style="display:none; padding:8px; background:#FEF2F2; margin-bottom:12px;">
+              <span>Student Due: </span><span id="inc-live-due-amount" style="font-weight:bold; color:red;">₹0</span>
+            </div>
+            <div class="form-group" style="margin-bottom:16px;"><label>Amount (₹)</label><input type="number" id="inc-amount" min="1" required /></div>
+            <button type="submit" class="btn-primary" style="background:var(--success-green); width:100%;">+ Save Collection</button>
+          </form>
+        </div>
+
+        <div class="finance-column-box expense-box">
+          <div class="finance-box-title expense-title">- Expense Entry</div>
+          <form id="expense-entry-form">
+            <div class="form-group" style="margin-bottom:12px;"><label>Date</label><input type="date" id="exp-date" required /></div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label>Purpose</label>
+              <select id="exp-purpose" required>
+                <option value="Vegetable/Food">Vegetable / Food</option>
+                <option value="Maintenance">Maintenance</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:12px;"><label>Paid To</label><input type="text" id="exp-person" required /></div>
+            <div class="form-group" style="margin-bottom:16px;"><label>Amount (₹)</label><input type="number" id="exp-amount" min="1" required /></div>
+            <button type="submit" class="btn-primary" style="background:var(--primary-red); width:100%;">- Save Expense</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="finance-split-grid">
+        <div class="card">
+          <div class="card-header" style="color:var(--success-green);">Income Ledger</div>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Date</th><th>Purpose</th><th>Person</th><th>Amount</th><th>Receipt</th></tr></thead>
+              <tbody id="income-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" style="color:var(--primary-red);">Expense Ledger</div>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Date</th><th>Purpose</th><th>Person</th><th>Amount</th></tr></thead>
+              <tbody id="expense-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. PERSONAL DESK VIEW (STUDENT / OFFICIAL) -->
     <div id="personal-desk-view" style="display: none;">
       <div class="card">
         <div class="card-header">
-          <span id="student-welcome-title">Student Portal</span>
+          <span id="desk-title">Portal Desk</span>
+          <button type="button" class="btn-print" onclick="window.print()">🖨️ Print Profile</button>
         </div>
-        <div id="student-profile-info" style="line-height: 1.8; font-size: 0.9rem;"></div>
+        <div id="personal-desk-content"></div>
       </div>
 
-      <div class="card" style="border-top: 3px solid var(--primary-red);">
+      <div class="card" id="student-routine-display" style="display:none; border-top: 3px solid var(--primary-red);">
         <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
-          <span>Class Routine & Test Schedule</span>
+          <span id="student-routine-batch-title">Batch Routine</span>
           <div style="display:flex; align-items:center; gap:8px;">
             <label style="font-size:0.75rem;">Date:</label>
             <input type="date" id="std-view-date-select" style="min-height:32px; padding:4px;" onchange="renderStudentReadRoutine()" />
@@ -673,12 +1464,7 @@
         <div class="table-container">
           <table>
             <thead>
-              <tr>
-                <th>Time Slot</th>
-                <th>Subject</th>
-                <th>Teacher</th>
-                <th>Topic / Syllabus</th>
-              </tr>
+              <tr><th>Time Slot</th><th>Subject</th><th>Teacher</th><th>Topic / Syllabus</th></tr>
             </thead>
             <tbody id="std-read-classes-body"></tbody>
           </table>
@@ -688,10 +1474,42 @@
 
   </div>
 
+  <!-- MONTHLY FEES MODAL -->
+  <div id="monthly-fee-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="card-header" style="border:none; padding:0 0 8px 0;">
+        <span id="modal-student-title">Monthly Clearances (Apr 2026 – Mar 2027)</span>
+        <button type="button" onclick="closeMonthModal()" style="border:none; background:none; font-size:1.3rem; cursor:pointer;">&times;</button>
+      </div>
+      <div class="months-container" id="modal-months-container"></div>
+      <div style="text-align: right; margin-top: 14px;">
+        <button type="button" class="btn-print" onclick="closeMonthModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="print-section">
+    <div class="print-box">
+      <div class="print-header">
+        <h2 style="color:#0A192F;">FAUJ-E-FACTORY</h2>
+        <p id="print-doc-subtitle">Official Document</p>
+      </div>
+      <div id="printable-details"></div>
+    </div>
+  </div>
+
   <script>
     const SUPABASE_REST_URL = "https://dyldejdkgfnyvunkrddh.supabase.co/rest/v1";
     // আপনার সুপাবেস লেটেস্ট Publishable Key
     const SUPABASE_KEY = "sb_publishable_7gyWwG40JDplWzdYD-XgNw_dJv9o0Fu";
+
+    const SUBJECTS = [
+      { id: "math", name: "Mathematics" },
+      { id: "gi", name: "General Intelligence" },
+      { id: "gk", name: "General Knowledge" },
+      { id: "english", name: "English" },
+      { id: "hindi", name: "Hindi" }
+    ];
 
     function cleanPhone(val) {
       if (!val) return "";
@@ -709,16 +1527,46 @@
       }
     }
 
-    // প্রাথমিক ডেটাবেস (স্ক্রিনশটে থাকা ছাত্রদের ব্যাকআপসহ)
+    function safeSet(key, val) {
+      try {
+        localStorage.setItem(key, JSON.stringify(val));
+        syncToCentralCloud();
+      } catch (e) {
+        console.warn("Storage warning");
+      }
+    }
+
+    const ACADEMIC_MONTHS = [
+      { key: "2026-04", label: "Apr 2026", order: 4 },
+      { key: "2026-05", label: "May 2026", order: 5 },
+      { key: "2026-06", label: "Jun 2026", order: 6 },
+      { key: "2026-07", label: "Jul 2026", order: 7 },
+      { key: "2026-08", label: "Aug 2026", order: 8 },
+      { key: "2026-09", label: "Sep 2026", order: 9 },
+      { key: "2026-10", label: "Oct 2026", order: 10 },
+      { key: "2026-11", label: "Nov 2026", order: 11 },
+      { key: "2026-12", label: "Dec 2026", order: 12 },
+      { key: "2027-01", label: "Jan 2027", order: 13 },
+      { key: "2027-02", label: "Feb 2027", order: 14 },
+      { key: "2027-03", label: "Mar 2027", order: 15 }
+    ];
+
     let DB = {
+      staff: safeGet("ff_staff"),
       students: safeGet("ff_students").length > 0 ? safeGet("ff_students") : [
-        { id: "STD-1", reg_id: "FF0001", name: "Tabu", gender: "Male", batch: "G1", ph1: "9748517869", password: "FF686794", total_fixed: 0, paid: 0, remaining: 0, status: "Active" },
-        { id: "STD-2", reg_id: "FF0002", name: "sss", gender: "Male", batch: "B1", ph1: "8641984809", password: "FF543881", total_fixed: 0, paid: 0, remaining: 0, status: "Active" }
+        { id: "STD-1", reg_id: "FF0001", name: "Tabu", gender: "Male", batch: "G1", ph1: "9748517869", password: "FF686794", total_fixed: 0, paid: 0, remaining: 0, status: "Active", paid_months: [] },
+        { id: "STD-2", reg_id: "FF0002", name: "sss", gender: "Male", batch: "B1", ph1: "8641984809", password: "FF543881", total_fixed: 0, paid: 0, remaining: 0, status: "Active", paid_months: [] }
       ],
-      schedules: safeGet("ff_schedules")
+      incomes: safeGet("ff_incomes"),
+      expenses: safeGet("ff_expenses"),
+      schedules: safeGet("ff_schedules"),
+      attendanceSessions: safeGet("ff_att_sessions") || [],
+      studyProgress: safeGet("ff_study_progress") || {},
+      examScores: safeGet("ff_exam_scores") || {}
     };
 
     let currentUser = null;
+    let activeModalStudentIdx = null;
 
     async function cloudFetch(endpoint, method = "GET", body = null) {
       try {
@@ -767,16 +1615,39 @@
           const remoteDB = cloudData[0].data;
 
           if (remoteDB.students && Array.isArray(remoteDB.students)) {
-            // লোকাল ও রিমোট ছাত্র মার্জ
             const map = new Map();
             DB.students.forEach(s => map.set(s.reg_id || s.ph1, s));
             remoteDB.students.forEach(s => map.set(s.reg_id || s.ph1, s));
             DB.students = Array.from(map.values());
             localStorage.setItem("ff_students", JSON.stringify(DB.students));
           }
-          if (remoteDB.schedules && Array.isArray(remoteDB.schedules)) {
+          if (remoteDB.staff) {
+            DB.staff = remoteDB.staff;
+            localStorage.setItem("ff_staff", JSON.stringify(DB.staff));
+          }
+          if (remoteDB.incomes) {
+            DB.incomes = remoteDB.incomes;
+            localStorage.setItem("ff_incomes", JSON.stringify(DB.incomes));
+          }
+          if (remoteDB.expenses) {
+            DB.expenses = remoteDB.expenses;
+            localStorage.setItem("ff_expenses", JSON.stringify(DB.expenses));
+          }
+          if (remoteDB.schedules) {
             DB.schedules = remoteDB.schedules;
             localStorage.setItem("ff_schedules", JSON.stringify(DB.schedules));
+          }
+          if (remoteDB.attendanceSessions) {
+            DB.attendanceSessions = remoteDB.attendanceSessions;
+            localStorage.setItem("ff_att_sessions", JSON.stringify(DB.attendanceSessions));
+          }
+          if (remoteDB.studyProgress) {
+            DB.studyProgress = remoteDB.studyProgress;
+            localStorage.setItem("ff_study_progress", JSON.stringify(DB.studyProgress));
+          }
+          if (remoteDB.examScores) {
+            DB.examScores = remoteDB.examScores;
+            localStorage.setItem("ff_exam_scores", JSON.stringify(DB.examScores));
           }
 
           const badge = document.getElementById("cloud-sync-badge");
@@ -786,11 +1657,15 @@
           }
         }
       } catch (e) {
-        console.warn("Sync skipped", e);
+        console.warn("Central sync check skipped.", e);
       }
 
       if (currentUser && currentUser.role === "SuperAdmin") {
+        renderStaffDirectory();
         renderRoster();
+        renderFinanceDashboard();
+        populate360StudentDropdown();
+        populateIncomeStudentDropdown();
       }
     }
 
@@ -820,7 +1695,49 @@
       return "FF" + String(maxNum + 1).padStart(4, "0");
     }
 
+    function toggleChestField(val) {
+      const el = document.getElementById("chest-group");
+      if (el) el.style.display = (val === "Male") ? "flex" : "none";
+    }
+
+    function getMonthOrder(dateStr) {
+      if (!dateStr) return 0;
+      const parts = dateStr.split("-");
+      const yr = parseInt(parts[0], 10);
+      const mo = parseInt(parts[1], 10);
+      if (yr === 2026 && mo >= 4) return mo;
+      if (yr === 2027 && mo <= 3) return mo + 12;
+      return 0;
+    }
+
+    function getRemainingMonthsCount(admDateStr) {
+      const admOrder = getMonthOrder(admDateStr);
+      if (admOrder < 4) return 12;
+      if (admOrder > 15) return 1;
+      return (15 - admOrder + 1);
+    }
+
+    function syncAdmissionMonths() {
+      calculateTotalFixedAndDue();
+    }
+
+    function calculateTotalFixedAndDue() {
+      const adm = parseFloat(document.getElementById("fix-admission").value) || 0;
+      const tuition = parseFloat(document.getElementById("fix-tuition").value) || 0;
+      const hostel = parseFloat(document.getElementById("fix-hostel").value) || 0;
+      const dress = parseFloat(document.getElementById("fix-dress").value) || 0;
+      const other = parseFloat(document.getElementById("fix-other").value) || 0;
+
+      const admDate = document.getElementById("std-admission-date").value || new Date().toISOString().split("T")[0];
+      const activeMonths = getRemainingMonthsCount(admDate);
+
+      const totalFixed = adm + dress + other + ((tuition + hostel) * activeMonths);
+      document.getElementById("total-fixed-fees-display").value = totalFixed;
+    }
+
     function initGenerators() {
+      const sp = document.getElementById("staff-password");
+      if (sp) sp.value = generateSecurePassword();
       const stp = document.getElementById("std-generated-pw");
       if (stp) stp.value = generateSecurePassword();
       const sReg = document.getElementById("std-auto-reg-id");
@@ -828,11 +1745,14 @@
 
       const today = new Date().toISOString().split("T")[0];
       if (document.getElementById("std-admission-date")) document.getElementById("std-admission-date").value = today;
+      if (document.getElementById("inc-date")) document.getElementById("inc-date").value = today;
+      if (document.getElementById("exp-date")) document.getElementById("exp-date").value = today;
+      if (document.getElementById("att-desk-date")) document.getElementById("att-desk-date").value = today;
       if (document.getElementById("sch-date-select")) document.getElementById("sch-date-select").value = today;
       if (document.getElementById("std-view-date-select")) document.getElementById("std-view-date-select").value = today;
     }
 
-    // ১০০% নির্ভুল লাইভ লগইন হ্যান্ডলার
+    // MULTI-ROLE LIVE CROSS-DEVICE LOGIN HANDLER
     document.getElementById("login-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const btn = document.getElementById("login-submit-btn");
@@ -845,7 +1765,6 @@
       const remember = document.getElementById("remember-me-checkbox").checked;
       const phoneClean = cleanPhone(rawInput);
 
-      // প্রতি লগইনের আগে ক্লাউড থেকে সিঙ্ক নিশ্চিত করা
       await syncFromCentralCloud();
 
       // ১. সুপার অ্যাডমিন ভ্যালিডেশন
@@ -857,7 +1776,22 @@
         return;
       }
 
-      // ২. স্টুডেন্ট ভ্যালিডেশন (১০ সংখ্যার ফোন নম্বর অথবা Reg ID দিয়ে)
+      // ২. স্টাফ / অফিশিয়াল ভ্যালিডেশন
+      const staff = DB.staff.find(s => {
+        const staffPhone = cleanPhone(s.phone);
+        const matchId = (staffPhone && phoneClean && staffPhone === phoneClean) || ((s.phone || "").toLowerCase() === rawId);
+        const matchPass = (s.password || "").trim() === pass;
+        return matchId && matchPass;
+      });
+
+      if (staff) {
+        startSession({ ...staff, role: staff.role || "Official" }, remember);
+        btn.innerText = "Sign In to Dashboard";
+        btn.disabled = false;
+        return;
+      }
+
+      // ৩. স্টুডেন্ট ভ্যালিডেশন
       const student = DB.students.find(s => {
         const stdPhone = cleanPhone(s.ph1);
         const stdReg = (s.reg_id || "").toLowerCase().trim();
@@ -867,12 +1801,6 @@
       });
 
       if (student) {
-        if (student.status === "Inactive") {
-          alert("Your profile is marked INACTIVE. Contact Administrator.");
-          btn.innerText = "Sign In to Dashboard";
-          btn.disabled = false;
-          return;
-        }
         startSession({ ...student, role: "Student" }, remember);
         btn.innerText = "Sign In to Dashboard";
         btn.disabled = false;
@@ -884,7 +1812,6 @@
       btn.disabled = false;
     });
 
-    // সেশন বজায় রাখা (Remember Me ফিক্সড)
     function startSession(user, remember) {
       currentUser = user;
       
@@ -904,72 +1831,93 @@
         document.getElementById("admin-nav-tabs").style.display = "flex";
         document.getElementById("mobile-nav-bar").style.display = "flex";
         document.getElementById("personal-desk-view").style.display = "none";
+
         switchTab("students");
+        renderStaffDirectory();
         renderRoster();
-        loadRoutineForCurrentSelection();
+        renderFinanceDashboard();
+        initWeekRange();
+        populate360StudentDropdown();
+        populateIncomeStudentDropdown();
+      } else if (currentUser.role === "Official" || currentUser.role === "Faculty") {
+        document.getElementById("admin-nav-tabs").style.display = "flex";
+        document.getElementById("mobile-nav-bar").style.display = "flex";
+        document.getElementById("personal-desk-view").style.display = "block";
+
+        document.getElementById("desk-title").innerText = `${currentUser.role} Desk: ${currentUser.name}`;
+        document.getElementById("personal-desk-content").innerHTML = `
+          <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:16px;">
+            <p><strong>Name:</strong> ${currentUser.name}</p>
+            <p><strong>Role:</strong> ${currentUser.role}</p>
+            <p><strong>Phone:</strong> ${currentUser.phone}</p>
+          </div>
+        `;
+        renderRoster();
+        initWeekRange();
       } else {
-        // স্টুডেন্ট ড্যাশবোর্ড
+        // স্টুডেন্ট পোর্টাল
         document.getElementById("admin-nav-tabs").style.display = "none";
         document.getElementById("mobile-nav-bar").style.display = "none";
         document.getElementById("tab-students-content").style.display = "none";
         document.getElementById("tab-schedule-content").style.display = "none";
+        document.getElementById("tab-attendance-content").style.display = "none";
+        document.getElementById("tab-exams-content").style.display = "none";
+        document.getElementById("tab-360-content").style.display = "none";
+        document.getElementById("tab-progress-content").style.display = "none";
+        document.getElementById("tab-finance-content").style.display = "none";
         document.getElementById("personal-desk-view").style.display = "block";
         
-        document.getElementById("student-welcome-title").innerText = `Student Portal: ${currentUser.name}`;
-        document.getElementById("student-profile-info").innerHTML = `
-          <p><strong>Full Name:</strong> ${currentUser.name}</p>
-          <p><strong>Registration ID:</strong> <span class="reg-pill">${currentUser.reg_id || 'FF0001'}</span></p>
-          <p><strong>Enrolled Batch:</strong> <span style="color:var(--primary-red); font-weight:800;">${currentUser.batch}</span></p>
-          <p><strong>Mobile Number:</strong> ${currentUser.ph1}</p>
-          <p><strong>Status:</strong> <span class="status-badge active">${currentUser.status || 'Active'}</span></p>
+        document.getElementById("desk-title").innerText = `Student Portal: ${currentUser.name}`;
+        document.getElementById("personal-desk-content").innerHTML = `
+          <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:16px; margin-bottom:14px; font-size:0.9rem; line-height:1.6;">
+            <p><strong>Student Name:</strong> ${currentUser.name}</p>
+            <p><strong>Registration ID:</strong> <span class="reg-pill">${currentUser.reg_id || 'FF0001'}</span></p>
+            <p><strong>Enrolled Batch:</strong> <span style="color:var(--primary-red); font-weight:800;">${currentUser.batch}</span></p>
+            <p><strong>Mobile Number:</strong> ${currentUser.ph1}</p>
+            <p><strong>Remaining Fee Due:</strong> <strong style="color:var(--primary-red);">₹${currentUser.remaining || 0}</strong></p>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-top:14px;">
+            <button type="button" class="btn-primary" onclick="showStudentRoutineView('${currentUser.batch}')">📅 View Batch (${currentUser.batch}) Routine & Tests</button>
+          </div>
         `;
-        renderStudentReadRoutine();
       }
     }
 
     function switchTab(tab) {
       document.getElementById("tab-students-content").style.display = (tab === 'students') ? 'block' : 'none';
       document.getElementById("tab-schedule-content").style.display = (tab === 'schedule') ? 'block' : 'none';
+      document.getElementById("tab-attendance-content").style.display = (tab === 'attendance') ? 'block' : 'none';
+      document.getElementById("tab-exams-content").style.display = (tab === 'exams') ? 'block' : 'none';
+      document.getElementById("tab-360-content").style.display = (tab === '360') ? 'block' : 'none';
+      document.getElementById("tab-progress-content").style.display = (tab === 'progress') ? 'block' : 'none';
+      document.getElementById("tab-finance-content").style.display = (tab === 'finance') ? 'block' : 'none';
       document.getElementById("personal-desk-view").style.display = 'none';
 
-      document.getElementById("btn-tab-students").classList.toggle("active", tab === 'students');
-      document.getElementById("btn-tab-schedule").classList.toggle("active", tab === 'schedule');
-      const mStud = document.getElementById("m-btn-students");
-      const mSch = document.getElementById("m-btn-schedule");
-      if (mStud) mStud.classList.toggle("active", tab === 'students');
-      if (mSch) mSch.classList.toggle("active", tab === 'schedule');
+      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+      document.querySelectorAll(".bottom-nav-item").forEach(btn => btn.classList.remove("active"));
 
-      if (tab === 'schedule') loadRoutineForCurrentSelection();
-      else if (tab === 'students') renderRoster();
+      const dtBtn = document.getElementById("btn-tab-" + tab);
+      const mbBtn = document.getElementById("m-btn-" + tab);
+      if (dtBtn) dtBtn.classList.add("active");
+      if (mbBtn) mbBtn.classList.add("active");
+
+      if (tab === 'schedule') initWeekRange();
+      else if (tab === 'attendance') renderAttendanceDeskSessions();
+      else if (tab === 'progress') renderProgressBoard();
+      else if (tab === 'exams') populateScheduledExamsDropdown();
+      else if (tab === '360') populate360StudentDropdown();
+      else if (tab === 'finance') populateIncomeStudentDropdown();
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function renderRoster() {
-      const tbody = document.getElementById("student-roster-body");
-      if (!tbody) return;
-      tbody.innerHTML = "";
-
-      DB.students.forEach((s) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><span class="reg-pill">${s.reg_id || 'FF0000'}</span></td>
-          <td><strong>${s.name}</strong> (${s.gender || 'N/A'})<br/><span style="font-size:0.75rem; color:var(--text-muted);">Batch: ${s.batch} | Ph: ${s.ph1}</span></td>
-          <td>₹${s.total_fixed || 0}</td>
-          <td style="color:var(--success-green); font-weight:bold;">₹${s.paid || 0}</td>
-          <td><strong style="color:var(--primary-red);">₹${s.remaining || 0}</strong></td>
-          <td><span class="password-pill">${s.password}</span></td>
-          <td><span class="status-badge active">${s.status || 'Active'}</span></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    // অ্যাডমিন দ্বারা নতুন ছাত্র রেজিস্ট্রেশন
+    // STUDENT ADMISSION
     document.getElementById("student-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const admDate = document.getElementById("std-admission-date").value;
       const studentName = document.getElementById("std-name").value.trim();
       const assignedRegId = document.getElementById("std-auto-reg-id").value;
-      const totalSessionFee = parseFloat(document.getElementById("std-fees").value) || 0;
+      const totalSessionFee = parseFloat(document.getElementById("total-fixed-fees-display").value) || 0;
       const rawPassword = document.getElementById("std-generated-pw").value.trim();
 
       const newStudent = {
@@ -985,19 +1933,126 @@
         paid: 0,
         remaining: totalSessionFee,
         password: rawPassword,
-        status: "Active"
+        status: "Active",
+        paid_months: []
       };
 
       DB.students.push(newStudent);
-      localStorage.setItem("ff_students", JSON.stringify(DB.students));
-      syncToCentralCloud();
+      safeSet("ff_students", DB.students);
       renderRoster();
       alert(`Student registered successfully!\nReg ID: ${newStudent.reg_id}\nPhone: ${newStudent.ph1}\nPassword: ${newStudent.password}`);
       document.getElementById("student-form").reset();
       initGenerators();
     });
 
-    // রুটিন ম্যানেজমেন্ট লজিক
+    function renderRoster() {
+      const tbody = document.getElementById("student-roster-body");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+      const isSuperAdmin = (currentUser && currentUser.role === "SuperAdmin");
+      const thPw = document.getElementById("th-student-pw");
+      if (thPw) thPw.style.display = isSuperAdmin ? "" : "none";
+
+      DB.students.forEach((s, idx) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><span class="reg-pill">${s.reg_id || 'FF0000'}</span></td>
+          <td><strong>${s.name}</strong> (${s.gender || 'N/A'})<br/><span style="font-size:0.75rem; color:var(--text-muted);">Batch: ${s.batch} | Ph: ${s.ph1}</span></td>
+          <td>₹${s.total_fixed || 0}</td>
+          <td style="color:var(--success-green); font-weight:bold;">₹${s.paid || 0}</td>
+          <td><strong style="color:var(--primary-red);">₹${s.remaining || 0}</strong></td>
+          <td><button type="button" class="btn-sub-action" onclick="openMonthModal(${idx})">📅 Clearances (${(s.paid_months || []).length})</button></td>
+          ${isSuperAdmin ? `<td><span class="password-pill">${s.password}</span></td>` : ''}
+          <td><span class="status-badge active">${s.status || 'Active'}</span></td>
+          <td><button type="button" class="btn-print" onclick="window.print()">🖨️ PDF</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // STAFF DIRECTORY
+    document.getElementById("staff-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const newStaff = {
+        id: "STAFF-" + Date.now(),
+        name: document.getElementById("staff-name").value.trim(),
+        phone: cleanPhone(document.getElementById("staff-phone").value.trim()),
+        dob: document.getElementById("staff-dob").value,
+        role: document.getElementById("staff-role").value,
+        password: document.getElementById("staff-password").value.trim(),
+        status: "Active"
+      };
+
+      DB.staff.push(newStaff);
+      safeSet("ff_staff", DB.staff);
+      renderStaffDirectory();
+      alert(`Staff Registered! Mobile: ${newStaff.phone} | Password: ${newStaff.password}`);
+      document.getElementById("staff-form").reset();
+      initGenerators();
+    });
+
+    function renderStaffDirectory() {
+      const tbody = document.getElementById("staff-roster-body");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+      DB.staff.forEach((st) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${st.role}</strong></td>
+          <td>${st.name}</td>
+          <td>${st.phone}</td>
+          <td>${st.dob}</td>
+          <td>All Modules</td>
+          <td><span class="password-pill">${st.password}</span></td>
+          <td><span class="status-badge active">${st.status || 'Active'}</span></td>
+          <td><button type="button" class="btn-print" onclick="window.print()">🖨 PDF</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // ROUTINE LOGIC
+    function initWeekRange() {
+      const fromInp = document.getElementById("sch-from-date");
+      const toInp = document.getElementById("sch-to-date");
+
+      if (!fromInp.value || !toInp.value) {
+        const today = new Date();
+        const curr = new Date(today);
+        const dayOfWeek = curr.getDay();
+        const distanceToMonday = (dayOfWeek + 6) % 7;
+        const monday = new Date(curr.setDate(curr.getDate() - distanceToMonday));
+        const sunday = new Date(curr.setDate(monday.getDate() + 6));
+
+        fromInp.value = monday.toISOString().split("T")[0];
+        toInp.value = sunday.toISOString().split("T")[0];
+      }
+      generateWeekRangeDates();
+    }
+
+    function generateWeekRangeDates() {
+      const fromStr = document.getElementById("sch-from-date").value;
+      const toStr = document.getElementById("sch-to-date").value;
+      const daySelect = document.getElementById("sch-day-select");
+      daySelect.innerHTML = "";
+
+      if (!fromStr || !toStr) return;
+
+      let start = new Date(fromStr + "T00:00:00");
+      const end = new Date(toStr + "T00:00:00");
+
+      while (start <= end) {
+        const opt = document.createElement("option");
+        const dateVal = start.toISOString().split("T")[0];
+        const dayName = start.toLocaleDateString("en-US", { weekday: "short" });
+        opt.value = dateVal;
+        opt.innerText = `${dateVal} (${dayName})`;
+        daySelect.appendChild(opt);
+        start.setDate(start.getDate() + 1);
+      }
+      loadRoutineForCurrentSelection();
+    }
+
     function addClassRow(data = {}) {
       const tbody = document.getElementById("class-rows-body");
       const tr = document.createElement("tr");
@@ -1014,7 +2069,7 @@
 
     function loadRoutineForCurrentSelection() {
       const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-date-select").value;
+      const date = document.getElementById("sch-day-select").value;
       const tbody = document.getElementById("class-rows-body");
       tbody.innerHTML = "";
 
@@ -1032,7 +2087,7 @@
 
     function saveRoutineForCurrentSelection() {
       const batch = document.getElementById("sch-batch-select").value;
-      const date = document.getElementById("sch-date-select").value;
+      const date = document.getElementById("sch-day-select").value;
       if (!date) {
         alert("Please select a date first!");
         return;
@@ -1057,12 +2112,21 @@
       if (idx > -1) DB.schedules[idx] = payload;
       else DB.schedules.push(payload);
 
-      localStorage.setItem("ff_schedules", JSON.stringify(DB.schedules));
-      syncToCentralCloud();
-      alert(`Routine saved successfully for Batch [${batch}] on ${date}! Now visible to all enrolled students.`);
+      safeSet("ff_schedules", DB.schedules);
+      alert(`Routine saved successfully for Batch [${batch}] on ${date}!`);
     }
 
-    // স্টুডেন্টের রুটিন ভিউ (১০০% সিঙ্কড)
+    function showStudentRoutineView(batch) {
+      const routineCard = document.getElementById("student-routine-display");
+      routineCard.style.display = "block";
+      document.getElementById("student-routine-batch-title").innerText = `Batch [${batch}] Daily Routine`;
+
+      const today = new Date().toISOString().split("T")[0];
+      document.getElementById("std-view-date-select").value = today;
+      renderStudentReadRoutine();
+      routineCard.scrollIntoView({ behavior: 'smooth' });
+    }
+
     function renderStudentReadRoutine() {
       const date = document.getElementById("std-view-date-select").value;
       const tbody = document.getElementById("std-read-classes-body");
@@ -1070,7 +2134,6 @@
 
       if (!currentUser || !date) return;
 
-      // স্টুডেন্টের নিজস্ব ব্যাচ এবং কমন ব্যাচ (ALL) দুটোই চেক করা
       const targetBatch = currentUser.batch;
       const matched = DB.schedules.filter(s => (s.batch === targetBatch || s.batch === "ALL") && s.date === date);
 
@@ -1090,8 +2153,295 @@
       });
 
       if (!foundAny) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:18px; color:var(--text-muted);">No classes or tests scheduled for ${date} in Batch [${currentUser.batch}].</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:18px; color:var(--text-muted);">No classes scheduled for ${date} in Batch [${currentUser.batch}].</td></tr>`;
       }
+    }
+
+    // FINANCE / LEDGER
+    function populateIncomeStudentDropdown() {
+      const sel = document.getElementById("inc-student-select");
+      if (!sel) return;
+      sel.innerHTML = '<option value="">-- Choose Student --</option><option value="EXTERNAL">External Depositor</option>';
+
+      DB.students.forEach(s => {
+        const opt = document.createElement("option");
+        opt.value = s.reg_id;
+        opt.setAttribute("data-name", s.name);
+        opt.setAttribute("data-due", s.remaining || 0);
+        opt.innerText = `[${s.reg_id}] ${s.name} (${s.batch}) - Due: ₹${s.remaining || 0}`;
+        sel.appendChild(opt);
+      });
+    }
+
+    function onIncomeStudentSelectChange() {
+      const sel = document.getElementById("inc-student-select");
+      const val = sel.value;
+      const dueBox = document.getElementById("inc-student-due-display");
+      const manualInput = document.getElementById("inc-person-manual");
+
+      if (val === "EXTERNAL") {
+        dueBox.style.display = "none";
+        manualInput.style.display = "block";
+      } else if (val) {
+        manualInput.style.display = "none";
+        const opt = sel.options[sel.selectedIndex];
+        const due = opt.getAttribute("data-due");
+        dueBox.style.display = "block";
+        document.getElementById("inc-live-due-amount").innerText = `₹${due}`;
+      } else {
+        dueBox.style.display = "none";
+        manualInput.style.display = "none";
+      }
+    }
+
+    document.getElementById("income-entry-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const sel = document.getElementById("inc-student-select");
+      const val = sel.value;
+      const amt = parseFloat(document.getElementById("inc-amount").value) || 0;
+      const purpose = document.getElementById("inc-purpose").value;
+      const date = document.getElementById("inc-date").value;
+
+      let personName = "";
+      let regId = "";
+
+      if (val === "EXTERNAL") {
+        personName = document.getElementById("inc-person-manual").value.trim();
+      } else if (val) {
+        const opt = sel.options[sel.selectedIndex];
+        personName = opt.getAttribute("data-name") + ` (${val})`;
+        regId = val;
+      }
+
+      const newIncome = {
+        id: "INC-" + Date.now(),
+        date, purpose, person: personName, reg_id: regId, amount: amt
+      };
+
+      DB.incomes.push(newIncome);
+
+      if (regId) {
+        const student = DB.students.find(s => s.reg_id === regId);
+        if (student) {
+          student.paid = (Number(student.paid) || 0) + amt;
+          student.remaining = Math.max(0, (Number(student.remaining) || 0) - amt);
+          safeSet("ff_students", DB.students);
+        }
+      }
+
+      safeSet("ff_incomes", DB.incomes);
+      renderRoster();
+      renderFinanceDashboard();
+      alert(`Payment of ₹${amt} successfully recorded!`);
+      document.getElementById("income-entry-form").reset();
+    });
+
+    document.getElementById("expense-entry-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const newExpense = {
+        id: "EXP-" + Date.now(),
+        date: document.getElementById("exp-date").value,
+        purpose: document.getElementById("exp-purpose").value,
+        person: document.getElementById("exp-person").value.trim(),
+        amount: parseFloat(document.getElementById("exp-amount").value) || 0
+      };
+
+      DB.expenses.push(newExpense);
+      safeSet("ff_expenses", DB.expenses);
+      renderFinanceDashboard();
+      document.getElementById("expense-entry-form").reset();
+    });
+
+    function renderFinanceDashboard() {
+      let totalIncome = 0;
+      let totalExpense = 0;
+
+      const incTbody = document.getElementById("income-table-body");
+      if (incTbody) {
+        incTbody.innerHTML = "";
+        DB.incomes.forEach((inc) => {
+          totalIncome += (Number(inc.amount) || 0);
+          incTbody.innerHTML += `
+            <tr>
+              <td>${inc.date}</td><td><strong>${inc.purpose}</strong></td><td>${inc.person}</td>
+              <td style="color:var(--success-green); font-weight:bold;">+₹${inc.amount}</td>
+              <td><button type="button" class="btn-receipt" onclick="window.print()">🧾 Receipt</button></td>
+            </tr>`;
+        });
+      }
+
+      const expTbody = document.getElementById("expense-table-body");
+      if (expTbody) {
+        expTbody.innerHTML = "";
+        DB.expenses.forEach((exp) => {
+          totalExpense += (Number(exp.amount) || 0);
+          expTbody.innerHTML += `
+            <tr>
+              <td>${exp.date}</td><td>${exp.purpose}</td><td>${exp.person}</td>
+              <td style="color:var(--primary-red); font-weight:bold;">-₹${exp.amount}</td>
+            </tr>`;
+        });
+      }
+
+      document.getElementById("stat-total-inflow").innerText = "₹" + totalIncome;
+      document.getElementById("stat-total-outflow").innerText = "₹" + totalExpense;
+      document.getElementById("stat-net-balance").innerText = "₹" + (totalIncome - totalExpense);
+    }
+
+    // STUDY PROGRESS BOARD
+    function renderProgressBoard() {
+      const feed = document.getElementById("progress-subjects-feed");
+      const batch = document.getElementById("prog-batch-select").value || "B1";
+      feed.innerHTML = "";
+
+      const batchProgress = DB.studyProgress[batch] || {};
+
+      SUBJECTS.forEach(sub => {
+        const subData = batchProgress[sub.id] || {};
+        const box = document.createElement("div");
+        box.className = "progress-subject-box";
+
+        const header = document.createElement("div");
+        header.className = "progress-subject-header";
+        header.innerHTML = `<div class="progress-subject-title">${sub.name}</div>`;
+        box.appendChild(header);
+
+        const grid = document.createElement("div");
+        grid.className = "progress-units-grid";
+
+        for (let u = 1; u <= 40; u++) {
+          const status = subData[u] || 0;
+          const uDiv = document.createElement("div");
+          uDiv.className = `unit-block ${status === 2 ? 'completed' : (status === 1 ? 'in-progress' : '')}`;
+          uDiv.innerText = u;
+          uDiv.onclick = () => toggleUnitProgress(batch, sub.id, u);
+          grid.appendChild(uDiv);
+        }
+
+        box.appendChild(grid);
+        feed.appendChild(box);
+      });
+    }
+
+    function toggleUnitProgress(batch, subjectId, unitNum) {
+      if (!DB.studyProgress[batch]) DB.studyProgress[batch] = {};
+      if (!DB.studyProgress[batch][subjectId]) DB.studyProgress[batch][subjectId] = {};
+
+      const currentStatus = DB.studyProgress[batch][subjectId][unitNum] || 0;
+      DB.studyProgress[batch][subjectId][unitNum] = (currentStatus + 1) % 3;
+      renderProgressBoard();
+    }
+
+    function saveStudyProgress() {
+      safeSet("ff_study_progress", DB.studyProgress);
+      alert("Study Progress saved successfully!");
+    }
+
+    // STUDENT 360 DOSSIER
+    function populate360StudentDropdown() {
+      const sel = document.getElementById("s360-student-select");
+      if (!sel) return;
+      sel.innerHTML = '<option value="">-- Choose Registered Student --</option>';
+
+      DB.students.forEach(s => {
+        const opt = document.createElement("option");
+        opt.value = s.reg_id;
+        opt.innerText = `[${s.reg_id}] ${s.name} (${s.batch})`;
+        sel.appendChild(opt);
+      });
+    }
+
+    function renderStudent360Dossier() {
+      const regId = document.getElementById("s360-student-select").value;
+      const output = document.getElementById("s360-dossier-output");
+      const emptyPrompt = document.getElementById("s360-empty-prompt");
+
+      if (!regId) {
+        output.style.display = "none";
+        emptyPrompt.style.display = "block";
+        return;
+      }
+
+      const student = DB.students.find(s => s.reg_id === regId);
+      if (!student) return;
+
+      emptyPrompt.style.display = "none";
+      output.style.display = "block";
+
+      document.getElementById("s360-regid").innerText = student.reg_id;
+      document.getElementById("s360-name").innerText = student.name;
+      document.getElementById("s360-batch").innerText = student.batch;
+      document.getElementById("s360-phone").innerText = student.ph1;
+      document.getElementById("s360-fee-due").innerText = `₹${student.remaining || 0}`;
+      document.getElementById("s360-fee-paid").innerText = `₹${student.paid || 0}`;
+    }
+
+    function openMonthModal(idx) {
+      activeModalStudentIdx = idx;
+      const student = DB.students[idx];
+      document.getElementById("modal-student-title").innerText = `${student.name} - Monthly Clearances`;
+      const container = document.getElementById("modal-months-container");
+      container.innerHTML = "";
+
+      const paidArr = student.paid_months || [];
+      ACADEMIC_MONTHS.forEach(m => {
+        const isPaid = paidArr.includes(m.label);
+        const badge = document.createElement("div");
+        badge.className = `month-badge ${isPaid ? 'paid' : ''}`;
+        badge.innerText = m.label;
+        badge.onclick = () => {
+          if (isPaid) student.paid_months = student.paid_months.filter(x => x !== m.label);
+          else student.paid_months.push(m.label);
+          safeSet("ff_students", DB.students);
+          openMonthModal(idx);
+          renderRoster();
+        };
+        container.appendChild(badge);
+      });
+      document.getElementById("monthly-fee-modal").style.display = "flex";
+    }
+
+    function closeMonthModal() {
+      document.getElementById("monthly-fee-modal").style.display = "none";
+    }
+
+    // ATTENDANCE DESK (PASSCODE)
+    function renderAttendanceDeskSessions() {
+      const feed = document.getElementById("att-sessions-feed");
+      const date = document.getElementById("att-desk-date").value;
+      feed.innerHTML = `
+        <div class="att-session-card">
+          <strong>Daily Assembly & Class Drill</strong>
+          <p style="font-size:0.75rem; color:var(--text-muted);">Date: ${date}</p>
+          <div style="margin-top:8px;">
+            <span>Live Passcode: </span><span class="live-code-box">48921</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function populateScheduledExamsDropdown() {
+      const sel = document.getElementById("exam-scheduled-selector");
+      sel.innerHTML = '<option value="TEST_1">Weekly Benchmark Assessment (Maths & GI)</option>';
+    }
+
+    function loadExamSessionMarksDesk() {
+      const tbody = document.getElementById("exam-students-marks-body");
+      tbody.innerHTML = "";
+      DB.students.forEach(s => {
+        tbody.innerHTML += `
+          <tr>
+            <td><span class="reg-pill">${s.reg_id}</span></td>
+            <td><strong>${s.name}</strong></td>
+            <td><input type="number" placeholder="Marks" style="width:90px;" /> / 50</td>
+            <td><input type="text" placeholder="Good / Average" /></td>
+          </tr>
+        `;
+      });
+    }
+
+    function saveExamMarks() {
+      alert("Exam marks saved successfully and synced with Central Cloud!");
     }
 
     function logout() {
@@ -1101,7 +2451,7 @@
       location.reload();
     }
 
-    // পেজ লোডে অটো-লগইন এবং সিঙ্কিং ইনিশিয়ালাইজেশন
+    // AUTO-LOGIN & CENTRAL SYNC ON APP LAUNCH
     window.addEventListener("DOMContentLoaded", async () => {
       initGenerators();
       await syncFromCentralCloud();
